@@ -1,17 +1,3 @@
-<p align="center">
-  <picture>
-    <img alt="ClawOps logo" src="./images/logo.png" width="180" height="190">
-  </picture>
-  <br>
-  <strong>ClawOps</strong>
-</p>
-
-<p align="center">
-  <a href="https://x.com/clawops">
-    <img alt="X (formerly Twitter) Follow" src="https://img.shields.io/twitter/follow/clawops" />
-  </a>
-</p>
-
 [ClawOps](https://clawops.ai) is the control plane for AI agents running in public channels. It helps non-technical teams keep agents safe, visible, and under control across Telegram, Discord, WhatsApp, and SMS. ClawOps is powered by the open-core ClawOps Engine for security and observability.
 
 - [x] ✅ **Control**
