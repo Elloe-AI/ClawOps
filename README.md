@@ -22,27 +22,30 @@ ClawOps is **not** an agent framework or chatbot builder. It’s the operations 
 
 ## Get started
 
-- Docs & overview: https://clawops.ai
+- Docs & overview: <https://clawops.ai>
 - Launch & packaging: `docs/LAUNCH.md`
 - Deployment guide: `DEPLOYMENT.md`
 - Contributing: `CONTRIBUTING.md`
-- Updates: https://x.com/clawops
+- Updates: <https://x.com/clawops>
 
 ---
 
 ## What ClawOps does
 
 **Control**
+
 - Agent status, pause/resume, and kill switch
 - Channel-first onboarding (no CLI, no YAML required for hosted)
 - Human-readable activity timelines
 
 **Guardrails**
+
 - Simple safety toggles mapped to policy rules
 - Blocks for direct injection rules
 - Auto-pause on repeated risk
 
 **Visibility**
+
 - Activity timelines with technical details on demand
 - Risk scoring and safety trends
 - OpenTelemetry-compatible traces under the hood
@@ -79,6 +82,7 @@ For full packaging details, see `docs/LAUNCH.md`.
 ## Runtime compatibility
 
 ClawOps wraps your existing LLM client and works with:
+
 - OpenAI, Anthropic, Bedrock, Groq, Mistral, Azure, and more
 - Any REST-based model gateway
 
@@ -115,6 +119,7 @@ cd clawops
 Create a `.env` file in the project root with minimal required variables:
 
 **Linux/Mac:**
+
 ```bash
 cat > .env << 'EOF'
 # Database (required)
@@ -142,6 +147,7 @@ EOF
 ```
 
 **Windows (PowerShell):**
+
 ```powershell
 @"
 # Database (required)
@@ -169,6 +175,7 @@ OPENAI_MODEL=gpt-4o-mini
 ```
 
 **Or use the example file:**
+
 ```bash
 cp .env.example .env
 # Then edit .env and replace placeholder values
@@ -181,12 +188,13 @@ docker compose -f docker-compose.yml up -d
 ```
 
 This starts all services:
-- **ClawOps UI** → http://localhost:3000
-- **ClawOps Core API** → http://localhost:8006
-- **Observability Backend** → http://localhost:8000
+
+- **ClawOps UI** → <http://localhost:3000>
+- **ClawOps Core API** → <http://localhost:8006>
+- **Observability Backend** → <http://localhost:8000>
 - **PostgreSQL** → localhost:5433
 - **ClickHouse** → localhost:8123
-- **Quickwit** → http://localhost:7280
+- **Quickwit** → <http://localhost:7280>
 
 ### Step 4: Run safety checks
 
@@ -197,9 +205,10 @@ npm run clawops:check
 
 ### Step 5: Access the dashboard
 
-Open your browser and go to **http://localhost:3000**
+Open your browser and go to **<http://localhost:3000>**
 
 **CLI quickstart (optional):**
+
 ```bash
 cd frontend
 npm run clawops:quickstart
@@ -265,6 +274,7 @@ export AGENT_ID=your-agent-id
 ## Activity & incidents (reading the results)
 
 Every risky or blocked action becomes an **Incident** with clear context:
+
 - **What happened**
 - **Why it happened** (guardrail or threat protection)
 - **What was prevented**
@@ -276,11 +286,13 @@ Technical details are available behind a toggle for engineers.
 ## Guardrails & threat protection
 
 Guardrails are presets you can understand:
+
 - Safe
 - Balanced
 - Autonomous
 
 Threat protection groups detections by:
+
 - Jailbreaks
 - Data exfiltration
 - Prompt injection
@@ -291,6 +303,7 @@ Threat protection groups detections by:
 ## Audit & compliance
 
 ClawOps provides:
+
 - Immutable audit logs
 - CSV/JSON exports
 - Evidence bundles for regulated reviews
@@ -312,6 +325,7 @@ ClawOps is metered on **active agents, sessions, incidents, and exports** — ne
 For production deployment, see [DEPLOYMENT.md](DEPLOYMENT.md).
 
 **Quick production commands:**
+
 ```bash
 # Build and push images
 .\scripts\build-and-push.ps1 -VersionTag v1.0.0  # Windows
@@ -331,6 +345,7 @@ npm run clawops:check
 ```
 
 ClawOps enforces:
+
 - No secrets in logs
 - Append-only audit logs
 - Rate limits at runtime boundaries
