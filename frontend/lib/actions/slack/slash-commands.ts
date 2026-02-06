@@ -13,8 +13,7 @@ interface SlackCommandResponse {
 
 const availableEvents = ["error_trace_analysis", "warning_trace_analysis"];
 const PRIMARY_COMMAND = "/clawops";
-const LEGACY_COMMAND = "/hipocap";
-const SUPPORTED_COMMANDS = [PRIMARY_COMMAND, LEGACY_COMMAND];
+const SUPPORTED_COMMANDS = [PRIMARY_COMMAND];
 
 export async function processSlashCommand(
   payload: z.infer<typeof SlackSlashCommandSchema>

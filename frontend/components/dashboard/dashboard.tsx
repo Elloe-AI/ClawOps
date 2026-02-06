@@ -5,8 +5,8 @@ import { useParams } from "next/navigation";
 
 import AuditTools from "@/components/audit/audit-tools";
 import GridLayout from "@/components/dashboard/grid-layout";
-import HipocapStatsCards from "@/components/dashboard/hipocap-stats-cards";
-import HipocapTimeSeriesChart from "@/components/dashboard/hipocap-timeseries-chart";
+import ClawOpsStatsCards from "@/components/dashboard/clawops-stats-cards";
+import ClawOpsTimeSeriesChart from "@/components/dashboard/clawops-timeseries-chart";
 import { Button } from "@/components/ui/button";
 
 import DateRangeFilter from "../ui/date-range-filter";
@@ -31,8 +31,8 @@ export default function Dashboard({ headerLabel = "Data / Audit" }: { headerLabe
       <ScrollArea className="h-full">
         <div className="h-full px-6 py-6">
           <AuditTools />
-          <HipocapStatsCards />
-          <HipocapTimeSeriesChart />
+          <ClawOpsStatsCards />
+          <ClawOpsTimeSeriesChart />
           <GridLayout />
         </div>
       </ScrollArea>

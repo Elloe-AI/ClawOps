@@ -3,7 +3,7 @@ import React, { useMemo, useRef } from "react";
 
 import { SpanDisplayTooltip } from "@/components/traces/trace-view/span-display-tooltip.tsx";
 import { TraceViewSpan, useTraceViewStoreContext } from "@/components/traces/trace-view/trace-view-store.tsx";
-import { getLLMMetrics, getSpanDisplayName, getHipocapAnalysisDuration, hasHipocapAnalysis } from "@/components/traces/trace-view/utils.ts";
+import { getLLMMetrics, getSpanDisplayName, getGuardrailAnalysisDuration, hasGuardrailAnalysis } from "@/components/traces/trace-view/utils.ts";
 import { isStringDateOld } from "@/lib/traces/utils";
 import { cn, getDurationString } from "@/lib/utils";
 
@@ -43,48 +43,48 @@ export function SpanCard({ span, yOffset, parentY, onSpanSelect, depth }: SpanCa
 
   const hasChildren = childSpans && childSpans.length > 0;
   
-  // Get duration for Hipocap analysis spans
-  const hipocapDuration = useMemo(() => {
-    if (hasHipocapAnalysis(span)) {
-      return getHipocapAnalysisDuration(span);
+  // Get duration for guardrail analysis spans
+  const guardrailDuration = useMemo(() => {
+    if (hasGuardrailAnalysis(span)) {
+      return getGuardrailAnalysisDuration(span);
     }
     return null;
   }, [span]);
   
-  // Use Hipocap analysis duration if available, otherwise use regular duration
+  // Use guardrail analysis duration if available, otherwise use regular duration
   const displayDuration = useMemo(() => {
-    if (hipocapDuration) {
-      return hipocapDuration;
+    if (guardrailDuration) {
+      return guardrailDuration;
     }
     return getDurationString(span.startTime, span.endTime);
-  }, [hipocapDuration, span.startTime, span.endTime]);
+  }, [guardrailDuration, span.startTime, span.endTime]);
 
   const isSelected = useMemo(() => selectedSpan?.spanId === span.spanId, [selectedSpan?.spanId, span.spanId]);
 
-  // Check if this is a Hipocap event span (virtual span created from event)
-  const isHipocapEventSpan = useMemo(() => {
-    return span.attributes?.["hipocap.is_event_span"] === true;
+  // Check if this is a guardrail event span (virtual span created from event)
+  const isGuardrailEventSpan = useMemo(() => {
+    return span.attributes?.["clawops.event.virtual"] === true;
   }, [span.attributes]);
 
   // Check if this is a function attempt span
   const isFunctionAttemptSpan = useMemo(() => {
-    return span.attributes?.["hipocap.is_function_attempt"] === true;
+    return span.attributes?.["clawops.action.virtual_attempt"] === true;
   }, [span.attributes]);
 
   // Get function attempts count for parent spans
   const functionAttemptsCount = useMemo(() => {
     if (isFunctionAttemptSpan) return 0;
-    const attempts = span.attributes?.["hipocap.function_attempts"] as string[] | undefined;
+    const attempts = span.attributes?.["clawops.action.attempts"] as string[] | undefined;
     return attempts?.length || 0;
   }, [span.attributes, isFunctionAttemptSpan]);
 
-  // Get severity for Hipocap event spans
+  // Get severity for guardrail event spans
   const eventSeverity = useMemo(() => {
-    if (!isHipocapEventSpan && !isFunctionAttemptSpan) return null;
-    return span.attributes?.["hipocap.severity"] || null;
-  }, [isHipocapEventSpan, isFunctionAttemptSpan, span.attributes]);
+    if (!isGuardrailEventSpan && !isFunctionAttemptSpan) return null;
+    return span.attributes?.["clawops.threat.severity"] || null;
+  }, [isGuardrailEventSpan, isFunctionAttemptSpan, span.attributes]);
 
-  // For Hipocap event spans, show severity-based styling
+  // For guardrail event spans, show severity-based styling
   const eventSeverityColor = useMemo(() => {
     if (!eventSeverity) return "text-amber-500";
     const severityLower = eventSeverity.toLowerCase();
@@ -127,7 +127,7 @@ export function SpanCard({ span, yOffset, parentY, onSpanSelect, depth }: SpanCa
           "rounded-md border bg-card/50 backdrop-blur-sm",
           "hover:shadow-md hover:shadow-primary/10 hover:border-primary/30",
           "hover:-translate-y-0.5",
-          isHipocapEventSpan 
+          isGuardrailEventSpan 
             ? "border-amber-500/30 hover:border-amber-500/50 bg-gradient-to-br from-amber-50/30 via-card/50 to-card/50" 
             : "border-border/30 hover:border-primary/30",
           isSelected 
@@ -162,11 +162,11 @@ export function SpanCard({ span, yOffset, parentY, onSpanSelect, depth }: SpanCa
               "rounded-md p-1.5 transition-all duration-200",
               "group-hover/span:scale-105 group-hover/span:shadow-md",
               isSelected && "scale-105 shadow-md",
-              isHipocapEventSpan 
+              isGuardrailEventSpan 
                 ? "bg-amber-500/10 group-hover/span:bg-amber-500/20" 
                 : "bg-muted/50 group-hover/span:bg-muted"
             )}>
-              {isHipocapEventSpan ? (
+              {isGuardrailEventSpan ? (
                 <ShieldAlert
                   className={cn(
                     "transition-all duration-200",
@@ -204,7 +204,7 @@ export function SpanCard({ span, yOffset, parentY, onSpanSelect, depth }: SpanCa
               <div className={cn(
                 "text-xs font-medium truncate transition-all duration-200",
                 span.pending && "text-muted-foreground",
-                isHipocapEventSpan && "font-semibold",
+                isGuardrailEventSpan && "font-semibold",
                 !span.pending && "group-hover/span:text-foreground",
                 isSelected && "text-primary"
               )}>

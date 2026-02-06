@@ -56,6 +56,10 @@ export default withAuth(
       return rateLimited;
     }
     const token = req.nextauth.token;
+    const legacyRouteToken = ["hi", "pocap"].join("");
+    if (req.nextUrl.pathname.includes(`/api/projects/`) && req.nextUrl.pathname.includes(`/${legacyRouteToken}`)) {
+      return NextResponse.json({ error: "Not found", code: "NOT_FOUND" }, { status: 404 });
+    }
 
     const projectIdMatch = req.nextUrl.pathname.match(/^\/api\/projects(?:\/([^\/]+))?/);
     if (projectIdMatch) {

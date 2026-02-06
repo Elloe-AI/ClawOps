@@ -18,7 +18,7 @@ services:
     volumes:
       - postgres-data:/var/lib/postgresql/data
       - type: bind
-        source: ./hipocap_server/postgres-init
+        source: ./clawops_engine/postgres-init
         target: /docker-entrypoint-initdb.d
     environment:
       POSTGRES_USER: ${POSTGRES_USER:-postgres}

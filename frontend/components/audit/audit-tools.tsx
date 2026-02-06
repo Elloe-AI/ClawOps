@@ -84,7 +84,7 @@ export default function AuditTools() {
           </Button>
           {isFreeTier && (
             <div className="text-xs text-muted-foreground w-full flex items-center gap-2">
-              Audit exports unlock on paid plans.
+              Audit exports unlock on Pro or Enterprise plans.
               <Button size="sm" variant="link" onClick={() => handleUpgradeClick("audit_exports")}>
                 Upgrade
               </Button>

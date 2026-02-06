@@ -63,6 +63,7 @@ export default function WorkspaceUsers({
   const [updatingRoleUserId, setUpdatingRoleUserId] = useState<string | null>(null);
 
   const canManageUsers = currentUserRole === "owner" || currentUserRole === "admin";
+  const canPurchaseSeats = workspace.tierName !== WorkspaceTier.FREE;
 
   const isCurrentUser = useCallback((u: WorkspaceUser) => u.email === user.email, [user.email]);
   const openDialog = useCallback((type: DialogState["type"], targetUser?: WorkspaceUser) => {
@@ -199,7 +200,7 @@ export default function WorkspaceUsers({
             title="Workspace seats"
             description={`You have ${workspaceStats.membersLimit} seat${workspaceStats.membersLimit > 1 ? "s" : ""} in this workspace`}
           />
-          {workspace.tierName === WorkspaceTier.PRO && (
+          {canPurchaseSeats && (
             <PurchaseSeatsDialog
               workspaceId={workspace.id}
               currentQuantity={workspaceStats.membersLimit}

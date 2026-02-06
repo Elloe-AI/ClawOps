@@ -2,6 +2,16 @@
 
 This guide covers building and deploying ClawOps Docker images to Docker Hub for production use.
 
+## Deployment Modes (Overview)
+
+ClawOps ships in three modes:
+
+- **Hosted ClawOps (SaaS)**: Fully managed control plane with metadata-only telemetry by default.
+- **Hybrid ClawOps (Recommended)**: Hosted control plane + self-hosted Edge connector; raw data stays local.
+- **Fully Self-Hosted**: Control plane + Edge on your infrastructure, no external dependencies.
+
+This guide focuses on the **self-hosted** deployment path. For packaging and onboarding details, see `docs/LAUNCH.md`.
+
 ## Prerequisites
 
 - Docker and Docker Compose installed
@@ -188,7 +198,8 @@ export DOCKER_HUB_ORG=clawops
 export VERSION_TAG=v1.0.0
 
 # Build clawops-engine (ClawOps engine)
-docker build -t ${DOCKER_HUB_ORG}/clawops-engine:${VERSION_TAG} ./hipocap_server
+ENGINE_DIR=${ENGINE_DIR:-./engine}
+docker build -t ${DOCKER_HUB_ORG}/clawops-engine:${VERSION_TAG} ${ENGINE_DIR}
 docker push ${DOCKER_HUB_ORG}/clawops-engine:${VERSION_TAG}
 
 # Build frontend

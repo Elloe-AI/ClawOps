@@ -254,11 +254,66 @@ export function createTemplateChecksum(guardrailsConfig: Record<string, any>, th
 export async function ensureMarketplaceTemplates() {
   const existing = await db.query.safetyTemplates.findMany({
     where: eq(safetyTemplates.visibility, "marketplace"),
+    columns: {
+      id: true,
+      name: true,
+    },
   });
 
-  if (existing.length > 0) return existing;
+  const existingNames = new Set(existing.map((template) => template.name));
 
   const defaults = [
+    {
+      name: "General Agent",
+      description: "Balanced guardrails for public-channel agents. Recommended default.",
+      guardrailsConfig: {
+        blockInstructionOverrides: true,
+        askBeforeRiskyActions: true,
+        limitResponseFrequency: true,
+        pauseOnUncertainty: true,
+        disableExternalTools: false,
+      },
+      threatProtectionConfig: {
+        jailbreaks: true,
+        data_exfiltration: true,
+        prompt_injection: true,
+        policy_manipulation: true,
+      },
+    },
+    {
+      name: "Healthcare",
+      description: "Regulated preset for patient-facing workflows and sensitive data handling.",
+      guardrailsConfig: {
+        blockInstructionOverrides: true,
+        askBeforeRiskyActions: true,
+        limitResponseFrequency: true,
+        pauseOnUncertainty: true,
+        disableExternalTools: true,
+      },
+      threatProtectionConfig: {
+        jailbreaks: true,
+        data_exfiltration: true,
+        prompt_injection: true,
+        policy_manipulation: true,
+      },
+    },
+    {
+      name: "Finance",
+      description: "High-scrutiny preset for financial workflows, approvals, and PII.",
+      guardrailsConfig: {
+        blockInstructionOverrides: true,
+        askBeforeRiskyActions: true,
+        limitResponseFrequency: true,
+        pauseOnUncertainty: true,
+        disableExternalTools: true,
+      },
+      threatProtectionConfig: {
+        jailbreaks: true,
+        data_exfiltration: true,
+        prompt_injection: true,
+        policy_manipulation: true,
+      },
+    },
     {
       name: "Safe Operations",
       description: "Strict guardrails with maximum protection across threat categories.",
@@ -314,6 +369,9 @@ export async function ensureMarketplaceTemplates() {
 
   const created = [];
   for (const template of defaults) {
+    if (existingNames.has(template.name)) {
+      continue;
+    }
     const checksum = createTemplateChecksum(template.guardrailsConfig, template.threatProtectionConfig);
     const [row] = await db
       .insert(safetyTemplates)
@@ -335,5 +393,10 @@ export async function ensureMarketplaceTemplates() {
     }
   }
 
-  return created;
+  const updated = await db.query.safetyTemplates.findMany({
+    where: eq(safetyTemplates.visibility, "marketplace"),
+    orderBy: desc(safetyTemplates.createdAt),
+  });
+
+  return updated.length > 0 ? updated : created;
 }

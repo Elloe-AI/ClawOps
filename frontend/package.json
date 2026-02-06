@@ -14,7 +14,8 @@
     "format:check": "prettier --check \"{app,lib,components}/**/*.{ts,tsx,mdx}\" --cache",
     "test": "tsx --test tests/**/*.test.ts",
     "schema-pull:lint": "drizzle-kit pull && sed -i.bak \"s/\\.default(')/\\.default('')/g\" lib/db/migrations/schema.ts && sed -i.bak \"s/vector()/jsonb()/g\" lib/db/migrations/schema.ts && rm lib/db/migrations/schema.ts.bak && next lint --fix",
-    "clawops:check": "tsx scripts/clawops-check.ts"
+    "clawops:check": "tsx scripts/clawops-check.ts",
+    "clawops:quickstart": "tsx scripts/clawops-quickstart.ts"
   },
   "dependencies": {
     "@ai-sdk/amazon-bedrock": "^3.0.17",

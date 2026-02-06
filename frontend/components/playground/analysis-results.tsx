@@ -3,7 +3,7 @@
 import { AlertCircle, CheckCircle2, ChevronDown, ChevronRight, Copy, Shield, ShieldAlert, XCircle } from "lucide-react";
 import { useMemo, useState } from "react";
 
-import { HipocapAnalysisResponse } from "@/lib/hipocap/types";
+import { ClawOpsAnalysisResponse } from "@/lib/clawops/types";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
@@ -14,7 +14,7 @@ import { useToast } from "@/lib/hooks/use-toast";
 import { cn } from "@/lib/utils";
 
 interface AnalysisResultsProps {
-  result: HipocapAnalysisResponse;
+  result: ClawOpsAnalysisResponse;
 }
 
 export function AnalysisResults({ result }: AnalysisResultsProps) {

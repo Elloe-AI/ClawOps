@@ -14,8 +14,8 @@ export default function ProjectUsageBanner({
 
   const messageContent =
     gbLimit > 0
-      ? `You've used ${dataPercentage.toFixed(1)}% of your data usage limit. Upgrade your workspace for an uninterrupted experience.`
-      : "Review your workspace settings for usage details.";
+      ? `Telemetry usage is at ${dataPercentage.toFixed(1)}% of the current limit. Upgrade your workspace for higher capacity.`
+      : "Review your workspace settings for telemetry details.";
 
   return (
     <Link

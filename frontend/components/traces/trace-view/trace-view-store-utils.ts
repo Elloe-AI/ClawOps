@@ -3,7 +3,7 @@ import { isEmpty, get } from "lodash";
 import { TraceViewSpan } from "@/components/traces/trace-view/trace-view-store.tsx";
 import { SpanType } from "@/lib/traces/types.ts";
 import { getDuration } from "@/lib/utils";
-import { hasHipocapAnalysis, extractHipocapAnalysis } from "@/components/traces/trace-view/utils.ts";
+import { hasGuardrailAnalysis, extractGuardrailAnalysis } from "@/components/traces/trace-view/utils.ts";
 
 export interface TreeSpan {
   span: TraceViewSpan;
@@ -58,11 +58,11 @@ export const getChildSpansMap = <T extends TraceViewSpan>(spans: T[]): { [key: s
 };
 
 /**
- * Creates virtual child spans for function attempts from Hipocap events
+ * Creates virtual child spans for function attempts from guardrail events
  */
 const createFunctionAttemptSpans = (span: TraceViewSpan): TraceViewSpan[] => {
-  const functionAttempts = span.attributes?.["hipocap.function_attempts"] as string[] | undefined;
-  const eventData = span.attributes?.["hipocap.event_data"] as Record<string, any> | undefined;
+  const functionAttempts = span.attributes?.["clawops.action.attempts"] as string[] | undefined;
+  const eventData = span.attributes?.["clawops.event.data"] as Record<string, any> | undefined;
   
   if (!functionAttempts || functionAttempts.length === 0) {
     return [];
@@ -86,12 +86,12 @@ const createFunctionAttemptSpans = (span: TraceViewSpan): TraceViewSpan[] => {
       spanType: "TOOL" as SpanType,
       attributes: {
         ...span.attributes,
-        "hipocap.is_function_attempt": true,
-        "hipocap.function_name": functionName,
-        "hipocap.severity": severity,
-        "hipocap.decision": decision,
-        "hipocap.reason": reason,
-        "hipocap.original_span_id": span.spanId,
+        "clawops.action.virtual_attempt": true,
+        "clawops.action.name": functionName,
+        "clawops.threat.severity": severity,
+        "clawops.threat.decision": decision,
+        "clawops.threat.reason": reason,
+        "clawops.event.original_span_id": span.spanId,
       },
       events: [],
       collapsed: false,
@@ -164,14 +164,14 @@ const traverse = (
 
 /**
  * Get effective start and end times for a span
- * For spans with Hipocap analysis, uses analysis timestamps for timeline positioning
+ * For spans with guardrail analysis, uses analysis timestamps for timeline positioning
  * Otherwise uses the span's actual startTime/endTime
  * Returns timestamps in milliseconds
  */
 const getEffectiveSpanTimes = (span: TraceViewSpan): { startTime: number; endTime: number } => {
-  // Check if span has Hipocap analysis and extract timestamps
-  if (hasHipocapAnalysis(span)) {
-    const analysis = extractHipocapAnalysis(span);
+  // Check if span has guardrail analysis and extract timestamps
+  if (hasGuardrailAnalysis(span)) {
+    const analysis = extractGuardrailAnalysis(span);
     if (analysis) {
       const timestamps: number[] = [];
       
@@ -282,10 +282,10 @@ export const transformSpansToTimeline = (spans: TraceViewSpan[]): TimelineData =
 
     const segmentEvents = [] as SegmentEvent[];
     
-    // For Hipocap analysis spans, we need to get the analysis timestamps for event positioning
+    // For guardrail analysis spans, we need the analysis timestamps for event positioning
     let analysisStartTime: number | null = null;
-    if (hasHipocapAnalysis(span)) {
-      const analysis = extractHipocapAnalysis(span);
+    if (hasGuardrailAnalysis(span)) {
+      const analysis = extractGuardrailAnalysis(span);
       if (analysis) {
         const timestamps: number[] = [];
         if (analysis.inputAnalysis?.timestamp) {
@@ -301,7 +301,7 @@ export const transformSpansToTimeline = (spans: TraceViewSpan[]): TimelineData =
     }
     
     for (const event of span.events) {
-      // For Hipocap analysis events, position relative to analysis start time if available
+    // For guardrail analysis events, position relative to analysis start time if available
       // Otherwise use the span's effective start time
       const eventTimestamp = new Date(event.timestamp).getTime();
       const referenceStartTime = analysisStartTime !== null ? analysisStartTime : effectiveTimes.startTime;

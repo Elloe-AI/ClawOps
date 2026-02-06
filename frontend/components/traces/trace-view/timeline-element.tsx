@@ -4,7 +4,8 @@ import React, { memo, useLayoutEffect, useMemo, useRef, useState } from "react";
 
 import { TraceViewSpan } from "@/components/traces/trace-view/trace-view-store.tsx";
 import { TimelineData } from "@/components/traces/trace-view/trace-view-store-utils.ts";
-import { getLLMMetrics, getSpanDisplayName, getHipocapAnalysisDuration, hasHipocapAnalysis } from "@/components/traces/trace-view/utils.ts";
+import { getLLMMetrics, getSpanDisplayName, getGuardrailAnalysisDuration, hasGuardrailAnalysis } from "@/components/traces/trace-view/utils.ts";
+import { normalizeLegacyLabel } from "@/lib/telemetry/normalize";
 import { SPAN_TYPE_TO_COLOR } from "@/lib/traces/utils";
 import { cn, getDurationString } from "@/lib/utils";
 
@@ -42,21 +43,21 @@ const TimelineElement = ({
 
   const llmMetrics = getLLMMetrics(span.span);
   
-  // Get duration for Hipocap analysis spans
-  const hipocapDuration = useMemo(() => {
-    if (hasHipocapAnalysis(span.span)) {
-      return getHipocapAnalysisDuration(span.span);
+  // Get duration for guardrail analysis spans
+  const guardrailDuration = useMemo(() => {
+    if (hasGuardrailAnalysis(span.span)) {
+      return getGuardrailAnalysisDuration(span.span);
     }
     return null;
   }, [span.span]);
   
-  // Use Hipocap analysis duration if available, otherwise use regular duration
+  // Use guardrail analysis duration if available, otherwise use regular duration
   const displayDuration = useMemo(() => {
-    if (hipocapDuration) {
-      return hipocapDuration;
+    if (guardrailDuration) {
+      return guardrailDuration;
     }
     return getDurationString(span.span.startTime, span.span.endTime);
-  }, [hipocapDuration, span.span.startTime, span.span.endTime]);
+  }, [guardrailDuration, span.span.startTime, span.span.endTime]);
 
   useLayoutEffect(() => {
     if (!blockRef.current || !textRef.current) return;
@@ -171,21 +172,21 @@ const TimelineElement = ({
             }}
           >
             {span.events.map((event) => {
-              // Helper function to check if an event is a Hipocap security event
-              const isHipocapSecurityEvent = (eventName: string): boolean => {
-                return eventName === "hipocap.security.threat_detected" || 
-                       eventName === "hipocap.security.analysis_complete";
+              // Helper function to check if an event is a guardrail security event
+              const isGuardrailSecurityEvent = (eventName: string): boolean => {
+                return eventName === "clawops.threat.detected" || 
+                       eventName === "clawops.threat.analysis_complete";
               };
               
-              // Check if this is a Hipocap security event
-              const isHipocapEvent = isHipocapSecurityEvent(event.name);
-              // Attributes use dot notation (e.g., "hipocap.severity")
-              const severity = event.attributes?.["hipocap.severity"];
-              const finalDecision = event.attributes?.["hipocap.final_decision"];
-              const reason = event.attributes?.["hipocap.reason"];
+              // Check if this is a guardrail security event
+              const isGuardrailEvent = isGuardrailSecurityEvent(event.name);
+              // Attributes use dot notation (e.g., "clawops.threat.severity")
+              const severity = event.attributes?.["clawops.threat.severity"];
+              const finalDecision = event.attributes?.["clawops.threat.decision"];
+              const reason = event.attributes?.["clawops.threat.reason"];
               
-              // Color mapping for Hipocap severity levels
-              const getHipocapEventColor = (severity?: string, decision?: string): string => {
+              // Color mapping for guardrail severity levels
+              const getGuardrailEventColor = (severity?: string, decision?: string): string => {
                 const normalizedDecision = (decision || "").toUpperCase();
                 if (["BLOCK", "BLOCKED", "DENY", "DENIED", "REJECT"].includes(normalizedDecision)) {
                   return "rgba(239, 68, 68, 1)"; // red-500
@@ -241,13 +242,13 @@ const TimelineElement = ({
                 return decisionValue || "Unknown";
               };
 
-              const eventColor = isHipocapEvent ? getHipocapEventColor(severity, finalDecision) : "rgba(73, 219, 126, 1)"; // green-400
-              const eventWidth = isHipocapEvent ? 3 : 1; // Make guardrail events more visible
+              const eventColor = isGuardrailEvent ? getGuardrailEventColor(severity, finalDecision) : "rgba(73, 219, 126, 1)"; // green-400
+              const eventWidth = isGuardrailEvent ? 3 : 1; // Make guardrail events more visible
               const riskLabel = formatRiskLabel(severity);
               const decisionLabel = formatDecisionLabel(finalDecision);
-              const eventTitle = isHipocapEvent 
+              const eventTitle = isGuardrailEvent 
                 ? `Guardrail check: ${decisionLabel}${riskLabel ? ` · ${riskLabel}` : ""}${reason ? ` · ${reason}` : ""}`
-                : event.name;
+                : (normalizeLegacyLabel(event.name) ?? event.name);
               
               return (
                 <div

@@ -67,7 +67,7 @@ const List = ({ traceId, onSpanSelect }: ListProps) => {
   const visibleSpanIds = compact(
     items
       .map((item) => listSpans[item.index]?.spanId)
-      .filter((id) => id && !id.startsWith("virtual-") && !id.includes("-function-attempt-") && !id.includes("-hipocap-event-"))
+      .filter((id) => id && !id.startsWith("virtual-") && !id.includes("-function-attempt-") && !id.includes("-clawops-event-"))
   ) as string[];
 
   const { getOutput } = useBatchedSpanOutputs(projectId, visibleSpanIds, {

@@ -2,13 +2,32 @@ import fs from "fs";
 import path from "path";
 
 const repoRoot = path.resolve(process.cwd(), "..");
+const legacyRoot = ["hi", "po", "cap"].join("");
+const legacyRootUpper = ["HI", "PO", "CAP"].join("");
+const legacyPrefix = `${legacyRootUpper}_`;
+const legacyPrefixShort = ["HI", "PO_"].join("");
+const legacyWordPattern = new RegExp(legacyRoot, "i");
+const legacyRoutePattern = new RegExp(`/${legacyRoot}`, "i");
 const scanRoots = [
   { name: "frontend", dir: process.cwd() },
   { name: "app-server", dir: path.join(repoRoot, "app-server") },
-  { name: "hipocap_server", dir: path.join(repoRoot, "hipocap_server") },
+  { name: "engine", dir: path.join(repoRoot, "clawops_engine") },
 ].filter((entry) => fs.existsSync(entry.dir));
 
 const allowedExtensions = new Set([".ts", ".tsx", ".js", ".jsx", ".py", ".rs"]);
+const brandingExtensions = new Set([
+  ".md",
+  ".ts",
+  ".tsx",
+  ".js",
+  ".jsx",
+  ".json",
+  ".yml",
+  ".yaml",
+  ".sql",
+  ".toml",
+  ".txt",
+]);
 const ignoredDirs = new Set(["node_modules", ".git", ".next", "dist", "build", "coverage", "target"]);
 
 const readFiles = (dir: string): string[] => {
@@ -30,12 +49,30 @@ const readFiles = (dir: string): string[] => {
   return files;
 };
 
+const scanPathsForLegacy = (dir: string): void => {
+  const entries = fs.readdirSync(dir, { withFileTypes: true });
+
+  for (const entry of entries) {
+    if (ignoredDirs.has(entry.name)) continue;
+    const fullPath = path.join(dir, entry.name);
+
+    if (legacyWordPattern.test(entry.name) || legacyWordPattern.test(fullPath)) {
+      issues.push(`Legacy name found in path: ${fullPath}`);
+    }
+
+    if (entry.isDirectory()) {
+      scanPathsForLegacy(fullPath);
+    }
+  }
+};
+
 const issues: string[] = [];
+scanPathsForLegacy(repoRoot);
 
 const logPattern =
   /(console\.(log|error|warn|info)|logger\.(info|error|warn|debug)|logging\.(info|error|warn|warning|debug|critical))/;
 const secretPattern = /(API_KEY|SECRET|TOKEN|PASSWORD|AUTH_|PRIVATE_KEY)/;
-const legacyEnvTokens = ["HIPOCAP_", "HIPO_"];
+const legacyEnvTokens = [legacyPrefix, legacyPrefixShort];
 
 for (const root of scanRoots) {
   const files = readFiles(root.dir);
@@ -80,6 +117,54 @@ for (const root of scanRoots) {
       issues.push(`Safety template application mutation detected: ${file}`);
     }
   }
+}
+
+const brandingScanRoots = [repoRoot].filter((entry) => fs.existsSync(entry));
+
+const readBrandingFiles = (dir: string): string[] => {
+  const entries = fs.readdirSync(dir, { withFileTypes: true });
+  const files: string[] = [];
+
+  for (const entry of entries) {
+    const fullPath = path.join(dir, entry.name);
+    if (entry.isDirectory()) {
+      if (ignoredDirs.has(entry.name)) continue;
+      files.push(...readBrandingFiles(fullPath));
+      continue;
+    }
+    if (brandingExtensions.has(path.extname(entry.name))) {
+      files.push(fullPath);
+    }
+  }
+
+  return files;
+};
+
+const brandingFiles = brandingScanRoots.flatMap((root) => {
+  if (fs.statSync(root).isDirectory()) {
+    return readBrandingFiles(root);
+  }
+  return brandingExtensions.has(path.extname(root)) ? [root] : [];
+});
+
+for (const file of brandingFiles) {
+  const content = fs.readFileSync(file, "utf-8");
+  if (legacyWordPattern.test(content)) {
+    issues.push(`Legacy branding found in ${file}`);
+  }
+  if (legacyRoutePattern.test(content)) {
+    issues.push(`Legacy route path found in ${file}`);
+  }
+
+  const lines = content.split(/\r?\n/);
+  lines.forEach((line, index) => {
+    if (/(from|import|require)\s+/.test(line) && legacyWordPattern.test(line)) {
+      issues.push(`Legacy import path found in ${file}:${index + 1}`);
+    }
+    if (legacyRoutePattern.test(line)) {
+      issues.push(`Legacy route path found in ${file}:${index + 1}`);
+    }
+  });
 }
 
 const legacyEnvDocs = [

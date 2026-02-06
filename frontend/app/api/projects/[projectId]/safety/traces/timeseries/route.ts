@@ -3,6 +3,7 @@ import { getServerSession } from "next-auth";
 import { prettifyError, ZodError } from "zod/v4";
 
 import { authOptions } from "@/lib/auth";
+import { normalizeLegacyPayload } from "@/lib/telemetry/normalize";
 
 const CLAWOPS_ENGINE_URL = process.env.CLAWOPS_ENGINE_URL || "http://localhost:8006";
 
@@ -60,7 +61,8 @@ export async function GET(
     }
 
     const data = await res.json();
-    return new Response(JSON.stringify(data), {
+    const normalized = normalizeLegacyPayload(data);
+    return new Response(JSON.stringify(normalized), {
       status: 200,
       headers: { "Content-Type": "application/json" },
     });

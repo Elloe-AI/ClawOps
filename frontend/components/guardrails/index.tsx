@@ -440,7 +440,7 @@ export default function Guardrails() {
               <div className="rounded-lg border bg-muted/40 p-3 text-xs">
                 <div className="font-medium text-foreground">Upgrade for advanced controls</div>
                 <p className="text-muted-foreground">
-                  Auto-pause and approval mode unlock on paid plans to keep operators in the loop.
+                  Auto-pause and approval mode unlock on Pro or Enterprise plans to keep operators in the loop.
                 </p>
                 <Button size="sm" variant="outline" className="mt-2" onClick={handleUpgradeClick}>
                   Upgrade

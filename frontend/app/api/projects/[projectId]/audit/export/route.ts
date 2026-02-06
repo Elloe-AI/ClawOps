@@ -9,6 +9,7 @@ import { requireProjectRoleAtLeast } from "@/lib/authorization/roles";
 import { assertFeatureAccess, FeatureGateError } from "@/lib/billing/feature-gates";
 import { db } from "@/lib/db/drizzle";
 import { auditLogEntries } from "@/lib/db/migrations/schema";
+import { normalizeLegacyPayload } from "@/lib/telemetry/normalize";
 import { stableJsonStringify } from "@/lib/utils/stable-json";
 
 const escapeCsv = (value: unknown) => {
@@ -59,15 +60,22 @@ export async function GET(
       .where(eq(auditLogEntries.projectId, params.projectId))
       .orderBy(asc(auditLogEntries.createdAt));
 
+    const normalizedRows = rows.map((row) => ({
+      ...row,
+      metadata: normalizeLegacyPayload(row.metadata),
+      before: normalizeLegacyPayload(row.before),
+      after: normalizeLegacyPayload(row.after),
+    }));
+
     const payload = {
       projectId: params.projectId,
       generatedAt,
-      records: rows,
+      records: normalizedRows,
     };
 
     const checksumPayload = {
       projectId: params.projectId,
-      records: rows,
+      records: normalizedRows,
     };
 
     const checksum = createHash("sha256").update(stableJsonStringify(checksumPayload)).digest("hex");
@@ -78,7 +86,7 @@ export async function GET(
       action: "audit_exported",
       entityType: "audit_log",
       entityId: params.projectId,
-      metadata: { format, checksum, recordCount: rows.length },
+      metadata: { format, checksum, recordCount: normalizedRows.length },
     });
 
     if (format === "json") {
@@ -94,7 +102,7 @@ export async function GET(
 
     const header = ["id", "created_at", "action", "entity_type", "entity_id", "actor_user_id", "metadata", "before", "after"];
     const csvLines = [header.join(",")];
-    for (const row of rows) {
+    for (const row of normalizedRows) {
       csvLines.push(
         [
           row.id,

@@ -103,11 +103,11 @@ export default function CreateFirstWorkspaceAndProject({ name }: CreateFirstWork
         // Don't fail the onboarding if policy creation fails - continue to dashboard
       }
 
-      router.push(`/project/${projectId}/mission-control`);
+      router.push(`/project/${projectId}/launch`);
     } catch (error) {
       console.error("Error creating policy:", error);
       // Even if policy creation fails, redirect to dashboard
-      router.push(`/project/${projectId}/mission-control`);
+      router.push(`/project/${projectId}/launch`);
     } finally {
       setIsLoading(false);
     }
@@ -115,7 +115,7 @@ export default function CreateFirstWorkspaceAndProject({ name }: CreateFirstWork
 
   const handleSkipRoleSetup = () => {
     if (projectId) {
-      router.push(`/project/${projectId}/mission-control`);
+      router.push(`/project/${projectId}/launch`);
     }
   };
 
@@ -136,7 +136,7 @@ export default function CreateFirstWorkspaceAndProject({ name }: CreateFirstWork
               </Link>
             </div>
             <p className="text-sm text-muted-foreground text-center">
-              Let’s set up your workspace and first project to get started
+              Let's set up your workspace and first project to get started
             </p>
           </div>
           <form onSubmit={handleWorkspaceCreation} className="grid gap-4">

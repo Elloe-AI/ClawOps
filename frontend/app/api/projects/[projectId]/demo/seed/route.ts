@@ -109,6 +109,20 @@ export async function POST(
   await createAgentEvent({
     projectId,
     agentId: salesAgent.id,
+    eventType: "agent_response_sent",
+    summary: "Approval completed",
+    reason: "Operator approved the response",
+    action: "Delivered approved reply",
+    details: {
+      demo: true,
+      approvalCompleted: true,
+    },
+    createdAt: new Date(now - 1000 * 60 * 9).toISOString(),
+  });
+
+  await createAgentEvent({
+    projectId,
+    agentId: salesAgent.id,
     eventType: "agent_response_blocked",
     summary: "Blocked response",
     reason: "Prompt injection attempt detected",

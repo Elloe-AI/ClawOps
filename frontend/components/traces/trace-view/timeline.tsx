@@ -15,7 +15,8 @@ import { Accordion, AccordionContent, AccordionItem, AccordionTrigger } from "@/
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { TraceViewSpan, useTraceViewStoreContext } from "@/components/traces/trace-view/trace-view-store";
-import { extractHipocapAnalysis } from "@/components/traces/trace-view/utils";
+import { extractGuardrailAnalysis } from "@/components/traces/trace-view/utils";
+import { normalizeLegacyPayload } from "@/lib/telemetry/normalize";
 import { cn } from "@/lib/utils";
 
 type TimelineEventType =
@@ -47,7 +48,7 @@ const eventStyles: Record<TimelineEventType, { icon: typeof Clock; tone: string 
 const formatDetails = (details: Record<string, any> | null | undefined) => {
   if (!details) return "No technical details available.";
   try {
-    return JSON.stringify(details, null, 2);
+    return JSON.stringify(normalizeLegacyPayload(details), null, 2);
   } catch (error) {
     return "Unable to render details.";
   }
@@ -94,7 +95,7 @@ const formatDecisionLabel = (decision: string) => {
 };
 
 const hasGuardrailSignal = (decision: string, severity?: string | null, eventName?: string) => {
-  if (eventName === "hipocap.security.threat_detected") return true;
+  if (eventName === "clawops.threat.detected") return true;
   if (isBlockedDecision(decision) || isReviewDecision(decision)) return true;
   if (!severity) return false;
   return severity.toLowerCase() !== "safe";
@@ -105,10 +106,10 @@ const buildGuardrailEvents = (span: TraceViewSpan): TimelineEvent[] => {
   const spanEvents = span.events || [];
 
   const securityEvents = spanEvents.filter((event) =>
-    ["hipocap.security.threat_detected", "hipocap.security.analysis_complete"].includes(event.name)
+    ["clawops.threat.detected", "clawops.threat.analysis_complete"].includes(event.name)
   );
 
-  const spanAnalysis = extractHipocapAnalysis(span);
+  const spanAnalysis = extractGuardrailAnalysis(span);
 
   const derivedEvents = securityEvents.length > 0 ? securityEvents : spanAnalysis ? [null] : [];
 
@@ -128,20 +129,18 @@ const buildGuardrailEvents = (span: TraceViewSpan): TimelineEvent[] => {
         };
 
     const decision = normalizeDecision(
-      source.attributes?.["hipocap.final_decision"] ??
-        source.attributes?.["hipocap.decision"] ??
+      source.attributes?.["clawops.threat.decision"] ??
         spanAnalysis?.finalDecision
     );
-    const severity = source.attributes?.["hipocap.severity"] ?? spanAnalysis?.severity ?? null;
-    const reason = source.attributes?.["hipocap.reason"] ?? spanAnalysis?.reason ?? undefined;
-    const blockedAt = source.attributes?.["hipocap.blocked_at"] ?? spanAnalysis?.blockedAt ?? undefined;
+    const severity = source.attributes?.["clawops.threat.severity"] ?? spanAnalysis?.severity ?? null;
+    const reason = source.attributes?.["clawops.threat.reason"] ?? spanAnalysis?.reason ?? undefined;
+    const blockedAt = source.attributes?.["clawops.threat.blocked_at"] ?? spanAnalysis?.blockedAt ?? undefined;
     const score =
-      source.attributes?.["hipocap.final_score"] ??
-      source.attributes?.["hipocap.score"] ??
+      source.attributes?.["clawops.threat.score"] ??
       spanAnalysis?.finalScore ??
       null;
     const functionName =
-      source.attributes?.["hipocap.function_name"] ?? spanAnalysis?.functionName ?? span.name;
+      source.attributes?.["clawops.action.name"] ?? spanAnalysis?.functionName ?? span.name;
 
     const guardrailTriggered = hasGuardrailSignal(decision, severity, source.name);
 
@@ -209,8 +208,6 @@ const buildGuardrailEvents = (span: TraceViewSpan): TimelineEvent[] => {
 const buildAutoPauseEvents = (span: TraceViewSpan): TimelineEvent[] => {
   const pauseEvents = (span.events || []).filter((event) =>
     [
-      "hipocap.agent.auto_paused",
-      "hipocap.agent.paused.auto",
       "clawops.agent.auto_paused",
       "clawops.agent.paused.auto",
     ].includes(event.name)

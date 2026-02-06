@@ -13,7 +13,7 @@ $ProjectRoot = Split-Path -Parent $ScriptDir
 
 # Services to build
 $Services = @(
-    @{Name = "clawops-engine"; Path = ".\hipocap_server"},
+    @{Name = "clawops-engine"; Path = ".\clawops_engine"},
     @{Name = "frontend"; Path = ".\frontend"},
     @{Name = "query-engine"; Path = ".\query-engine"},
     @{Name = "app-server"; Path = ".\app-server"}

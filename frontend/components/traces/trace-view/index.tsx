@@ -143,8 +143,8 @@ const PureTraceView = ({ traceId, spanId, onClose, propsTrace }: TraceViewProps)
     () => spans
       .filter((span) => 
         span.spanType === SpanType.LLM && 
-        !span.attributes?.["hipocap.is_function_attempt"] &&
-        !span.attributes?.["hipocap.is_event_span"]
+        !span.attributes?.["clawops.action.virtual_attempt"] &&
+        !span.attributes?.["clawops.event.virtual"]
       )
       .map((span) => span.spanId),
     [spans]
@@ -196,20 +196,20 @@ const PureTraceView = ({ traceId, spanId, onClose, propsTrace }: TraceViewProps)
     (span?: TraceViewSpan) => {
       if (!span) return;
 
-      // If this is a virtual Hipocap event span or function attempt span, redirect to its parent
+      // If this is a virtual guardrail event span or function attempt span, redirect to its parent
       let spanToSelect = span;
       let eventId: string | undefined;
       
-      const isVirtualSpan = span.attributes?.["hipocap.is_event_span"] === true || 
-                           span.attributes?.["hipocap.is_function_attempt"] === true;
+      const isVirtualSpan = span.attributes?.["clawops.event.virtual"] === true || 
+                           span.attributes?.["clawops.action.virtual_attempt"] === true;
       
       if (isVirtualSpan && span.parentSpanId) {
         const parentSpan = spans.find((s) => s.spanId === span.parentSpanId);
         if (parentSpan) {
           spanToSelect = parentSpan;
           // Extract the event ID from the virtual span attributes if it's an event span
-          if (span.attributes?.["hipocap.is_event_span"]) {
-            eventId = span.attributes?.["hipocap.event_id"];
+          if (span.attributes?.["clawops.event.virtual"]) {
+            eventId = span.attributes?.["clawops.event.id"];
             // Set flags to auto-open Events tab and highlight the event
             if (eventId) {
               setSelectedEventId(eventId);

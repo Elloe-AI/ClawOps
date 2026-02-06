@@ -1,5 +1,7 @@
 [ClawOps](https://clawops.ai) is the control plane for AI agents running in public channels. It helps non-technical teams keep agents safe, visible, and under control across Telegram, Discord, WhatsApp, and SMS. ClawOps is powered by the open-core ClawOps Engine for security and observability.
 
+ClawOps is **not** an agent framework or chatbot builder. It is the operations, safety, and governance layer for agents you already run. You don't rebuild agents to make them safe - you operate them safely after they're deployed.
+
 - [x] ✅ **Control**
     - [x] Agent status, pause/resume, and kill switch
     - [x] Channel-first onboarding (no CLI, no YAML)
@@ -12,6 +14,32 @@
     - [x] Activity timelines with technical details on demand
     - [x] Risk scoring and safety trends
     - [x] OpenTelemetry-native traces under the hood
+
+## Deployment Modes
+
+ClawOps ships in three official deployment modes - all backed by the same codebase and enforcement rules:
+
+1. **Hosted ClawOps (SaaS)**  
+   Control plane is hosted by ClawOps. Default data handling is **metadata-only**, with optional full-fidelity opt-in.
+
+2. **Hybrid ClawOps (Recommended)**  
+   Hosted control plane + self-hosted **ClawOps Edge** connector and decision cache. Raw data stays local; SaaS receives metadata and incidents.
+
+3. **Fully Self-Hosted ClawOps**  
+   Control plane + Edge deployed on your infrastructure. No external dependencies; licensing + support hooks only.
+
+For full launch packaging details, see `docs/LAUNCH.md`.
+
+## 5-Minute Agent Protection
+
+ClawOps onboarding is designed for non-technical teams:
+
+1. Create org + project  
+2. Register your first agent  
+3. Choose a policy preset (General Agent / Healthcare / Finance)  
+4. Generate agent key + connector snippet  
+5. **Run the mandatory demo**  
+6. Readiness label is emitted automatically
 
 ## Demo
 
@@ -114,9 +142,22 @@ This starts all services:
 - **ClickHouse** → localhost:8123
 - **Quickwit** → http://localhost:7280
 
-### Step 4: Access the Dashboard
+### Step 4: Run safety checks
+
+```bash
+cd frontend
+npm run clawops:check
+```
+
+### Step 5: Access the Dashboard
 
 Open your browser and go to **http://localhost:3000**
+
+**CLI quickstart (optional):**
+```bash
+cd frontend
+npm run clawops:quickstart
+```
 
 You'll be prompted to sign up and create an account. Once logged in, you can:
 - Connect a channel and create an agent
@@ -127,8 +168,26 @@ You'll be prompted to sign up and create an account. Once logged in, you can:
 
 1. **Connect a channel** (Telegram, Discord, WhatsApp, SMS)
 2. **Name your agent**
-3. **Choose guardrails** (simple toggles)
-4. **Go live**
+3. **Choose a policy preset** (General Agent, Healthcare, Finance)
+4. **Copy the runtime snippet**
+5. **Run the mandatory demo**
+6. **Go live**
+
+## Pricing & Metering
+
+ClawOps is metered on **active agents, sessions, incidents, and exports**. We never charge per token.
+
+- **Community (Free)**: 1 active agent, metadata-only telemetry, basic guardrails
+- **Pro**: multi-agent monitoring, approvals + auto-pause, redacted telemetry, WhatsApp/SMS
+- **Enterprise**: full-fidelity telemetry (local or hybrid), evidence bundles, advanced approvals, self-hosted
+
+## Distribution & Adoption
+
+ClawOps supports multiple adoption paths without requiring ClawBot UI changes:
+
+- **ClawBot Ecosystem**: drop-in connector + base URL proxy ("Works with ClawBot")
+- **SimpleClaw / Emergent-style builders**: copy-paste setup with safe defaults
+- **Direct developer adoption**: CLI + Docker quickstart, `npm run clawops:check` surfaced early
 
 ## Guardrails and Blocks
 
@@ -149,7 +208,7 @@ Blocks are prompt-based rules for direct injection detection. Create them in **B
 
 ## Runtime Integration (copy-paste)
 
-ClawOps connects to your agent runtime. No changes to agent logic required—wrap your LLM client.
+ClawOps connects to your agent runtime. No changes to agent logic required - wrap your LLM client.
 
 ### Node / TypeScript
 
@@ -256,6 +315,7 @@ docker compose -f docker-compose.prod.yml up -d
 
 - [Contributing Guide](CONTRIBUTING.md) - Development setup and contributing
 - [Deployment Guide](DEPLOYMENT.md) - Production deployment
+- [Launch & Packaging](docs/LAUNCH.md) - Deployment modes, onboarding, and go-to-market
 - [Full Documentation](https://clawops.ai) - Product overview and docs
 
 ## Runtime SDKs

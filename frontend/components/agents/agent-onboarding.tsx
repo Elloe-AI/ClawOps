@@ -47,25 +47,10 @@ const RUNTIME_TYPES = [
 
 const GUARDRAIL_PRESETS = [
   {
-    id: "safe",
-    label: "Safe",
-    description: "Tight controls with frequent pauses on risk.",
-    allows: "Low-risk responses and safe tool calls",
-    blocks: "Instruction overrides and risky actions",
-    pauses: "Quickly when confidence drops",
-    config: {
-      blockInstructionOverrides: true,
-      askBeforeRiskyActions: true,
-      limitResponseFrequency: true,
-      pauseOnUncertainty: true,
-      disableExternalTools: true,
-    },
-  },
-  {
-    id: "balanced",
-    label: "Balanced",
-    description: "Recommended blend of autonomy and oversight.",
-    allows: "Most responses with approval checks",
+    id: "general",
+    label: "General Agent",
+    description: "Balanced guardrails for most public-channel agents.",
+    allows: "Everyday requests with approval checks on risk",
     blocks: "Instruction overrides and unsafe output",
     pauses: "When risk climbs or guardrails repeat",
     config: {
@@ -77,18 +62,33 @@ const GUARDRAIL_PRESETS = [
     },
   },
   {
-    id: "autonomous",
-    label: "Autonomous",
-    description: "Minimal friction with core safety checks.",
-    allows: "Faster responses and tooling",
-    blocks: "Instruction overrides only",
-    pauses: "Only for extreme risk",
+    id: "healthcare",
+    label: "Healthcare",
+    description: "Strict controls for regulated or patient-facing workflows.",
+    allows: "Low-risk responses with explicit approvals",
+    blocks: "Instruction overrides, unsafe output, and risky tooling",
+    pauses: "Quickly when confidence drops",
     config: {
       blockInstructionOverrides: true,
-      askBeforeRiskyActions: false,
-      limitResponseFrequency: false,
-      pauseOnUncertainty: false,
-      disableExternalTools: false,
+      askBeforeRiskyActions: true,
+      limitResponseFrequency: true,
+      pauseOnUncertainty: true,
+      disableExternalTools: true,
+    },
+  },
+  {
+    id: "finance",
+    label: "Finance",
+    description: "High-scrutiny preset for financial workflows and PII.",
+    allows: "Responses with approvals before risky actions",
+    blocks: "Instruction overrides, unsafe output, and risky tooling",
+    pauses: "When risk climbs or volume spikes",
+    config: {
+      blockInstructionOverrides: true,
+      askBeforeRiskyActions: true,
+      limitResponseFrequency: true,
+      pauseOnUncertainty: true,
+      disableExternalTools: true,
     },
   },
 ] as const;
@@ -134,7 +134,7 @@ export default function AgentOnboarding() {
   const [runtimeIdTouched, setRuntimeIdTouched] = useState(false);
   const [runtimeType, setRuntimeType] = useState<string>(RUNTIME_TYPES[0].id);
   const [partnerId, setPartnerId] = useState("");
-  const [guardrailPreset, setGuardrailPreset] = useState<GuardrailPresetId>("safe");
+  const [guardrailPreset, setGuardrailPreset] = useState<GuardrailPresetId>("general");
   const [apiKey, setApiKey] = useState<string | null>(null);
   const [agentRecordId, setAgentRecordId] = useState<string | null>(null);
   const [connectionState, setConnectionState] = useState<ConnectionState>("idle");
@@ -235,7 +235,10 @@ llm = clawops.wrap_llm(openai_client)`;
             environment,
             partnerId: partnerId || undefined,
             runtimeType: runtimeType || undefined,
-            guardrailsConfig: getPreset(guardrailPreset).config,
+            guardrailsConfig: {
+              ...getPreset(guardrailPreset).config,
+              presetLabel: getPreset(guardrailPreset).label,
+            },
             channelConfig: {
               label: channelMeta?.label,
               environment,
@@ -348,7 +351,7 @@ llm = clawops.wrap_llm(openai_client)`;
                 </div>
                 {isFreeTier && (
                   <p className="text-xs text-muted-foreground">
-                    WhatsApp and SMS connections unlock on paid plans for compliance and carrier approvals.
+                    WhatsApp and SMS connections unlock on Pro or Enterprise plans for compliance and carrier approvals.
                   </p>
                 )}
               </div>
@@ -430,7 +433,7 @@ llm = clawops.wrap_llm(openai_client)`;
             <div className="space-y-4">
               <div className="flex items-center gap-2 text-sm font-medium">
                 <ShieldCheck className="h-4 w-4 text-muted-foreground" />
-                Guardrail preset
+                Policy preset
               </div>
               <div className="grid gap-3 md:grid-cols-3">
                 {GUARDRAIL_PRESETS.map((preset) => {

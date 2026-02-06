@@ -58,6 +58,9 @@ const DEFAULT_GUARDRAILS = {
 };
 
 const getGuardrailPreset = (config: Record<string, any> | null | undefined) => {
+  if (config && typeof config.presetLabel === "string" && config.presetLabel.trim().length > 0) {
+    return config.presetLabel;
+  }
   const merged = { ...DEFAULT_GUARDRAILS, ...(config ?? {}) };
   const disabled = Object.values(merged).filter((value) => value === false).length;
   if (disabled === 0) return "Safe";
@@ -72,6 +75,13 @@ const formatDetails = (details: Record<string, any> | null | undefined) => {
   } catch (error) {
     return "Unable to render details.";
   }
+};
+
+const getRiskLabel = (score?: number | null) => {
+  if (score === null || score === undefined) return "Low";
+  if (score >= 70) return "High";
+  if (score >= 40) return "Medium";
+  return "Low";
 };
 
 export default function AgentActivity({ agentId }: { agentId: string }) {
@@ -92,6 +102,18 @@ export default function AgentActivity({ agentId }: { agentId: string }) {
 
   const events = useMemo(() => eventsData?.items ?? [], [eventsData]);
   const isPaused = agentData?.status !== "running";
+  const blockedCount = events.filter((event) => event.eventType === "agent_response_blocked").length;
+  const guardrailCount = events.filter((event) => event.eventType === "guardrail_triggered").length;
+  const pauseCount = events.filter((event) =>
+    ["agent_paused_auto", "agent_paused_manual"].includes(event.eventType)
+  ).length;
+  const lastIncident = events.find((event) =>
+    ["agent_response_blocked", "guardrail_triggered", "agent_paused_auto", "agent_paused_manual"].includes(
+      event.eventType
+    )
+  );
+  const riskLabel = getRiskLabel(agentData?.riskScore);
+  const guardrailLabel = getGuardrailPreset(agentData?.guardrailsConfig as Record<string, any>);
 
   const handleToggleStatus = async () => {
     if (!agentData) return;
@@ -122,6 +144,39 @@ export default function AgentActivity({ agentId }: { agentId: string }) {
       });
     } finally {
       setIsUpdatingStatus(false);
+    }
+  };
+
+  const scorecardText = `ClawOps-Protected\nAgent: ${agentData?.name ?? "Agent"}\nChannel: ${
+    agentData?.channel ? AGENT_CHANNEL_LABELS[agentData.channel] : "Channel"
+  }\nRisk: ${riskLabel}\nGuardrails: ${guardrailLabel}\nBlocks: ${blockedCount}\nGuardrails triggered: ${guardrailCount}\nLast incident: ${
+    lastIncident?.createdAt ? new Date(lastIncident.createdAt).toISOString() : "None"
+  }`;
+  const badgeSnippet = `<span class="clawops-protected">ClawOps-Protected</span>`;
+
+  const handleCopyScorecard = async () => {
+    try {
+      await navigator.clipboard.writeText(scorecardText);
+      toast({ title: "Scorecard copied", description: "Shareable safety summary copied to clipboard." });
+    } catch (error) {
+      toast({
+        title: "Copy failed",
+        description: "Unable to copy scorecard. Please try again.",
+        variant: "destructive",
+      });
+    }
+  };
+
+  const handleCopyBadge = async () => {
+    try {
+      await navigator.clipboard.writeText(badgeSnippet);
+      toast({ title: "Badge snippet copied", description: "Embed the ClawOps-Protected badge anywhere." });
+    } catch (error) {
+      toast({
+        title: "Copy failed",
+        description: "Unable to copy badge snippet. Please try again.",
+        variant: "destructive",
+      });
     }
   };
 
@@ -192,6 +247,52 @@ export default function AgentActivity({ agentId }: { agentId: string }) {
             <div className="text-xs text-muted-foreground mt-1">
               {AGENT_ENVIRONMENT_LABELS[agentData?.environment ?? "prod"]} · {getGuardrailPreset(agentData?.guardrailsConfig as Record<string, any>)}
             </div>
+          </div>
+        </CardContent>
+      </Card>
+
+      <Card>
+        <CardHeader>
+          <CardTitle>Safety scorecard</CardTitle>
+          <CardDescription>Shareable proof that this agent is running under ClawOps guardrails.</CardDescription>
+        </CardHeader>
+        <CardContent className="space-y-4 text-sm">
+          <div className="grid gap-3 md:grid-cols-4">
+            <div>
+              <div className="text-xs uppercase tracking-wide text-muted-foreground">Risk level</div>
+              <div className="text-sm font-medium text-foreground">{riskLabel}</div>
+            </div>
+            <div>
+              <div className="text-xs uppercase tracking-wide text-muted-foreground">Guardrails</div>
+              <div className="text-sm font-medium text-foreground">{guardrailLabel}</div>
+            </div>
+            <div>
+              <div className="text-xs uppercase tracking-wide text-muted-foreground">Blocks</div>
+              <div className="text-sm font-medium text-foreground">{blockedCount}</div>
+            </div>
+            <div>
+              <div className="text-xs uppercase tracking-wide text-muted-foreground">Pauses</div>
+              <div className="text-sm font-medium text-foreground">{pauseCount}</div>
+            </div>
+          </div>
+          <div className="rounded-lg border bg-muted/40 p-3 text-xs">
+            <div className="flex items-center justify-between gap-2">
+              <span className="font-medium text-foreground">ClawOps-Protected</span>
+              <div className="flex items-center gap-2">
+                <Button size="sm" variant="outline" onClick={handleCopyScorecard}>
+                  Copy scorecard
+                </Button>
+                <Button size="sm" variant="outline" onClick={handleCopyBadge}>
+                  Copy badge
+                </Button>
+              </div>
+            </div>
+            <div className="mt-2 text-muted-foreground">
+              Share this scorecard in proposals, compliance reviews, or partner docs to show active guardrails.
+            </div>
+            <pre className="mt-3 whitespace-pre-wrap rounded-md bg-background p-2 text-[11px] text-muted-foreground">
+              {badgeSnippet}
+            </pre>
           </div>
         </CardContent>
       </Card>

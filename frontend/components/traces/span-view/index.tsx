@@ -6,8 +6,8 @@ import { useHotkeys } from "react-hotkeys-hook";
 import useSWR from "swr";
 
 import { SpanControls } from "@/components/traces/span-controls";
-import { HipocapAnalysisCard } from "@/components/traces/trace-view/hipocap-analysis-card";
-import { hasHipocapAnalysis } from "@/components/traces/trace-view/utils";
+import { GuardrailAnalysisCard } from "@/components/traces/trace-view/guardrail-analysis-card";
+import { hasGuardrailAnalysis } from "@/components/traces/trace-view/utils";
 import SpanViewSearchBar from "@/components/traces/span-view/search-bar.tsx";
 import SpanContent from "@/components/traces/span-view/span-content";
 import { SpanSearchProvider, useSpanSearchContext } from "@/components/traces/span-view/span-search-context";
@@ -16,6 +16,7 @@ import { Alert, AlertDescription, AlertTitle } from "@/components/ui/alert.tsx";
 import ContentRenderer from "@/components/ui/content-renderer/index";
 import { Skeleton } from "@/components/ui/skeleton";
 import { Event } from "@/lib/events/types";
+import { normalizeLegacyPayload } from "@/lib/telemetry/normalize";
 import { Span } from "@/lib/traces/types";
 
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "../../ui/tabs";
@@ -57,18 +58,20 @@ const SpanViewTabs = ({
   setSearchOpen: (open: boolean) => void;
 }) => {
   const searchContext = useSpanSearchContext();
+  const normalizedAttributes = useMemo(() => normalizeLegacyPayload(span.attributes ?? {}), [span.attributes]);
+  const normalizedEvents = useMemo(() => normalizeLegacyPayload(cleanedEvents), [cleanedEvents]);
 
-  const hasHipocap = useMemo(() => hasHipocapAnalysis(span), [span]);
+  const hasGuardrail = useMemo(() => hasGuardrailAnalysis(span), [span]);
   const hasInput = useMemo(() => !isNullOrUndefined(span.input), [span.input]);
   const hasOutput = useMemo(() => !isNullOrUndefined(span.output), [span.output]);
 
-  // Determine the default tab - prioritize hipocap, then input, then output, then attributes
+  // Determine the default tab - prioritize guardrail, then input, then output, then attributes
   const defaultTab = useMemo(() => {
-    if (hasHipocap) return "hipocap-analysis";
+    if (hasGuardrail) return "guardrail-analysis";
     if (hasInput) return "span-input";
     if (hasOutput) return "span-output";
     return "attributes";
-  }, [hasInput, hasOutput, hasHipocap]);
+  }, [hasInput, hasOutput, hasGuardrail]);
 
   return (
     <div className="flex flex-col h-full overflow-hidden">
@@ -76,8 +79,8 @@ const SpanViewTabs = ({
         {/* Tabs Navigation - Horizontal Layout */}
         <div className="flex items-center justify-between px-4 py-2 border-b bg-muted/20">
           <TabsList className="border-none text-xs h-8 bg-transparent">
-            {hasHipocap && (
-              <TabsTrigger value="hipocap-analysis" className="text-xs px-3 h-7">
+            {hasGuardrail && (
+              <TabsTrigger value="guardrail-analysis" className="text-xs px-3 h-7">
                 Guardrail check
               </TabsTrigger>
             )}
@@ -103,10 +106,10 @@ const SpanViewTabs = ({
 
         {/* Content Area */}
         <div className="flex-1 min-h-0 overflow-hidden">
-          {hasHipocap && (
-            <TabsContent value="hipocap-analysis" className="w-full h-full overflow-y-auto m-0">
+          {hasGuardrail && (
+            <TabsContent value="guardrail-analysis" className="w-full h-full overflow-y-auto m-0">
               <div className="p-4">
-                <HipocapAnalysisCard span={span} />
+                <GuardrailAnalysisCard span={span} />
               </div>
             </TabsContent>
           )}
@@ -125,7 +128,7 @@ const SpanViewTabs = ({
               className="rounded-none border-0"
               codeEditorClassName="rounded-none border-none bg-background contain-strict"
               readOnly
-              value={JSON.stringify(span.attributes)}
+              value={JSON.stringify(normalizedAttributes)}
               defaultMode="yaml"
               searchTerm={searchContext?.searchTerm || ""}
             />
@@ -135,7 +138,7 @@ const SpanViewTabs = ({
               className="rounded-none border-0"
               codeEditorClassName="rounded-none border-none bg-background contain-strict"
               readOnly
-              value={JSON.stringify(cleanedEvents)}
+              value={JSON.stringify(normalizedEvents)}
               defaultMode="yaml"
               searchTerm={searchContext?.searchTerm || ""}
             />
@@ -150,11 +153,11 @@ export function SpanView({ spanId, traceId }: SpanViewProps) {
   const { projectId } = useParams();
   const [searchOpen, setSearchOpen] = useState(false);
 
-  // Check if this is a virtual Hipocap event span ID or function attempt span ID and redirect to parent
+  // Check if this is a virtual guardrail event span ID or function attempt span ID and redirect to parent
   const actualSpanId = useMemo(() => {
-    // If spanId looks like a virtual span ID (contains -hipocap-event- or -function-attempt-), extract parent
-    if (spanId?.includes("-hipocap-event-")) {
-      return spanId.split("-hipocap-event-")[0];
+    // If spanId looks like a virtual span ID (contains -clawops-event- or -function-attempt-), extract parent
+    if (spanId?.includes("-clawops-event-")) {
+      return spanId.split("-clawops-event-")[0];
     }
     if (spanId?.includes("-function-attempt-")) {
       return spanId.split("-function-attempt-")[0];

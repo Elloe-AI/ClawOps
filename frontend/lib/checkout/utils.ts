@@ -7,7 +7,7 @@ import { users, userSubscriptionInfo, workspaces } from '../db/migrations/schema
 
 
 export const LOOKUP_KEY_TO_TIER_NAME: Record<string, string> = {
-  hobby_monthly_2025_04: 'ClawOps Hobby tier',
+  hobby_monthly_2025_04: 'ClawOps Pro tier (Legacy)',
   pro_monthly_2025_02: 'ClawOps Pro tier',
   pro_monthly_2025_04: 'ClawOps Pro tier',
   additional_seat_2024_11: 'Additional seat',

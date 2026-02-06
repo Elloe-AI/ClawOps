@@ -19,7 +19,7 @@ PROJECT_ROOT="$(cd "$SCRIPT_DIR/.." && pwd)"
 
 # Services to build
 SERVICES=(
-    "clawops-engine:./hipocap_server"
+    "clawops-engine:./clawops_engine"
     "frontend:./frontend"
     "query-engine:./query-engine"
     "app-server:./app-server"

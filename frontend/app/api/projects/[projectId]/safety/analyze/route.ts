@@ -1,7 +1,7 @@
 import { NextResponse } from "next/server";
 import { getServerSession } from "next-auth";
 
-import { HipocapAnalysisRequest, HipocapAnalysisResponse } from "@/lib/hipocap/types";
+import { ClawOpsAnalysisRequest, ClawOpsAnalysisResponse } from "@/lib/clawops/types";
 import { authOptions } from "@/lib/auth";
 import { requireProjectRoleAtLeast } from "@/lib/authorization/roles";
 
@@ -67,24 +67,24 @@ export async function POST(req: Request, props: { params: Promise<{ projectId: s
     const response = await fetch(analyzeUrl, {
       method: "POST",
       headers,
-      body: JSON.stringify(requestBody as HipocapAnalysisRequest),
+      body: JSON.stringify(requestBody as ClawOpsAnalysisRequest),
       signal: req.signal,
     });
 
     if (!response.ok) {
       const errorText = await response.text();
       const reason = errorText?.trim() || `Guardrail engine returned ${response.status}.`;
-      const fallback: HipocapAnalysisResponse = {
+      const fallback: ClawOpsAnalysisResponse = {
         final_decision: "BLOCKED",
         safe_to_use: false,
         score: 1,
         final_score: 1,
         reason: `Safety check unavailable. ${reason}`,
-      } as HipocapAnalysisResponse;
+      } as ClawOpsAnalysisResponse;
       return NextResponse.json(fallback, { status: 200 });
     }
 
-    const data = (await response.json()) as HipocapAnalysisResponse;
+    const data = (await response.json()) as ClawOpsAnalysisResponse;
 
     return NextResponse.json(data);
   } catch (error) {
@@ -94,13 +94,13 @@ export async function POST(req: Request, props: { params: Promise<{ projectId: s
       return NextResponse.json({ error: "Request was cancelled" }, { status: 499 });
     }
 
-    const fallback: HipocapAnalysisResponse = {
+    const fallback: ClawOpsAnalysisResponse = {
       final_decision: "BLOCKED",
       safe_to_use: false,
       score: 1,
       final_score: 1,
       reason: "Safety check unavailable. Response blocked by default.",
-    } as HipocapAnalysisResponse;
+    } as ClawOpsAnalysisResponse;
     return NextResponse.json(fallback, { status: 200 });
   }
 }

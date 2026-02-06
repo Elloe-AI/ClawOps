@@ -61,6 +61,9 @@ const DEFAULT_GUARDRAILS = {
 };
 
 const getGuardrailPreset = (config: Record<string, any> | null | undefined) => {
+  if (config && typeof config.presetLabel === "string" && config.presetLabel.trim().length > 0) {
+    return config.presetLabel;
+  }
   const merged = { ...DEFAULT_GUARDRAILS, ...(config ?? {}) };
   const disabled = Object.values(merged).filter((value) => value === false).length;
   if (disabled === 0) return "Safe";
@@ -154,6 +157,14 @@ export default function MissionControl() {
     () => (isFreeTier ? events.filter((event) => visibleAgentIds.has(event.agentId)) : events),
     [events, isFreeTier, visibleAgentIds]
   );
+  const demoComplete = useMemo(
+    () =>
+      agents.some((agent) => {
+        const channelConfig = agent.channelConfig as Record<string, any> | null | undefined;
+        return Boolean(channelConfig?.demo) || agent.externalBotId?.startsWith("demo-");
+      }),
+    [agents]
+  );
 
   useEffect(() => {
     if (selectedAgentId || visibleAgents.length === 0) return;
@@ -201,8 +212,9 @@ export default function MissionControl() {
       { label: "First message received", complete: firstMessage },
       { label: "First block detected", complete: firstBlock },
       { label: "Pause / resume tested", complete: firstPause && pauseResumeTested },
+      { label: "Demo run complete", complete: demoComplete },
     ];
-  }, [agents.length, events]);
+  }, [agents.length, demoComplete, events]);
 
   const handleToggleStatus = async (agent: Agent) => {
     if (!projectId) return;
@@ -291,6 +303,9 @@ export default function MissionControl() {
               </CardDescription>
             </CardHeader>
             <CardContent className="flex flex-wrap gap-3">
+              <Button onClick={() => router.push(`/project/${projectId}/launch`)}>
+                Start 5-minute launch
+              </Button>
               <Button onClick={() => router.push(`/project/${projectId}/agents/new`)}>
                 Connect an agent
               </Button>
@@ -490,13 +505,21 @@ export default function MissionControl() {
                 <CardTitle>Onboarding checklist</CardTitle>
                 <CardDescription>Track your first milestones in ClawOps.</CardDescription>
               </CardHeader>
-              <CardContent className="space-y-2">
+              <CardContent className="space-y-3">
                 {checklist.map((item) => (
                   <div key={item.label} className="flex items-center gap-2 text-sm">
                     <div className={cn("h-2.5 w-2.5 rounded-full", item.complete ? "bg-emerald-500" : "bg-muted")} />
                     <span className={cn(item.complete ? "text-foreground" : "text-muted-foreground")}>{item.label}</span>
                   </div>
                 ))}
+                <Button
+                  size="sm"
+                  variant="outline"
+                  className="mt-2"
+                  onClick={() => router.push(`/project/${projectId}/launch`)}
+                >
+                  Open launch checklist
+                </Button>
               </CardContent>
             </Card>
           </div>
@@ -524,7 +547,7 @@ export default function MissionControl() {
                       <div className="rounded-lg border bg-muted/40 p-3 text-xs">
                         <div className="font-medium text-foreground">Upgrade for advanced controls</div>
                         <p className="text-muted-foreground">
-                          Auto-pause and approval queue are available on paid plans to keep operators in the loop.
+                          Auto-pause and approval queue are available on Pro or Enterprise plans to keep operators in the loop.
                         </p>
                         <Button
                           size="sm"

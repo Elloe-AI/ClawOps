@@ -48,7 +48,7 @@ const UsageDisplay = ({
 
   return (
     <div className="p-2 rounded-lg border bg-muted/30 text-xs">
-      <div className="text-muted-foreground mb-2">Free plan usage</div>
+      <div className="text-muted-foreground mb-2">Telemetry usage (not billed)</div>
       <div className="flex flex-col gap-2">
         <div title={title} className="font-medium truncate">
           {title}

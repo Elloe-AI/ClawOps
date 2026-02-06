@@ -27,6 +27,7 @@ import {
 import { useUserContext } from "@/contexts/user-context.tsx";
 import { deleteLastProjectIdCookie } from "@/lib/actions/project/cookies.ts";
 import { deleteLastWorkspaceIdCookie, setLastWorkspaceIdCookie } from "@/lib/actions/workspace/cookies.ts";
+import { displayTierName } from "@/lib/billing/tiers";
 import { useToast } from "@/lib/hooks/use-toast.ts";
 import { cn, swrFetcher } from "@/lib/utils.ts";
 import { Workspace, WorkspaceWithOptionalUsers } from "@/lib/workspaces/types.ts";
@@ -103,11 +104,11 @@ const WorkspaceSidebarHeader = ({ workspace }: WorkspaceSidebarHeaderProps) => {
                       className={cn(
                         "text-xs text-secondary-foreground py-0 px-1.5 rounded-md bg-secondary/40 font-mono border border-secondary-foreground/20",
                         {
-                          "border-primary bg-primary/10 text-primary": w.tierName === "Pro",
+                          "border-primary bg-primary/10 text-primary": displayTierName(w.tierName) === "Pro",
                         }
                       )}
                     >
-                      {w.tierName}
+                      {displayTierName(w.tierName)}
                     </span>
                   </DropdownMenuItem>
                 </Link>

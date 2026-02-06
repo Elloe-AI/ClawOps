@@ -4,6 +4,10 @@ export type WorkspaceStats = {
   members: number;
   membersLimit: number;
   resetTime: string;
+  activeAgents: number;
+  sessionCount: number;
+  incidentCount: number;
+  exportCount: number;
   // GB usage fields
   gbUsedThisMonth: number;
   gbLimit: number;

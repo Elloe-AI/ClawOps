@@ -138,13 +138,16 @@ to test a change.
 
 ### 3. Run the ClawOps engine in development mode
 
+Set your engine path and module name (varies by deployment):
+
 ```bash
-cd hipocap_server
+ENGINE_DIR=${CLAWOPS_ENGINE_DIR:-./engine}
+cd ${ENGINE_DIR}
 # Install dependencies if needed
 pip install -e .
 
 # Run the server
-python -m hipocap_server.api.server
+python -m <engine_module>.api.server
 ```
 
 ### 4. Run frontend in development mode

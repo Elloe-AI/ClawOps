@@ -6,7 +6,7 @@ export const PolicySchema = z.object({
   policy_key: z.string(),
   name: z.string(),
   description: z.string().nullable().optional(),
-  owner_id: z.string(), // UUID string from Hipocap
+  owner_id: z.string(), // UUID string from the control plane
   roles: z.record(z.string(), z.any()).nullable().optional(),
   functions: z.record(z.string(), z.any()).nullable().optional(),
   severity_rules: z.record(z.string(), z.any()).nullable().optional(),

@@ -14,6 +14,7 @@ import {
   QueryResult,
   SelectQueryOptions,
 } from "@/lib/actions/common/query-builder";
+import { normalizeLegacyLabel, normalizeLegacyPayload } from "@/lib/telemetry/normalize";
 import { tryParseJson } from "@/lib/utils.ts";
 
 const spansColumnFilterConfig: ColumnFilterConfig = {
@@ -262,57 +263,59 @@ export const transformSpanWithEvents = (
   projectId: string
 ): TraceViewSpan => {
   const parsedAttributes = tryParseJson(span.attributes) || {};
+  const normalizedAttributes = normalizeLegacyPayload(parsedAttributes) as Record<string, any>;
   const events = (spanEventsMap[span.spanId] || []).map((event) => {
     const parsedAttributes = typeof event.attributes === "string" ? tryParseJson(event.attributes) || {} : event.attributes || {};
-    // Helper function to check if an event is a Hipocap security event
-    const isHipocapSecurityEvent = (eventName: string): boolean => {
-      return eventName === "hipocap.security.threat_detected" || 
-             eventName === "hipocap.security.analysis_complete";
+    const normalizedEventAttributes = normalizeLegacyPayload(parsedAttributes) as Record<string, any>;
+    const normalizedEventName = normalizeLegacyLabel(event.name) ?? event.name;
+    const isGuardrailSecurityEvent = (eventName: string): boolean => {
+      return eventName === "clawops.threat.detected" ||
+             eventName === "clawops.threat.analysis_complete";
     };
-    // Debug logging for Hipocap events
-    if (isHipocapSecurityEvent(event.name)) {
+    if (isGuardrailSecurityEvent(normalizedEventName)) {
       console.debug("[ClawOps Event] Parsed event for span:", span.spanId, {
         eventId: event.id,
-        name: event.name,
-        attributes: parsedAttributes,
+        name: normalizedEventName,
+        attributes: normalizedEventAttributes,
         originalAttributesType: typeof event.attributes,
       });
     }
     return {
       ...event,
       projectId,
-      attributes: parsedAttributes,
+      name: normalizedEventName,
+      attributes: normalizedEventAttributes,
     };
   });
 
-  // Extract function_call_attempts from Hipocap events
+  // Extract function call attempts from guardrail events
   const functionAttempts: string[] = [];
-  const hipocapEventData: Record<string, any> = {};
-  let hipocapFunctionName: string | undefined = undefined;
+  const guardrailEventData: Record<string, any> = {};
+  let guardrailFunctionName: string | undefined = undefined;
   
   for (const event of events) {
-    if (event.name === "hipocap.security.threat_detected" || event.name === "hipocap.security.analysis_complete") {
+    if (event.name === "clawops.threat.detected" || event.name === "clawops.threat.analysis_complete") {
       const eventAttrs = event.attributes || {};
       
       // Get the function name from the event (this is the function that was called/analyzed)
-      const functionName = eventAttrs["hipocap.function_name"];
-      if (functionName && !hipocapFunctionName) {
-        hipocapFunctionName = functionName;
+      const functionName = eventAttrs["clawops.action.name"];
+      if (functionName && !guardrailFunctionName) {
+        guardrailFunctionName = functionName;
       }
       
       // Try to get function_call_attempts from various possible locations
       let attempts: string[] = [];
       
       // Check direct attribute
-      if (Array.isArray(eventAttrs["hipocap.function_call_attempts"])) {
-        attempts = eventAttrs["hipocap.function_call_attempts"];
+      if (Array.isArray(eventAttrs["clawops.action.call_attempts"])) {
+        attempts = eventAttrs["clawops.action.call_attempts"];
       }
       // Check in llm_analysis JSON string
-      else if (eventAttrs["hipocap.llm_analysis"]) {
+      else if (eventAttrs["clawops.threat.llm_analysis"]) {
         try {
-          const llmAnalysis = typeof eventAttrs["hipocap.llm_analysis"] === "string" 
-            ? tryParseJson(eventAttrs["hipocap.llm_analysis"]) 
-            : eventAttrs["hipocap.llm_analysis"];
+          const llmAnalysis = typeof eventAttrs["clawops.threat.llm_analysis"] === "string"
+            ? tryParseJson(eventAttrs["clawops.threat.llm_analysis"])
+            : eventAttrs["clawops.threat.llm_analysis"];
           if (llmAnalysis && Array.isArray(llmAnalysis.function_call_attempts)) {
             attempts = llmAnalysis.function_call_attempts;
           }
@@ -326,14 +329,14 @@ export const transformSpanWithEvents = (
           functionAttempts.push(...attempts);
         }
         // Store event data for later use
-        hipocapEventData[event.id] = {
+        guardrailEventData[event.id] = {
           functionName: functionName,
-          severity: eventAttrs["hipocap.severity"] || eventAttrs["hipocap.final_decision"],
-          decision: eventAttrs["hipocap.final_decision"] || eventAttrs["hipocap.decision"],
-          reason: eventAttrs["hipocap.reason"],
-          blockedAt: eventAttrs["hipocap.blocked_at"],
-          finalScore: eventAttrs["hipocap.final_score"] || eventAttrs["hipocap.score"],
-          llmAnalysis: eventAttrs["hipocap.llm_analysis"],
+          severity: eventAttrs["clawops.threat.severity"] || eventAttrs["clawops.threat.decision"],
+          decision: eventAttrs["clawops.threat.decision"],
+          reason: eventAttrs["clawops.threat.reason"],
+          blockedAt: eventAttrs["clawops.threat.blocked_at"],
+          finalScore: eventAttrs["clawops.threat.score"],
+          llmAnalysis: eventAttrs["clawops.threat.llm_analysis"],
         };
       }
     }
@@ -341,20 +344,20 @@ export const transformSpanWithEvents = (
 
   // Store function attempts and event data in span attributes for easy access
   // Also store the function name from the first event if available
-  const firstEventData = Object.values(hipocapEventData)[0] as any;
+  const firstEventData = Object.values(guardrailEventData)[0] as any;
   const enrichedAttributes = {
-    ...parsedAttributes,
+    ...normalizedAttributes,
     ...(functionAttempts.length > 0 && {
-      "hipocap.function_attempts": functionAttempts,
-      "hipocap.event_data": hipocapEventData,
+      "clawops.action.attempts": functionAttempts,
+      "clawops.event.data": guardrailEventData,
     }),
-    ...(hipocapFunctionName && {
-      "hipocap.function_name": hipocapFunctionName,
+    ...(guardrailFunctionName && {
+      "clawops.action.name": guardrailFunctionName,
     }),
   };
   
-  // Update span name if we have a function name from Hipocap event
-  const updatedName = hipocapFunctionName || span.name;
+  // Update span name if we have a function name from guardrail event
+  const updatedName = guardrailFunctionName || span.name;
 
   return {
     ...span,

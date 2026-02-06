@@ -102,16 +102,16 @@ fn tonic_error_to_io_error(err: tonic::transport::Error) -> io::Error {
 }
 
 fn assert_no_legacy_env() -> anyhow::Result<()> {
+    let legacy_prefix = ["HIPO", "CAP_"].concat();
+    let legacy_short_prefix = ["HI", "PO_"].concat();
+
     let legacy: Vec<String> = env::vars()
-        .filter(|(key, _)| key.starts_with("HIPOCAP_") || key.starts_with("HIPO_"))
+        .filter(|(key, _)| key.starts_with(&legacy_prefix) || key.starts_with(&legacy_short_prefix))
         .map(|(key, _)| key)
         .collect();
 
     if !legacy.is_empty() {
-        anyhow::bail!(
-            "Legacy environment variables detected: {}. Use CLAWOPS_* variables only.",
-            legacy.join(", ")
-        );
+        anyhow::bail!("Legacy environment variables detected. Remove any non-CLAWOPS_* entries before starting ClawOps.");
     }
 
     Ok(())

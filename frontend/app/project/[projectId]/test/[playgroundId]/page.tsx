@@ -1,6 +1,6 @@
 import { Metadata } from "next";
 
-import { HipocapAnalysisPlayground } from "@/components/playground/hipocap-analysis-playground";
+import { GuardrailAnalysisPlayground } from "@/components/playground/guardrail-analysis-playground";
 import Header from "@/components/ui/header";
 
 export const metadata: Metadata = {
@@ -18,7 +18,7 @@ export default async function TestDetailPage(props: {
   return (
     <div className="flex-1 flex flex-col overflow-hidden">
       <Header path="test/analysis" />
-      <HipocapAnalysisPlayground />
+      <GuardrailAnalysisPlayground />
     </div>
   );
 }

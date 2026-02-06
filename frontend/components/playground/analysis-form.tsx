@@ -8,7 +8,7 @@ import { Controller, useForm } from "react-hook-form";
 import { z } from "zod";
 import useSWR from "swr";
 
-import { HipocapAnalysisRequest, HipocapAnalysisResponse } from "@/lib/hipocap/types";
+import { ClawOpsAnalysisRequest, ClawOpsAnalysisResponse } from "@/lib/clawops/types";
 import { Policy, listPolicies } from "@/lib/actions/policies";
 import { swrFetcher } from "@/lib/utils";
 import { Collapsible, CollapsibleContent, CollapsibleTrigger } from "@/components/ui/collapsible";
@@ -90,7 +90,7 @@ const analysisFormSchema = z
 export type AnalysisFormData = z.infer<typeof analysisFormSchema>;
 
 interface AnalysisFormProps {
-  onResult: (result: HipocapAnalysisResponse) => void;
+  onResult: (result: ClawOpsAnalysisResponse) => void;
   onError: (error: string) => void;
   onFormReady?: (formControls: {
     control: ReturnType<typeof useForm<AnalysisFormData>>["control"];
@@ -110,8 +110,6 @@ interface AnalysisFormProps {
 
 const STORAGE_KEY_BACKEND_URL = "clawops_playground_engine_url";
 const STORAGE_KEY_API_KEY = "clawops_playground_engine_key";
-const LEGACY_STORAGE_KEY_BACKEND_URL = "hipocap_playground_backend_url";
-const LEGACY_STORAGE_KEY_API_KEY = "hipocap_playground_api_key";
 
 export function AnalysisForm({ onResult, onError, onFormReady }: AnalysisFormProps) {
   const params = useParams();
@@ -131,14 +129,8 @@ export function AnalysisForm({ onResult, onError, onFormReady }: AnalysisFormPro
 
   useEffect(() => {
     if (typeof window !== "undefined") {
-      const url =
-        localStorage.getItem(STORAGE_KEY_BACKEND_URL) ||
-        localStorage.getItem(LEGACY_STORAGE_KEY_BACKEND_URL) ||
-        "";
-      const key =
-        localStorage.getItem(STORAGE_KEY_API_KEY) ||
-        localStorage.getItem(LEGACY_STORAGE_KEY_API_KEY) ||
-        "";
+      const url = localStorage.getItem(STORAGE_KEY_BACKEND_URL) || "";
+      const key = localStorage.getItem(STORAGE_KEY_API_KEY) || "";
       setSavedBackendUrl(url);
       setSavedApiKey(key);
     }
@@ -307,7 +299,7 @@ export function AnalysisForm({ onResult, onError, onFormReady }: AnalysisFormPro
         throw new Error(errorData.error || `Request failed with status ${response.status}`);
       }
 
-      const result = (await response.json()) as HipocapAnalysisResponse;
+      const result = (await response.json()) as ClawOpsAnalysisResponse;
       onResult(result);
     } catch (error) {
       const errorMessage = error instanceof Error ? error.message : "Failed to analyze function";

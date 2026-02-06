@@ -282,8 +282,8 @@ const createTraceViewStore = () =>
         },
 
         setSelectedSpan: (span) => {
-          // If selecting a virtual Hipocap event span, select its parent instead
-          if (span?.attributes?.["hipocap.is_event_span"]) {
+          // If selecting a virtual guardrail event span, select its parent instead
+          if (span?.attributes?.["clawops.event.virtual"]) {
             const parentSpanId = span.parentSpanId;
             if (parentSpanId) {
               const parentSpan = get().spans.find((s) => s.spanId === parentSpanId);
@@ -298,8 +298,8 @@ const createTraceViewStore = () =>
         selectSpanById: (spanId: string) => {
           const span = get().spans.find((s) => s.spanId === spanId);
           if (span && !span.pending) {
-            // If selecting a virtual Hipocap event span, select its parent instead
-            if (span.attributes?.["hipocap.is_event_span"] && span.parentSpanId) {
+            // If selecting a virtual guardrail event span, select its parent instead
+            if (span.attributes?.["clawops.event.virtual"] && span.parentSpanId) {
               const parentSpan = get().spans.find((s) => s.spanId === span.parentSpanId);
               if (parentSpan) {
                 set({ selectedSpan: parentSpan });

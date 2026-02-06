@@ -177,6 +177,12 @@ export default function Landing() {
                 <p className="px-4 md:px-0 text-lg md:text-2xl text-white/85 font-semibold tracking-normal font-title text-left md:text-center">
                   ClawOps gives you calm, clear visibility and guardrails for Telegram, Discord, WhatsApp, and SMS bots.
                 </p>
+                <p className="px-4 md:px-0 text-sm md:text-base text-white/70 font-semibold tracking-normal font-title text-left md:text-center max-w-3xl">
+                  Not an agent framework. Not a chatbot builder. ClawOps is the operations, safety, and governance layer for agents you already run.
+                </p>
+                <p className="px-4 md:px-0 text-sm md:text-base text-white/80 font-semibold tracking-normal font-title text-left md:text-center">
+                  You don't rebuild agents to make them safe. You operate them safely after they're deployed.
+                </p>
                 <div className="flex space-x-4 items-center">
                   <Link href="/sign-up">
                     <Button className="w-40 h-10 text-base border-none">Get started - free</Button>

@@ -25,6 +25,7 @@ import { useProjectContext } from "@/contexts/project-context.tsx";
 import { useUserContext } from "@/contexts/user-context.tsx";
 import { deleteLastProjectIdCookie, setLastProjectIdCookie } from "@/lib/actions/project/cookies";
 import { deleteLastWorkspaceIdCookie } from "@/lib/actions/workspace/cookies";
+import { displayTierName } from "@/lib/billing/tiers";
 import { cn } from "@/lib/utils.ts";
 
 const ProjectSidebarHeader = ({ projectId, workspaceId }: { workspaceId: string; projectId: string }) => {
@@ -122,11 +123,11 @@ const ProjectSidebarHeader = ({ projectId, workspaceId }: { workspaceId: string;
                     className={cn(
                       "text-xs text-secondary-foreground py-0 px-1.5 rounded-md bg-secondary/40 font-mono border border-secondary-foreground/20",
                       {
-                        "border-primary bg-primary/10 text-primary": workspace?.tierName === "Pro",
+                        "border-primary bg-primary/10 text-primary": displayTierName(workspace?.tierName) === "Pro",
                       }
                     )}
                   >
-                    {workspace?.tierName}
+                    {displayTierName(workspace?.tierName)}
                   </span>
                 </DropdownMenuItem>
               </Link>

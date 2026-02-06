@@ -36,11 +36,11 @@ export async function assertFeatureAccess(params: {
   if (!locked) return;
 
   const reasonMap: Record<FeatureGate, string> = {
-    approval_queue: "Approval queue is available on paid plans.",
-    auto_pause: "Auto-pause is available on paid plans.",
-    whatsapp_sms: "WhatsApp and SMS connections require a paid plan.",
-    audit_exports: "Audit exports are available on paid plans.",
-    multi_agent_monitoring: "Multi-agent monitoring is available on paid plans.",
+    approval_queue: "Approval queue is available on Pro or Enterprise plans.",
+    auto_pause: "Auto-pause is available on Pro or Enterprise plans.",
+    whatsapp_sms: "WhatsApp and SMS connections require a Pro or Enterprise plan.",
+    audit_exports: "Audit exports are available on Pro or Enterprise plans.",
+    multi_agent_monitoring: "Multi-agent monitoring is available on Pro or Enterprise plans.",
   };
 
   const message = reasonMap[feature] ?? "This feature is locked on the current plan.";

@@ -1,20 +1,20 @@
 ---
-description: Use it when user asks about adding instrumentation with HipoCap, creating an eval with HipoCap or migrating from Langfuse/Laminar to HipoCap instrumentation.
+description: Use it when user asks about adding instrumentation with ClawOps, creating an eval with ClawOps or migrating from Langfuse/Laminar to ClawOps instrumentation.
 globs: 
 alwaysApply: false
 ---
-# HipoCap AI Security and Observability Platform - Cursor Rules
+# ClawOps AI Security and Observability Platform - Cursor Rules
 
 ## Overview
-HipoCap is an AI security and observability platform that protects your LLM applications from prompt injection attacks while providing comprehensive observability. It provides comprehensive LLM tracing based on OpenTelemetry, powerful evaluation tools, and multi-stage security analysis.
+ClawOps is an AI security and observability platform that protects your LLM applications from prompt injection attacks while providing comprehensive observability. It provides comprehensive LLM tracing based on OpenTelemetry, powerful evaluation tools, and multi-stage security analysis.
 
 ### Always Follow These Patterns:
-- Analyze the project structure and initialize HipoCap once at application entry point with `Hipocap.initialize()`
-- Use environment variables for API keys (`HIPOCAP_API_KEY`)
+- Analyze the project structure and initialize ClawOps once at application entry point with `ClawOps.initialize()`
+- Use environment variables for API keys (`ClawOps_API_KEY`)
 - Prefer automatic instrumentation over manual when possible
 - Use `@observe()` decorator for custom function tracing in Python
 - Use `observe()` wrapper for custom function tracing in JavaScript/TypeScript
-- Call `Hipocap.shutdown()` in JavaScript/TypeScript before process exit if it is a single script
+- Call `ClawOps.shutdown()` in JavaScript/TypeScript before process exit if it is a single script
 - Group related spans into traces using parent spans
 - Use sessions to group related traces for user interactions
 - If needed add user IDs and metadata for comprehensive tracking
@@ -24,52 +24,52 @@ HipoCap is an AI security and observability platform that protects your LLM appl
 
 ### JavaScript/TypeScript
 ```bash
-npm add hipocap
+npm add ClawOps
 ```
 
 ### Python
 ```bash
-pip install 'hipocap[all]'
+pip install 'ClawOps[all]'
 ```
 
 ## Environment Variables
 ```bash
-HIPOCAP_API_KEY=your_project_api_key_here
-HIPOCAP_USER_ID=your_user_id_here
-HIPOCAP_SERVER_URL=http://localhost:8006  # Optional, for self-hosted security server
+ClawOps_API_KEY=your_project_api_key_here
+ClawOps_USER_ID=your_user_id_here
+ClawOps_SERVER_URL=http://localhost:8006  # Optional, for self-hosted security server
 ```
 
 ## Initialization Patterns
 
 ### JavaScript/TypeScript - Standard Setup
 ```javascript
-import { Hipocap } from 'hipocap';
+import { ClawOps } from 'ClawOps';
 
-Hipocap.initialize({
-  projectApiKey: process.env.HIPOCAP_API_KEY,
+ClawOps.initialize({
+  projectApiKey: process.env.ClawOps_API_KEY,
   baseUrl: "http://localhost",      // Observability server
   httpPort: 8000,
   grpcPort: 8001,
-  hipocapBaseUrl: "http://localhost:8006",  // Security server
-  hipocapUserId: process.env.HIPOCAP_USER_ID
+  ClawOpsBaseUrl: "http://localhost:8006",  // Security server
+  ClawOpsUserId: process.env.ClawOps_USER_ID
 });
 
 // At application exit if a single script
-await Hipocap.shutdown();
+await ClawOps.shutdown();
 ```
 
 ### Next.js Setup - instrumentation.ts
 ```javascript
 export async function register() {
   if (process.env.NEXT_RUNTIME === 'nodejs') {
-    const { Hipocap } = await import('hipocap');
-    Hipocap.initialize({
-      projectApiKey: process.env.HIPOCAP_API_KEY,
-      baseUrl: process.env.HIPOCAP_OBS_BASE_URL || "http://localhost",
-      httpPort: parseInt(process.env.HIPOCAP_OBS_HTTP_PORT || "8000"),
-      grpcPort: parseInt(process.env.HIPOCAP_OBS_GRPC_PORT || "8001"),
-      hipocapBaseUrl: process.env.HIPOCAP_SERVER_URL || "http://localhost:8006",
-      hipocapUserId: process.env.HIPOCAP_USER_ID
+    const { ClawOps } = await import('ClawOps');
+    ClawOps.initialize({
+      projectApiKey: process.env.ClawOps_API_KEY,
+      baseUrl: process.env.ClawOps_OBS_BASE_URL || "http://localhost",
+      httpPort: parseInt(process.env.ClawOps_OBS_HTTP_PORT || "8000"),
+      grpcPort: parseInt(process.env.ClawOps_OBS_GRPC_PORT || "8001"),
+      ClawOpsBaseUrl: process.env.ClawOps_SERVER_URL || "http://localhost:8006",
+      ClawOpsUserId: process.env.ClawOps_USER_ID
     });
   }
 }
@@ -79,7 +79,7 @@ export async function register() {
 ```javascript
 const nextConfig = {
   experimental: {
-    serverExternalPackages: ['hipocap']
+    serverExternalPackages: ['ClawOps']
   }
 };
 module.exports = nextConfig;
@@ -87,36 +87,36 @@ module.exports = nextConfig;
 
 ### Python Setup
 ```python
-from hipocap import Hipocap
+from ClawOps import ClawOps
 import os
 
-Hipocap.initialize(
-    project_api_key=os.environ["HIPOCAP_API_KEY"],
+ClawOps.initialize(
+    project_api_key=os.environ["ClawOps_API_KEY"],
     base_url="http://localhost",      # Observability server
     http_port=8000,
     grpc_port=8001,
-    hipocap_base_url="http://localhost:8006",  # Security server
-    hipocap_user_id=os.environ.get("HIPOCAP_USER_ID")
+    ClawOps_base_url="http://localhost:8006",  # Security server
+    ClawOps_user_id=os.environ.get("ClawOps_USER_ID")
 )
 ```
 
 ### Self-Hosted Configuration
 ```javascript
 // JavaScript/TypeScript
-Hipocap.initialize({
-  projectApiKey: process.env.HIPOCAP_API_KEY,
+ClawOps.initialize({
+  projectApiKey: process.env.ClawOps_API_KEY,
   baseUrl: "http://localhost",
   httpPort: 8000,
   grpcPort: 8001,
-  hipocapBaseUrl: "http://localhost:8006",
-  hipocapUserId: process.env.HIPOCAP_USER_ID
+  ClawOpsBaseUrl: "http://localhost:8006",
+  ClawOpsUserId: process.env.ClawOps_USER_ID
 });
 ```
 
 ## Instrumentation and Manual Span Creation
 
 ### Automatic Instrumentation
-HipoCap automatically instruments these libraries when initialized:
+ClawOps automatically instruments these libraries when initialized:
 - OpenAI, Anthropic, Google Gemini, Mistral, Groq
 - LangChain, LlamaIndex
 - Browser Use, Stagehand, Playwright
@@ -126,7 +126,7 @@ HipoCap automatically instruments these libraries when initialized:
 
 #### Python with @observe decorator
 ```python
-from hipocap import observe
+from ClawOps import observe
 
 @observe()
 def my_ai_function(prompt):
@@ -143,7 +143,7 @@ def custom_function(data):
 
 #### JavaScript with observe wrapper
 ```javascript
-import { observe } from 'hipocap';
+import { observe } from 'ClawOps';
 
 const myAiFunction = observe(
   { name: 'myAiFunction' },
@@ -161,26 +161,26 @@ const myAiFunction = observe(
 
 #### Python Manual Spans
 ```python
-from hipocap import Hipocap
+from ClawOps import ClawOps
 
 # Context manager (recommended)
-with Hipocap.start_as_current_span(
+with ClawOps.start_as_current_span(
     name="my_custom_span",
     input={"user_query": "example input"},
     span_type="DEFAULT"
 ) as span:
     result = process_data()
-    Hipocap.set_span_output(result)
+    ClawOps.set_span_output(result)
 
 # Manual span management
-span = Hipocap.start_span(
+span = ClawOps.start_span(
     name="manual_span",
     input={"data": "input_data"},
     span_type="LLM"
 )
 try:
     output = perform_operation()
-    Hipocap.set_span_output(output)
+    ClawOps.set_span_output(output)
     span.set_attributes({"custom.metric": 42})
 finally:
     span.end()
@@ -188,10 +188,10 @@ finally:
 
 #### JavaScript Manual Spans  
 ```javascript
-import { Hipocap } from 'hipocap';
+import { ClawOps } from 'ClawOps';
 
 // Async context (recommended)
-await Hipocap.withSpan(
+await ClawOps.withSpan(
   {
     name: "my_custom_span",
     input: { userQuery: "example input" },
@@ -199,7 +199,7 @@ await Hipocap.withSpan(
   },
   async (span) => {
     const result = await processData();
-    Hipocap.setSpanOutput(result);
+    ClawOps.setSpanOutput(result);
     return result;
   }
 );
@@ -209,17 +209,17 @@ await Hipocap.withSpan(
 
 ### Python Security Analysis
 ```python
-from hipocap import Hipocap, observe
+from ClawOps import ClawOps, observe
 from openai import OpenAI
 
-# Initialize HipoCap (returns the security client)
-client = Hipocap.initialize(
-    project_api_key=os.environ.get("HIPOCAP_API_KEY"),
+# Initialize ClawOps (returns the security client)
+client = ClawOps.initialize(
+    project_api_key=os.environ.get("ClawOps_API_KEY"),
     base_url="http://localhost",
     http_port=8000,
     grpc_port=8001,
-    hipocap_base_url="http://localhost:8006",
-    hipocap_user_id=os.environ.get("HIPOCAP_USER_ID")
+    ClawOps_base_url="http://localhost:8006",
+    ClawOps_user_id=os.environ.get("ClawOps_USER_ID")
 )
 
 @observe()
@@ -258,10 +258,10 @@ def process_user_request():
 
 ### Python Session Management
 ```python
-from hipocap import Hipocap, observe
+from ClawOps import ClawOps, observe
 
 # Set session globally
-Hipocap.set_session(session_id="session_123")
+ClawOps.set_session(session_id="session_123")
 
 @observe()
 def process_user_request(user_id, request_data):
@@ -269,15 +269,15 @@ def process_user_request(user_id, request_data):
     return result
 
 # optionally clear session
-Hipocap.clear_session()
+ClawOps.clear_session()
 ```
 
 ### JavaScript Session Management
 ```javascript
-import { Hipocap, observe } from "hipocap";
+import { ClawOps, observe } from "ClawOps";
 
 // Using withSession wrapper
-await Hipocap.withSession(
+await ClawOps.withSession(
   { 
     sessionId: "session123",
   }, 
@@ -305,10 +305,10 @@ await observe(
 
 #### JavaScript/TypeScript Metadata Patterns
 ```javascript
-import { Hipocap, observe } from 'hipocap';
+import { ClawOps, observe } from 'ClawOps';
 
 // Option 1: Using withMetadata wrapper (applies to all traces in scope)
-Hipocap.withMetadata({
+ClawOps.withMetadata({
     environment: 'production',
     featureFlag: 'new-algorithm-v2',
     region: 'us-west'
@@ -320,14 +320,14 @@ Hipocap.withMetadata({
 
 #### Python Metadata Patterns
 ```python
-from hipocap import Hipocap, observe
+from ClawOps import ClawOps, observe
 
 # Option 1: Using set_metadata within a span context (MUST be within active span)
 @observe()
 def my_function():
     # IMPORTANT: set_metadata must be called within an active span context
     # Here, the @observe decorator creates that context
-    Hipocap.set_metadata({
+    ClawOps.set_metadata({
         'environment': 'production',
         'feature_flag': 'new-algorithm-v2',
         'region': 'us-west'
@@ -337,9 +337,9 @@ def my_function():
 
 # Option 2: Using start_as_current_span
 def process_request():
-    with Hipocap.start_as_current_span(name="process_request") as span:
+    with ClawOps.start_as_current_span(name="process_request") as span:
         # Now we have an active span context
-        Hipocap.set_metadata({
+        ClawOps.set_metadata({
             'environment': 'production',
             'feature_flag': 'new-algorithm-v2'
         })
@@ -350,7 +350,7 @@ def process_request():
 #### ❌ Incorrect Python Usage
 ```python
 # This won't work because it's outside any span context
-Hipocap.set_metadata({'environment': 'production'})
+ClawOps.set_metadata({'environment': 'production'})
 
 @observe()
 def my_function():
@@ -362,17 +362,17 @@ def my_function():
 
 ### Selective Instrumentation
 ```javascript
-import { Hipocap, Instruments } from 'hipocap';
+import { ClawOps, Instruments } from 'ClawOps';
 
-Hipocap.initialize({
-  projectApiKey: process.env.HIPOCAP_API_KEY,
+ClawOps.initialize({
+  projectApiKey: process.env.ClawOps_API_KEY,
   instruments: new Set([Instruments.OPENAI, Instruments.ANTHROPIC])
 });
 ```
 
 ### Dynamic Tracing Control
 ```javascript
-import { withTracingLevel, TracingLevel } from "hipocap";
+import { withTracingLevel, TracingLevel } from "ClawOps";
 
 withTracingLevel(TracingLevel.OFF, () => {
     performSensitiveOperation();
@@ -387,7 +387,7 @@ withTracingLevel(TracingLevel.META_ONLY, () => {
 
 ### Basic Evaluation Setup
 ```javascript
-import { evaluate } from 'hipocap';
+import { evaluate } from 'ClawOps';
 
 const writePoem = (data) => {
   return `This is a poem about ${data.topic}`;
@@ -409,11 +409,11 @@ evaluate({
 ### Common Issues
 ```javascript
 // Issue: Auto-instrumentation not working
-// Solution: Import modules after HipoCap initialization
-import { Hipocap } from 'hipocap';
+// Solution: Import modules after ClawOps initialization
+import { ClawOps } from 'ClawOps';
 
-Hipocap.initialize({
-  projectApiKey: process.env.HIPOCAP_API_KEY,
+ClawOps.initialize({
+  projectApiKey: process.env.ClawOps_API_KEY,
   instrumentModules: {
     openai: await import('openai')
   }
@@ -428,9 +428,9 @@ export OTEL_NODE_DISABLED_INSTRUMENTATIONS="fs,http,dns,undici,express"
 ## Best Practices
 
 ### Do:
-- Initialize HipoCap once at application startup
+- Initialize ClawOps once at application startup
 - Use environment variables for sensitive data
-- Call `Hipocap.shutdown()` before Node.js process exit
+- Call `ClawOps.shutdown()` before Node.js process exit
 - Use `@observe()` for custom function tracing
 - Group related spans into traces with parent spans
 - Use sessions for user interaction grouping
@@ -441,7 +441,7 @@ export OTEL_NODE_DISABLED_INSTRUMENTATIONS="fs,http,dns,undici,express"
 - Use security analysis (`client.analyze()`) to protect against prompt injection
 
 ### Don't:
-- Initialize HipoCap multiple times
+- Initialize ClawOps multiple times
 - Hardcode API keys in source code
 - Forget to handle JavaScript process exit properly if it is a single script
 - Use `@observe()` on async generators in Python
@@ -451,23 +451,23 @@ export OTEL_NODE_DISABLED_INSTRUMENTATIONS="fs,http,dns,undici,express"
 - Skip security analysis for user-facing functions
 
 ## OpenTelemetry Compatibility
-Configure existing OpenTelemetry exporters to send to HipoCap:
+Configure existing OpenTelemetry exporters to send to ClawOps:
 
 ```javascript
 import { OTLPTraceExporter } from '@opentelemetry/exporter-trace-otlp-grpc';
 import { Metadata } from '@grpc/grpc-js';
 
 const metadata = new Metadata();
-metadata.set('authorization', `Bearer ${process.env.HIPOCAP_API_KEY}`);
+metadata.set('authorization', `Bearer ${process.env.ClawOps_API_KEY}`);
 
 const exporter = new OTLPTraceExporter({
-  url: "http://localhost:8001/v1/traces",  // HipoCap gRPC endpoint
+  url: "http://localhost:8001/v1/traces",  // ClawOps gRPC endpoint
   metadata,
 });
 ```
 
 ---
-## Migrating from Langfuse/Laminar to HipoCap
+## Migrating from Langfuse/Laminar to ClawOps
 
 ### 1. Installation & Setup Migration
 
@@ -484,13 +484,13 @@ npm install langfuse
 npm add @lmnr-ai/lmnr
 ```
 
-**HipoCap:**
+**ClawOps:**
 ```bash
 # Python
-pip install 'hipocap[all]'
+pip install 'ClawOps[all]'
 
 # JavaScript/TypeScript
-npm add hipocap
+npm add ClawOps
 ```
 
 ### 2. Environment Variables Migration
@@ -508,14 +508,14 @@ LMNR_PROJECT_API_KEY=your_project_api_key_here
 LMNR_BASE_URL=your_base_url
 ```
 
-**HipoCap:**
+**ClawOps:**
 ```bash
-HIPOCAP_API_KEY=your_project_api_key_here
-HIPOCAP_USER_ID=your_user_id_here
-HIPOCAP_SERVER_URL=http://localhost:8006  # Optional, for self-hosted
-HIPOCAP_OBS_BASE_URL=http://localhost      # Optional, for self-hosted
-HIPOCAP_OBS_HTTP_PORT=8000                 # Optional
-HIPOCAP_OBS_GRPC_PORT=8001                 # Optional
+ClawOps_API_KEY=your_project_api_key_here
+ClawOps_USER_ID=your_user_id_here
+ClawOps_SERVER_URL=http://localhost:8006  # Optional, for self-hosted
+ClawOps_OBS_BASE_URL=http://localhost      # Optional, for self-hosted
+ClawOps_OBS_HTTP_PORT=8000                 # Optional
+ClawOps_OBS_GRPC_PORT=8001                 # Optional
 ```
 
 ### 3. Initialization Migration
@@ -531,18 +531,18 @@ langfuse = Langfuse()
 Laminar.initialize(project_api_key=os.environ["LMNR_PROJECT_API_KEY"])
 ```
 
-**HipoCap Python:**
+**ClawOps Python:**
 ```python
-from hipocap import Hipocap
+from ClawOps import ClawOps
 import os
 
-client = Hipocap.initialize(
-    project_api_key=os.environ["HIPOCAP_API_KEY"],
+client = ClawOps.initialize(
+    project_api_key=os.environ["ClawOps_API_KEY"],
     base_url="http://localhost",
     http_port=8000,
     grpc_port=8001,
-    hipocap_base_url="http://localhost:8006",
-    hipocap_user_id=os.environ.get("HIPOCAP_USER_ID")
+    ClawOps_base_url="http://localhost:8006",
+    ClawOps_user_id=os.environ.get("ClawOps_USER_ID")
 )
 ```
 
@@ -557,23 +557,23 @@ const langfuse = new Langfuse();
 Laminar.initialize({ projectApiKey: process.env.LMNR_PROJECT_API_KEY });
 ```
 
-**HipoCap JavaScript:**
+**ClawOps JavaScript:**
 ```javascript
-import { Hipocap } from 'hipocap';
+import { ClawOps } from 'ClawOps';
 
-const client = Hipocap.initialize({
-  projectApiKey: process.env.HIPOCAP_API_KEY,
+const client = ClawOps.initialize({
+  projectApiKey: process.env.ClawOps_API_KEY,
   baseUrl: "http://localhost",
   httpPort: 8000,
   grpcPort: 8001,
-  hipocapBaseUrl: "http://localhost:8006",
-  hipocapUserId: process.env.HIPOCAP_USER_ID
+  ClawOpsBaseUrl: "http://localhost:8006",
+  ClawOpsUserId: process.env.ClawOps_USER_ID
 });
 ```
 
 ### 4. Manual Tracing Migration
 
-**Langfuse/Laminar Traces/Observations → HipoCap Spans**
+**Langfuse/Laminar Traces/Observations → ClawOps Spans**
 
 **Langfuse/Laminar Python:**
 ```python
@@ -592,16 +592,16 @@ with Laminar.start_as_current_span(
     Laminar.set_span_output(result)
 ```
 
-**HipoCap Python:**
+**ClawOps Python:**
 ```python
 # Using context manager (recommended)
-with Hipocap.start_as_current_span(
+with ClawOps.start_as_current_span(
     name="my_span",
     input={"key": "value"},
     span_type="DEFAULT"
 ) as span:
     result = {"result": "value"}
-    Hipocap.set_span_output(result)
+    ClawOps.set_span_output(result)
 ```
 
 **Langfuse/Laminar JavaScript:**
@@ -629,9 +629,9 @@ await Laminar.withSpan(
 );
 ```
 
-**HipoCap JavaScript:**
+**ClawOps JavaScript:**
 ```javascript
-await Hipocap.withSpan(
+await ClawOps.withSpan(
   {
     name: "my_span",
     input: { key: "value" },
@@ -639,7 +639,7 @@ await Hipocap.withSpan(
   },
   async (span) => {
     const result = { result: "value" };
-    Hipocap.setSpanOutput(result);
+    ClawOps.setSpanOutput(result);
     return result;
   }
 );
@@ -658,9 +658,9 @@ def my_function(param):
     return process(param)
 ```
 
-**HipoCap Python:**
+**ClawOps Python:**
 ```python
-from hipocap import observe
+from ClawOps import observe
 
 @observe()
 def my_function(param):
@@ -679,9 +679,9 @@ const myFunction = observe(
 );
 ```
 
-**HipoCap JavaScript:**
+**ClawOps JavaScript:**
 ```javascript
-import { observe } from 'hipocap';
+import { observe } from 'ClawOps';
 
 const myFunction = observe(
   { name: 'myFunction' },
@@ -702,10 +702,10 @@ trace = langfuse.trace(session_id="session_123", user_id="user_456")
 Laminar.set_session(session_id="session_123", user_id="user_456")
 ```
 
-**HipoCap Sessions:**
+**ClawOps Sessions:**
 ```python
 # Python
-Hipocap.set_session(session_id="session_123", user_id="user_456")
+ClawOps.set_session(session_id="session_123", user_id="user_456")
 ```
 
 **Langfuse/Laminar JavaScript:**
@@ -722,9 +722,9 @@ await Laminar.withSession(
 );
 ```
 
-**HipoCap JavaScript:**
+**ClawOps JavaScript:**
 ```javascript
-await Hipocap.withSession(
+await ClawOps.withSession(
   { 
     sessionId: "session_123"
   }, 
@@ -736,7 +736,7 @@ await Hipocap.withSession(
 
 ### 7. Metadata and Tags Migration
 
-**Langfuse/Laminar Metadata/Tags → HipoCap Trace Metadata**
+**Langfuse/Laminar Metadata/Tags → ClawOps Trace Metadata**
 
 **Langfuse/Laminar Metadata:**
 ```python
@@ -754,21 +754,21 @@ def my_function():
     return process_data()
 ```
 
-**HipoCap Trace Metadata:**
+**ClawOps Trace Metadata:**
 ```python
-# HipoCap attaches metadata to entire traces
+# ClawOps attaches metadata to entire traces
 
 @observe()
 def my_function():
-    Hipocap.set_metadata({
+    ClawOps.set_metadata({
         "key": "value"
     })
     return process_data()
 ```
 
-**HipoCap JavaScript:**
+**ClawOps JavaScript:**
 ```javascript
-Hipocap.withMetadata({
+ClawOps.withMetadata({
     key: "value"
 }, () => {
     return processData();
@@ -777,18 +777,18 @@ Hipocap.withMetadata({
 
 ### Key Metadata Migration Points
 
-1. **Scope Change**: Langfuse metadata applies to individual spans; HipoCap metadata applies to entire traces
-2. **Python Requirements**: HipoCap's `set_metadata()` must be called within an active span context
-3. **No Manual Flushing**: HipoCap handles metadata persistence automatically
+1. **Scope Change**: Langfuse metadata applies to individual spans; ClawOps metadata applies to entire traces
+2. **Python Requirements**: ClawOps's `set_metadata()` must be called within an active span context
+3. **No Manual Flushing**: ClawOps handles metadata persistence automatically
 
-### 8. Security Analysis (HipoCap Unique Feature)
+### 8. Security Analysis (ClawOps Unique Feature)
 
-**HipoCap adds security analysis capabilities:**
+**ClawOps adds security analysis capabilities:**
 
 ```python
-from hipocap import Hipocap, observe
+from ClawOps import ClawOps, observe
 
-client = Hipocap.initialize(...)
+client = ClawOps.initialize(...)
 
 @observe()
 def get_user_data(user_id: str):
@@ -801,7 +801,7 @@ def process_user_request():
     
     user_data = get_user_data(user_id)
     
-    # Analyze for security threats (HipoCap unique feature)
+    # Analyze for security threats (ClawOps unique feature)
     result = client.analyze(
         function_name="get_user_data",
         function_result=user_data,
@@ -838,10 +838,10 @@ await langfuse.shutdownAsync();
 await Laminar.shutdown();
 ```
 
-**HipoCap:**
+**ClawOps:**
 ```javascript
 // JavaScript - call before process exit
-await Hipocap.shutdown();
+await ClawOps.shutdown();
 ```
 
 ```python
@@ -854,23 +854,23 @@ await Hipocap.shutdown();
 - Requires explicit integration setup for each framework
 - Uses framework-specific handlers (e.g., `LangchainCallbackHandler`)
 
-**HipoCap Framework Integration:**
+**ClawOps Framework Integration:**
 - Automatic instrumentation when initialized
 - No additional setup required for supported frameworks
 - Auto-instruments: OpenAI, Anthropic, LangChain, LlamaIndex, etc.
 
 ### Migration Checklist
 
-- [ ] Replace Langfuse/Laminar dependencies with HipoCap
-- [ ] Update environment variables to use `HIPOCAP_API_KEY` and `HIPOCAP_USER_ID`
-- [ ] Replace initialization with `Hipocap.initialize()` including security server URL
-- [ ] Convert manual trace/span creation to HipoCap span patterns
+- [ ] Replace Langfuse/Laminar dependencies with ClawOps
+- [ ] Update environment variables to use `ClawOps_API_KEY` and `ClawOps_USER_ID`
+- [ ] Replace initialization with `ClawOps.initialize()` including security server URL
+- [ ] Convert manual trace/span creation to ClawOps span patterns
 - [ ] Replace decorators with `@observe()` 
-- [ ] Update session management to use HipoCap session APIs
+- [ ] Update session management to use ClawOps session APIs
 - [ ] Remove manual flushing calls (handled automatically)
 - [ ] Remove framework-specific callback handlers (auto-instrumented)
 - [ ] Test that automatic instrumentation captures your LLM calls
-- [ ] Verify metadata and user tracking in HipoCap dashboard
+- [ ] Verify metadata and user tracking in ClawOps dashboard
 - [ ] Add security analysis (`client.analyze()`) to protect user-facing functions
-- [ ] Configure security policies in HipoCap dashboard
+- [ ] Configure security policies in ClawOps dashboard
 

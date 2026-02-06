@@ -35,12 +35,12 @@ export function useBatchedSpanOutputs(
       if (spanIds.length === 0 || !trace) return;
 
       // Filter out virtual spans - they don't exist in the database
-      // Virtual spans have IDs that start with "virtual-" or contain "-function-attempt-" or "-hipocap-event-"
+      // Virtual spans have IDs that start with "virtual-" or contain "-function-attempt-" or "-clawops-event-"
       const realSpanIds = spanIds.filter(
         (id) => 
           !id.startsWith("virtual-") && 
           !id.includes("-function-attempt-") && 
-          !id.includes("-hipocap-event-")
+          !id.includes("-clawops-event-")
       );
       
       if (realSpanIds.length === 0) return;

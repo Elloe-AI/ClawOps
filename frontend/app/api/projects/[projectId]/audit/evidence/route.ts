@@ -19,6 +19,7 @@ import {
   safetyTemplateApplications,
   safetyTemplates,
 } from "@/lib/db/migrations/schema";
+import { normalizeLegacyPayload } from "@/lib/telemetry/normalize";
 import { stableJsonStringify } from "@/lib/utils/stable-json";
 
 export async function GET(
@@ -43,6 +44,7 @@ export async function GET(
 
     const generatedAt = new Date().toISOString();
     const threatProtectionConfig = await getThreatProtectionConfig(params.projectId);
+    const normalizedThreatProtectionConfig = normalizeLegacyPayload(threatProtectionConfig);
 
     const [project] = await db
       .select({
@@ -94,29 +96,37 @@ export async function GET(
           .orderBy(asc(safetyTemplateApplications.appliedAt)),
       ]);
 
+    const normalizedAgents = agentsRows.map((row) => normalizeLegacyPayload(row));
+    const normalizedActivity = activityRows.map((row) => normalizeLegacyPayload(row));
+    const normalizedIncidents = incidentsRows.map((row) => normalizeLegacyPayload(row));
+    const normalizedApprovals = approvalsRows.map((row) => normalizeLegacyPayload(row));
+    const normalizedAuditLogs = auditRows.map((row) => normalizeLegacyPayload(row));
+    const normalizedTemplates = templatesRows.map((row) => normalizeLegacyPayload(row));
+    const normalizedTemplateApplications = applicationRows.map((row) => normalizeLegacyPayload(row));
+
     const bundle = {
       generatedAt,
       project: project ?? null,
-      threatProtectionConfig,
-      agents: agentsRows,
-      activityEvents: activityRows,
-      incidents: incidentsRows,
-      approvals: approvalsRows,
-      auditLogs: auditRows,
-      safetyTemplates: templatesRows,
-      safetyTemplateApplications: applicationRows,
+      threatProtectionConfig: normalizedThreatProtectionConfig,
+      agents: normalizedAgents,
+      activityEvents: normalizedActivity,
+      incidents: normalizedIncidents,
+      approvals: normalizedApprovals,
+      auditLogs: normalizedAuditLogs,
+      safetyTemplates: normalizedTemplates,
+      safetyTemplateApplications: normalizedTemplateApplications,
     };
 
     const checksumPayload = {
       project: project ?? null,
-      threatProtectionConfig,
-      agents: agentsRows,
-      activityEvents: activityRows,
-      incidents: incidentsRows,
-      approvals: approvalsRows,
-      auditLogs: auditRows,
-      safetyTemplates: templatesRows,
-      safetyTemplateApplications: applicationRows,
+      threatProtectionConfig: normalizedThreatProtectionConfig,
+      agents: normalizedAgents,
+      activityEvents: normalizedActivity,
+      incidents: normalizedIncidents,
+      approvals: normalizedApprovals,
+      auditLogs: normalizedAuditLogs,
+      safetyTemplates: normalizedTemplates,
+      safetyTemplateApplications: normalizedTemplateApplications,
     };
 
     const checksum = createHash("sha256").update(stableJsonStringify(checksumPayload)).digest("hex");

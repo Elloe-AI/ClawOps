@@ -9,7 +9,7 @@ import { useUserContext } from "@/contexts/user-context";
 import { Feature, isFeatureEnabled } from "@/lib/features/features";
 
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "../ui/tabs";
-import HipocapTracesTable from "./hipocap-traces-table";
+import IncidentTracesTable from "./incident-traces-table";
 import SpansTable from "./spans-table";
 import { TracesStoreProvider, useTracesStoreContext } from "./traces-store";
 import TracesTable from "./traces-table";
@@ -105,7 +105,7 @@ function TracesContent() {
           <SpansTable />
         </TabsContent>
         <TabsContent value="function-traces" asChild>
-          <HipocapTracesTable />
+          <IncidentTracesTable />
         </TabsContent>
         <TabsContent value="analytics" asChild>
           <TracesTable showTable={false} />

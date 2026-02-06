@@ -1,7 +1,7 @@
 import React, { memo, useCallback, useEffect, useMemo, useState } from "react";
 
 import { useSpanSearchContext } from "@/components/traces/span-view/span-search-context";
-import { HipocapFunctionAttemptsParts } from "@/components/traces/span-view/hipocap-function-attempts";
+import { GuardrailFunctionAttemptsParts } from "@/components/traces/span-view/guardrail-function-attempts";
 import ContentRenderer from "@/components/ui/content-renderer/index";
 import { Skeleton } from "@/components/ui/skeleton";
 import { PAYLOAD_URL_REGEX } from "@/lib/actions/trace/utils";
@@ -78,13 +78,13 @@ const SpanContent = ({ span, type }: SpanContentProps) => {
 
   const searchContext = useSpanSearchContext();
 
-  // Check if span has Hipocap function attempts
+  // Check if span has guardrail function attempts
   const functionAttempts = useMemo(() => {
-    return (span.attributes?.["hipocap.function_attempts"] as string[] | undefined) || [];
+    return (span.attributes?.["clawops.action.attempts"] as string[] | undefined) || [];
   }, [span.attributes]);
 
-  const hipocapEventData = useMemo(() => {
-    return (span.attributes?.["hipocap.event_data"] as Record<string, any> | undefined);
+  const guardrailEventData = useMemo(() => {
+    return (span.attributes?.["clawops.event.data"] as Record<string, any> | undefined);
   }, [span.attributes]);
 
   const hasFunctionAttempts = functionAttempts.length > 0;
@@ -114,9 +114,9 @@ const SpanContent = ({ span, type }: SpanContentProps) => {
           searchTerm={searchContext?.searchTerm || ""}
         />
         {hasFunctionAttempts && (
-          <HipocapFunctionAttemptsParts
+          <GuardrailFunctionAttemptsParts
             functionAttempts={functionAttempts}
-            eventData={hipocapEventData}
+            eventData={guardrailEventData}
             presetKey={presetKey}
           />
         )}
@@ -137,9 +137,9 @@ const SpanContent = ({ span, type }: SpanContentProps) => {
         searchTerm={searchContext?.searchTerm || ""}
       />
       {hasFunctionAttempts && (
-        <HipocapFunctionAttemptsParts
+        <GuardrailFunctionAttemptsParts
           functionAttempts={functionAttempts}
-          eventData={hipocapEventData}
+          eventData={guardrailEventData}
           presetKey={presetKey}
         />
       )}

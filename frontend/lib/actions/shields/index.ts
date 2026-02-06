@@ -9,7 +9,7 @@ export const ShieldSchema = z.object({
   prompt_description: z.string(),
   what_to_block: z.string(),
   what_not_to_block: z.string(),
-  owner_id: z.string(), // UUID string from Hipocap
+  owner_id: z.string(), // UUID string from the control plane
   is_active: z.boolean(),
   created_at: z.string(),
   updated_at: z.string().nullable().optional(),

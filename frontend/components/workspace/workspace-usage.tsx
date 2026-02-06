@@ -1,11 +1,8 @@
-import { memo } from "react";
-import { PolarGrid, PolarRadiusAxis, RadialBar, RadialBarChart } from "recharts";
-
 import { SettingsSection, SettingsSectionHeader } from "@/components/settings/settings-section";
-import { ChartContainer } from "@/components/ui/chart";
 import { WorkspaceStats } from "@/lib/usage/types";
 import { cn } from "@/lib/utils";
 import { Workspace } from "@/lib/workspaces/types";
+import { displayTierName } from "@/lib/billing/tiers";
 
 import { Button } from "../ui/button";
 import { Dialog, DialogContent, DialogTitle, DialogTrigger } from "../ui/dialog";
@@ -17,47 +14,15 @@ interface WorkspaceUsageProps {
   isOwner: boolean;
 }
 
-const TIER_USAGE_HINTS = {
-  free: {
-    data: "1GB",
-    isOverageAllowed: false,
-  },
-  hobby: {
-    data: "2GB",
-    isOverageAllowed: true,
-  },
-  pro: {
-    data: "5GB",
-    isOverageAllowed: true,
-  },
-};
-
 export default function WorkspaceUsage({ workspace, workspaceStats, isOwner }: WorkspaceUsageProps) {
-  const gbUsedThisMonth = workspaceStats?.gbUsedThisMonth ?? 0;
-  const gbLimit = workspaceStats?.gbLimit ?? 1;
   const resetTime = workspaceStats.resetTime;
-
-  const formatter = new Intl.NumberFormat("en-US", {
-    style: "percent",
-    minimumFractionDigits: 0,
-    maximumFractionDigits: 2,
-  });
-
-  const formatGB = (gb: number) => {
-    if (gb < 0.001) {
-      return `${(gb * 1024).toFixed(2)} MB`;
-    }
-    return `${gb.toFixed(2)} GB`;
-  };
-
-  const tierHintInfo = TIER_USAGE_HINTS[workspaceStats.tierName.toLowerCase().trim() as keyof typeof TIER_USAGE_HINTS];
-  const tierHint = `${workspaceStats.tierName} tier comes with ${tierHintInfo?.data ?? "unlimited"} data per month.`;
-
-  const tierHintOverages =
-    "If you exceed this limit, " +
-    (tierHintInfo?.isOverageAllowed
-      ? "you will be charged $2 per GB for additional data."
-      : "you won't be able to send any more data during current billing cycle.");
+  const tierLabel = displayTierName(workspaceStats.tierName);
+  const usageMetrics = [
+    { label: "Active agents", value: workspaceStats.activeAgents },
+    { label: "Sessions", value: workspaceStats.sessionCount },
+    { label: "Incidents", value: workspaceStats.incidentCount },
+    { label: "Exports", value: workspaceStats.exportCount },
+  ];
 
   return (
     <>
@@ -75,11 +40,11 @@ export default function WorkspaceUsage({ workspace, workspaceStats, isOwner }: W
               className={cn(
                 "text-xs text-secondary-foreground p-0.5 px-1.5 rounded-md bg-secondary/40 font-mono border border-secondary-foreground/20",
                 {
-                  "border-primary bg-primary/10 text-primary": workspace.tierName === "Pro",
+                  "border-primary bg-primary/10 text-primary": tierLabel === "Pro",
                 }
               )}
             >
-              {workspace.tierName}
+              {tierLabel}
             </span>
           </div>
         </div>
@@ -103,56 +68,20 @@ export default function WorkspaceUsage({ workspace, workspaceStats, isOwner }: W
       </SettingsSection>
 
       <SettingsSection>
-        <SettingsSectionHeader size="sm" title="Usage summary" description={`${tierHint} ${tierHintOverages}`} />
-        <div className="border rounded-md p-6 bg-secondary max-w-md">
-          <div className="flex justify-between items-center max-w-md">
-            <div className="flex flex-col gap-1">
-              <span className="text-sm font-medium">Data usage</span>
-              <span className="text-sm text-secondary-foreground">
-                {formatGB(gbUsedThisMonth)} / {formatGB(gbLimit)}
-              </span>
-              <span className="text-xs text-muted-foreground">
-                {formatter.format(gbUsedThisMonth / gbLimit)} of limit used
-              </span>
+        <SettingsSectionHeader
+          size="sm"
+          title="Operational usage"
+          description="Metering is based on active agents, sessions, incidents, and exports (never tokens)."
+        />
+        <div className="grid gap-4 md:grid-cols-2">
+          {usageMetrics.map((metric) => (
+            <div key={metric.label} className="border rounded-md p-4 bg-secondary">
+              <div className="text-xs uppercase tracking-wide text-muted-foreground">{metric.label}</div>
+              <div className="text-lg font-semibold text-foreground">{metric.value}</div>
             </div>
-            <UsageProgressDisc
-              data={[{ fill: "hsl(var(--chart-1))", usage: gbUsedThisMonth }]}
-              dataKey="usage"
-              value={gbUsedThisMonth}
-              maxValue={gbLimit}
-            />
-          </div>
+          ))}
         </div>
       </SettingsSection>
     </>
   );
 }
-
-interface UsageProgressDiscProps {
-  value: number;
-  maxValue: number;
-  data: any[];
-  dataKey: string;
-}
-
-const UsageProgressDisc = memo(({ maxValue, value, data, dataKey }: UsageProgressDiscProps) => {
-  const startAngle = 90;
-  const endAngle = startAngle - (Math.min(value, maxValue) / maxValue) * 360;
-
-  return (
-    <ChartContainer config={{}} className="aspect-square h-16 w-16">
-      <RadialBarChart data={data} innerRadius={24} outerRadius={36} startAngle={startAngle} endAngle={endAngle}>
-        <PolarGrid
-          gridType="circle"
-          radialLines={false}
-          className="first:fill-muted last:fill-sidebar"
-          polarRadius={[25, 22]}
-        />
-        <RadialBar dataKey={dataKey} cornerRadius={50} />
-        <PolarRadiusAxis tick={false} tickLine={false} axisLine={false} />
-      </RadialBarChart>
-    </ChartContainer>
-  );
-});
-
-UsageProgressDisc.displayName = "UsageProgressDisc";

@@ -10,11 +10,10 @@ export async function register() {
 
   // prevent this from running in the edge runtime for the second time
   if (process.env.NEXT_RUNTIME === "nodejs") {
-    const legacyEnvKeys = Object.keys(process.env).filter((key) =>
-      key.startsWith("HIPOCAP_") || key.startsWith("HIPO_")
-    );
+    const legacyEnvPattern = /^HI(?:PO|POCAP)_/;
+    const legacyEnvKeys = Object.keys(process.env).filter((key) => legacyEnvPattern.test(key));
     if (legacyEnvKeys.length > 0) {
-      throw new Error(`Legacy environment variables detected: ${legacyEnvKeys.join(", ")}. Use CLAWOPS_* variables only.`);
+      throw new Error("Legacy environment variables detected. Remove non-CLAWOPS_* variables before starting ClawOps.");
     }
 
     const requiredEnv = ["CLAWOPS_ENGINE_URL", "CLAWOPS_ENGINE_API_KEY"];

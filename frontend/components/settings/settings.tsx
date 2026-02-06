@@ -6,6 +6,7 @@ import { usePathname, useSearchParams } from "next/navigation";
 import { CSSProperties, ReactNode, useMemo, useState } from "react";
 
 import { useProjectContext } from "@/contexts/project-context.tsx";
+import { isPaidTier } from "@/lib/billing/tiers";
 import { ProjectApiKey } from "@/lib/api-keys/types";
 
 import Header from "../ui/header";
@@ -21,6 +22,7 @@ import {
 import DeleteProject from "./delete-project";
 import Integrations from "./integrations";
 import ProjectApiKeys from "./project-api-keys";
+import ProjectDeploymentSettings from "./project-deployment";
 import ProviderApiKeys from "./provider-api-keys";
 import RenameProject from "./rename-project";
 import UserIdDisplay from "./user-id-display";
@@ -51,11 +53,10 @@ export default function Settings({ apiKeys, isSlackEnabled, slackClientId, slack
 
   const { workspace } = useProjectContext();
 
-  const menuTabs = useMemo(
-    () =>
-      tabs.filter((t) => !(t.id === "integrations" && (workspace?.tierName !== "Pro" || !isSlackEnabled))),
-    [workspace, isSlackEnabled]
-  );
+  const menuTabs = useMemo(() => {
+    const paid = isPaidTier(workspace?.tierName);
+    return tabs.filter((t) => !(t.id === "integrations" && (!paid || !isSlackEnabled)));
+  }, [workspace, isSlackEnabled]);
 
   const renderContent = () => {
     switch (activeTab) {
@@ -65,6 +66,7 @@ export default function Settings({ apiKeys, isSlackEnabled, slackClientId, slack
             <SettingsSectionHeader title="General" description="Manage your project settings and preferences" />
             <div className="flex flex-col gap-8">
               <UserIdDisplay />
+              <ProjectDeploymentSettings />
               <RenameProject />
               <DeleteProject />
             </div>
@@ -75,7 +77,7 @@ export default function Settings({ apiKeys, isSlackEnabled, slackClientId, slack
       case "provider-api-keys":
         return <ProviderApiKeys />;
       case "integrations":
-        if (workspace?.tierName === "Pro" && isSlackEnabled) {
+        if (isPaidTier(workspace?.tierName) && isSlackEnabled) {
           return <Integrations slackClientId={slackClientId} slackRedirectUri={slackRedirectUri} />;
         }
         return null;

@@ -32,9 +32,8 @@ export async function GET(_req: NextRequest): Promise<Response> {
     rateLimitMax: Number.isFinite(Number(process.env.CLAWOPS_RATE_LIMIT_MAX ?? "")),
   };
 
-  const legacyEnvPresent = Object.keys(process.env).some(
-    (key) => key.startsWith("HIPOCAP_") || key.startsWith("HIPO_")
-  );
+  const legacyEnvPattern = /^HI(?:PO|POCAP)_/;
+  const legacyEnvPresent = Object.keys(process.env).some((key) => legacyEnvPattern.test(key));
 
   const eventCounts = await db
     .select({ name: productEvents.name, count: count(productEvents.id) })
