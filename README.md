@@ -1,6 +1,11 @@
-# ClawOps — mission control for live AI agents
+---
+classification: Documentation
+last_reviewed: '2026-02-06'
+start_date: '2026-01-01'
+---
+# 🧠 ClawOps — mission control for live AI agents
 
-*Operations, safety, and governance for agents running in public channels.*
+> **Operations, safety, and governance for agents running in public channels.**
 
 ClawOps is the control plane for AI agents deployed in Telegram, Discord, WhatsApp, and SMS. It gives non-technical teams a clear, safe way to operate agents in production: see what’s running, spot risk early, and intervene when needed.
 
@@ -87,21 +92,6 @@ ClawOps onboarding is designed for non-technical teams:
 4. Generate agent key + connector snippet
 5. **Run the mandatory demo**
 6. Readiness label is emitted automatically
-
----
-
-## Screenshots
-
-<p align="center">
-  <img alt="ClawOps Mission Control" src="./images/dashboard-mission-control.png" width="700">
-</p>
-<p align="center">
-  <img alt="ClawOps Agents view" src="./images/dashboard-agents.png" width="700">
-</p>
-<p align="center">
-  <img alt="ClawOps Incidents view" src="./images/dashboard-incidents.png" width="700">
-</p>
-
 ---
 
 ## Quick start (self-hosted)
@@ -374,6 +364,26 @@ If you reference ClawOps in a paper or audit, use:
 
 ---
 
-## License
+## 📄 License
 
 ClawOps is licensed under Apache 2.0. See [LICENSE.md](LICENSE.md).
+
+
+## 🤝 Contributing
+
+We welcome contributions! Please see our [Contributing Guidelines](CONTRIBUTING.md) for details.
+
+
+## 📞 Contact
+
+For support and inquiries:
+- Email: support@elloe.ai
+- GitHub Issues: https://github.com/Elloe-AI/clawops/issues
+- Documentation: https://doc.github.io/clawops/
+
+---
+
+<div align="center">
+  <p>Built with ❤️ by the Elloe AI Labs Team</p>
+  <p>© 2026 Elloe AI Labs. All rights reserved.</p>
+</div> 
