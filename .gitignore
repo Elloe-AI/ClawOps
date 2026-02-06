@@ -10,6 +10,12 @@ aegis-paper.pdf
 images/debug-*.png
 scripts/capture_*.py
 scripts/apply_enterprise_fix.sql
+frontend/assets/landing/debug_*.png
+frontend/assets/landing/*debug*.gif
+scripts/*-debug.png
+scripts/*-debug.gif
+scripts/signin-debug.png
+scripts/generate_landing_assets.py
 
 # Python cache files
 __pycache__/
