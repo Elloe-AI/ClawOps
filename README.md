@@ -7,6 +7,8 @@ start_date: '2026-01-01'
 
 > **Operations, safety, and governance for agents running in public channels.**
 
+## 🎯 Overview
+
 ClawOps is the control plane for AI agents deployed in Telegram, Discord, WhatsApp, and SMS. It gives non-technical teams a clear, safe way to operate agents in production: see what’s running, spot risk early, and intervene when needed.
 
 ClawOps is **not** an agent framework or chatbot builder. It’s the operations layer for agents you already run. You don’t rebuild agents to make them safe — you operate them safely after they’re deployed.
