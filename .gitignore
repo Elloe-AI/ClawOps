@@ -4,6 +4,12 @@
 **/..DS_Store
 .idea
 target/
+.pnpm-store/
+frontend/.pnpm-store/
+aegis-paper.pdf
+images/debug-*.png
+scripts/capture_*.py
+scripts/apply_enterprise_fix.sql
 
 # Python cache files
 __pycache__/
