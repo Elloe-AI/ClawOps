@@ -12,9 +12,9 @@ import evals2 from "@/assets/landing/evals2.png";
 import iterate from "@/assets/landing/iterate.png";
 import labeling from "@/assets/landing/labeling.png";
 import observability from "@/assets/landing/observability.png";
-import observe from "@/assets/landing/observe.png";
+import observe from "@/assets/landing/observe.gif";
 import playground from "@/assets/landing/playground.png";
-import query from "@/assets/landing/query.png";
+import query from "@/assets/landing/query.gif";
 import yc from "@/assets/landing/yc.svg";
 import { IconBrowserUse, IconPlaywright } from "@/components/ui/icons";
 
@@ -391,6 +391,7 @@ function CoreSections() {
         <Image
           src={observe}
           alt="Observe"
+          unoptimized
           className="w-[600px] 2xl:w-[800px] h-full object-cover object-top"
           quality={100}
         />
@@ -442,6 +443,7 @@ function CoreSections() {
         <Image
           src={query}
           alt="Query and analyze"
+          unoptimized
           className="w-[600px] xl:w-[600px] 2xl:w-[800px] h-full object-cover object-top"
           quality={100}
         />
@@ -508,6 +510,7 @@ function CoreSections() {
                 <Image
                   src={observe}
                   alt="Observe"
+                  unoptimized
                   className="w-full object-cover object-top"
                   quality={100}
                 />
@@ -608,6 +611,7 @@ function CoreSections() {
                 <Image
                   src={query}
                   alt="Query and analyze"
+                  unoptimized
                   className="w-full object-cover object-top"
                   quality={100}
                 />
