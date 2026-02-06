@@ -1,69 +1,124 @@
-[ClawOps](https://clawops.ai) is the control plane for AI agents running in public channels. It helps non-technical teams keep agents safe, visible, and under control across Telegram, Discord, WhatsApp, and SMS. ClawOps is powered by the open-core ClawOps Engine for security and observability.
+# ClawOps — mission control for live AI agents
 
-ClawOps is **not** an agent framework or chatbot builder. It is the operations, safety, and governance layer for agents you already run. You don't rebuild agents to make them safe - you operate them safely after they're deployed.
+*Operations, safety, and governance for agents running in public channels.*
 
-- [x] ✅ **Control**
-    - [x] Agent status, pause/resume, and kill switch
-    - [x] Channel-first onboarding (no CLI, no YAML)
-    - [x] Human-readable activity timelines
-- [x] 🛡️ **Guardrails**
-    - [x] Simple safety toggles mapped to policy rules
-    - [x] Blocks (prompt-based rules for direct injection)
-    - [x] Auto-pause on repeated risk
-- [x] 📊 **Visibility**
-    - [x] Activity timelines with technical details on demand
-    - [x] Risk scoring and safety trends
-    - [x] OpenTelemetry-native traces under the hood
+ClawOps is the control plane for AI agents deployed in Telegram, Discord, WhatsApp, and SMS. It gives non-technical teams a clear, safe way to operate agents in production: see what’s running, spot risk early, and intervene when needed.
 
-## Deployment Modes
+ClawOps is **not** an agent framework or chatbot builder. It’s the operations layer for agents you already run. You don’t rebuild agents to make them safe — you operate them safely after they’re deployed.
 
-ClawOps ships in three official deployment modes - all backed by the same codebase and enforcement rules:
+[![License](https://img.shields.io/badge/license-Apache_2.0-blue.svg)](LICENSE.md)
+[![Docs](https://img.shields.io/badge/docs-clawops.ai-0a66c2.svg)](https://clawops.ai)
+[![Checks](https://img.shields.io/badge/checks-clawops%3Acheck-2ea043.svg)](https://clawops.ai)
+[![Community](https://img.shields.io/badge/community-x.com%2Fclawops-111111.svg)](https://x.com/clawops)
+
+---
+
+## Get started
+
+- Docs & overview: https://clawops.ai
+- Launch & packaging: `docs/LAUNCH.md`
+- Deployment guide: `DEPLOYMENT.md`
+- Contributing: `CONTRIBUTING.md`
+- Updates: https://x.com/clawops
+
+---
+
+## What ClawOps does
+
+**Control**
+- Agent status, pause/resume, and kill switch
+- Channel-first onboarding (no CLI, no YAML required for hosted)
+- Human-readable activity timelines
+
+**Guardrails**
+- Simple safety toggles mapped to policy rules
+- Blocks for direct injection rules
+- Auto-pause on repeated risk
+
+**Visibility**
+- Activity timelines with technical details on demand
+- Risk scoring and safety trends
+- OpenTelemetry-compatible traces under the hood
+
+---
+
+## Deployment modes
+
+ClawOps ships in three official modes — all backed by the same codebase, guardrail semantics, and audit guarantees:
 
 1. **Hosted ClawOps (SaaS)**  
-   Control plane is hosted by ClawOps. Default data handling is **metadata-only**, with optional full-fidelity opt-in.
+   Control plane hosted by ClawOps. Data handling is **metadata-only** by default, with full-fidelity opt-in.
 
 2. **Hybrid ClawOps (Recommended)**  
-   Hosted control plane + self-hosted **ClawOps Edge** connector and decision cache. Raw data stays local; SaaS receives metadata and incidents.
+   Hosted control plane + self-hosted Edge connector and decision cache. Raw data stays local; incidents and metadata sync.
 
 3. **Fully Self-Hosted ClawOps**  
-   Control plane + Edge deployed on your infrastructure. No external dependencies; licensing + support hooks only.
+   Control plane and Edge deployed on your infrastructure. No external dependencies; licensing + support hooks only.
 
-For full launch packaging details, see `docs/LAUNCH.md`.
+For full packaging details, see `docs/LAUNCH.md`.
 
-## 5-Minute Agent Protection
+---
+
+## Supported channels
+
+- Telegram
+- Discord
+- WhatsApp
+- SMS
+- Slack
+
+---
+
+## Runtime compatibility
+
+ClawOps wraps your existing LLM client and works with:
+- OpenAI, Anthropic, Bedrock, Groq, Mistral, Azure, and more
+- Any REST-based model gateway
+
+---
+
+## 5-minute agent protection
 
 ClawOps onboarding is designed for non-technical teams:
 
-1. Create org + project  
-2. Register your first agent  
-3. Choose a policy preset (General Agent / Healthcare / Finance)  
-4. Generate agent key + connector snippet  
-5. **Run the mandatory demo**  
+1. Create org + project
+2. Register your first agent
+3. Choose a guardrail preset (General Agent / Healthcare / Finance)
+4. Generate agent key + connector snippet
+5. **Run the mandatory demo**
 6. Readiness label is emitted automatically
 
-## Demo
+---
+
+## Screenshots
 
 <p align="center">
-  <img alt="ClawOps demo screenshot" src="./images/demo.png" width="700">
+  <img alt="ClawOps Mission Control" src="./images/dashboard-mission-control.png" width="700">
+</p>
+<p align="center">
+  <img alt="ClawOps Agents view" src="./images/dashboard-agents.png" width="700">
+</p>
+<p align="center">
+  <img alt="ClawOps Incidents view" src="./images/dashboard-incidents.png" width="700">
 </p>
 
-## Quick Start (5 minutes)
+---
 
-Get ClawOps running locally in minutes.
+## Quick start (self-hosted)
 
 ### Prerequisites
 
-- Docker and Docker Compose installed
+- Docker and Docker Compose
 - Git
 
-### Step 1: Clone and Setup
+### Step 1: Clone and setup
 
 ```bash
 git clone https://github.com/clawops/clawops
 cd clawops
 ```
 
-### Step 2: Create Environment File
+### Step 2: Create environment file
 
 Create a `.env` file in the project root with minimal required variables:
 
@@ -123,12 +178,11 @@ OPENAI_MODEL=gpt-4o-mini
 
 **Or use the example file:**
 ```bash
-# If .env.example exists
 cp .env.example .env
 # Then edit .env and replace placeholder values
 ```
 
-### Step 3: Start Services
+### Step 3: Start services
 
 ```bash
 docker compose -f docker-compose.yml up -d
@@ -136,7 +190,7 @@ docker compose -f docker-compose.yml up -d
 
 This starts all services:
 - **ClawOps UI** → http://localhost:3000
-- **ClawOps Engine (clawops-engine)** → http://localhost:8006
+- **ClawOps Core API** → http://localhost:8006
 - **Observability Backend** → http://localhost:8000
 - **PostgreSQL** → localhost:5433
 - **ClickHouse** → localhost:8123
@@ -149,7 +203,7 @@ cd frontend
 npm run clawops:check
 ```
 
-### Step 5: Access the Dashboard
+### Step 5: Access the dashboard
 
 Open your browser and go to **http://localhost:3000**
 
@@ -159,56 +213,22 @@ cd frontend
 npm run clawops:quickstart
 ```
 
-You'll be prompted to sign up and create an account. Once logged in, you can:
-- Connect a channel and create an agent
-- Set guardrails with simple toggles
-- View activity and safety trends
+---
 
-## Connect Your First Agent
+## Connect your first agent
 
-1. **Connect a channel** (Telegram, Discord, WhatsApp, SMS)
-2. **Name your agent**
-3. **Choose a policy preset** (General Agent, Healthcare, Finance)
-4. **Copy the runtime snippet**
-5. **Run the mandatory demo**
-6. **Go live**
+1. Connect a channel (Telegram, Discord, WhatsApp, SMS)
+2. Name your agent
+3. Choose a guardrail preset
+4. Copy the runtime snippet
+5. Run the mandatory demo
+6. Go live
 
-## Pricing & Metering
+---
 
-ClawOps is metered on **active agents, sessions, incidents, and exports**. We never charge per token.
+## Runtime integration (copy‑paste)
 
-- **Community (Free)**: 1 active agent, metadata-only telemetry, basic guardrails
-- **Pro**: multi-agent monitoring, approvals + auto-pause, redacted telemetry, WhatsApp/SMS
-- **Enterprise**: full-fidelity telemetry (local or hybrid), evidence bundles, advanced approvals, self-hosted
-
-## Distribution & Adoption
-
-ClawOps supports multiple adoption paths without requiring ClawBot UI changes:
-
-- **ClawBot Ecosystem**: drop-in connector + base URL proxy ("Works with ClawBot")
-- **SimpleClaw / Emergent-style builders**: copy-paste setup with safe defaults
-- **Direct developer adoption**: CLI + Docker quickstart, `npm run clawops:check` surfaced early
-
-## Guardrails and Blocks
-
-### Guardrails (simple toggles)
-
-Open **Guardrails** in the sidebar to enable safety toggles like:
-- Block instruction overrides
-- Ask before risky actions
-- Limit response frequency
-- Pause on uncertainty
-- Disable external tools
-
-These toggles map to policy rules internally, but you never have to manage policy keys.
-
-### Blocks (direct injection rules)
-
-Blocks are prompt-based rules for direct injection detection. Create them in **Blocks** to define what should be blocked before an agent responds.
-
-## Runtime Integration (copy-paste)
-
-ClawOps connects to your agent runtime. No changes to agent logic required - wrap your LLM client.
+ClawOps connects to your agent runtime with no logic changes — wrap your LLM client.
 
 ### Node / TypeScript
 
@@ -228,6 +248,7 @@ const llm = clawops.wrapLLM(openai);
 
 ```python
 from clawops import ClawOps
+import os
 
 clawops = ClawOps(
   api_key=os.getenv("CLAWOPS_API_KEY"),
@@ -238,16 +259,63 @@ clawops = ClawOps(
 llm = clawops.wrap_llm(openai_client)
 ```
 
-Replace your LLM client with the wrapped version. The first request will appear in Activity and Incidents.
+Replace your LLM client with the wrapped version. The first request appears in Activity and Incidents.
 
-### Runtime Environment Variables
+### Runtime environment variables
 
 ```bash
 export CLAWOPS_API_KEY=your-api-key-from-dashboard
 export AGENT_ID=your-agent-id
 ```
 
-## Production Deployment
+---
+
+## Activity & incidents (reading the results)
+
+Every risky or blocked action becomes an **Incident** with clear context:
+- **What happened**
+- **Why it happened** (guardrail or threat protection)
+- **What was prevented**
+
+Technical details are available behind a toggle for engineers.
+
+---
+
+## Guardrails & threat protection
+
+Guardrails are presets you can understand:
+- Safe
+- Balanced
+- Autonomous
+
+Threat protection groups detections by:
+- Jailbreaks
+- Data exfiltration
+- Prompt injection
+- Policy manipulation
+
+---
+
+## Audit & compliance
+
+ClawOps provides:
+- Immutable audit logs
+- CSV/JSON exports
+- Evidence bundles for regulated reviews
+
+---
+
+## Pricing & metering
+
+ClawOps is metered on **active agents, sessions, incidents, and exports** — never per token.
+
+- **Community (Free)**: 1 active agent, metadata-only telemetry, basic guardrails
+- **Pro**: multi-agent monitoring, approvals + auto-pause, redacted telemetry, WhatsApp/SMS
+- **Enterprise**: full-fidelity telemetry (local or hybrid), evidence bundles, advanced approvals, self-hosted
+
+---
+
+## Production deployment
 
 For production deployment, see [DEPLOYMENT.md](DEPLOYMENT.md).
 
@@ -261,70 +329,51 @@ For production deployment, see [DEPLOYMENT.md](DEPLOYMENT.md).
 docker compose -f docker-compose.prod.yml up -d
 ```
 
-## Troubleshooting
+---
 
-### Services won't start
+## CLI checks
 
-1. **Check Docker is running:**
-   ```bash
-   docker info
-   ```
+```bash
+cd frontend
+npm run clawops:check
+```
 
-2. **Check ports are available:**
-   ```bash
-   # Linux/Mac
-   lsof -i :3000
+ClawOps enforces:
+- No secrets in logs
+- Append-only audit logs
+- Rate limits at runtime boundaries
+- Readiness gating
 
-   # Windows
-   netstat -ano | findstr :3000
-   ```
+---
 
-3. **View service logs:**
-   ```bash
-   docker compose -f docker-compose.yml logs frontend
-   docker compose -f docker-compose.yml logs clawops-engine
-   ```
+## FAQ
 
-### Frontend shows connection errors
+**Is ClawOps an agent framework?**  
+No. It’s the operations layer for agents you already run.
 
-- Ensure all services are running: `docker compose -f docker-compose.yml ps`
-- Check that environment variables are set correctly
-- Verify services are healthy: `docker compose -f docker-compose.yml ps`
+**Do I need ClawBot UI changes?**  
+No. ClawOps connects via a runtime wrapper and works with existing bots.
 
-### Database connection issues
+**Can I run locally or in regulated environments?**  
+Yes. Hybrid and fully self-hosted modes keep raw data local.
 
-- Wait for postgres to be healthy (may take 30-60 seconds on first start)
-- Check postgres logs: `docker compose -f docker-compose.yml logs postgres`
-- Verify `POSTGRES_PASSWORD` matches in your `.env` file
+---
 
-### Can't access dashboard
+## Citing ClawOps
 
-- Ensure frontend is running: `docker compose -f docker-compose.yml ps frontend`
-- Check frontend logs: `docker compose -f docker-compose.yml logs frontend`
-- Try accessing http://localhost:3000 directly
-- Check if port 3000 is already in use
+If you reference ClawOps in a paper or audit, use:
 
-## Next Steps
+```bibtex
+@software{clawops,
+  title={{ClawOps: Mission Control for AI Agents}},
+  author={ClawOps Team},
+  year={2026},
+  howpublished={\url{https://clawops.ai}}
+}
+```
 
-- **Connect your first agent**: Use the in-app onboarding to connect a channel and go live
-- **Tune guardrails**: Start with safe defaults and adjust as needed
-- **Review activity**: Use Activity timelines to understand what your agents do
-- **Read Documentation**: See [CONTRIBUTING.md](CONTRIBUTING.md) for development setup
+---
 
-## Documentation
+## License
 
-- [Contributing Guide](CONTRIBUTING.md) - Development setup and contributing
-- [Deployment Guide](DEPLOYMENT.md) - Production deployment
-- [Launch & Packaging](docs/LAUNCH.md) - Deployment modes, onboarding, and go-to-market
-- [Full Documentation](https://clawops.ai) - Product overview and docs
-
-## Runtime SDKs
-
-- Node / TypeScript: `@clawops/runtime`
-- Python: `clawops`
-
-## Support
-
-- **Issues**: [GitHub Issues](https://github.com/clawops/clawops/issues)
-- **Documentation**: [clawops.ai](https://clawops.ai)
-- **X**: [@clawops](https://x.com/clawops)
+ClawOps is licensed under Apache 2.0. See [LICENSE.md](LICENSE.md).
