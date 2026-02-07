@@ -1,0 +1,220 @@
+================================================================================
+CLAWOPS DEPLOYMENT - clawops.elloe.ai
+================================================================================
+
+SERVER IP: 143.198.12.229
+DOMAIN: clawops.elloe.ai
+REPOSITORY: https://gitlab.com/introd1/ClawOps
+
+================================================================================
+STEP 0: DNS CONFIGURATION (DO THIS FIRST!)
+================================================================================
+
+Go to your DNS provider for elloe.ai and add:
+
+Type: A
+Name: clawops
+Value: 143.198.12.229
+TTL: 300
+
+Wait 5-10 minutes, then verify:
+nslookup clawops.elloe.ai
+(Should return: 143.198.12.229)
+
+================================================================================
+STEP 1: CONNECT TO SERVER
+================================================================================
+
+ssh root@143.198.12.229
+
+================================================================================
+STEP 2: RUN AUTOMATED DEPLOYMENT
+================================================================================
+
+bash <(curl -s https://gitlab.com/introd1/ClawOps/-/raw/main/scripts/deploy-digitalocean.sh)
+
+When prompted:
+- Domain: clawops.elloe.ai
+- Email: your-owen@elloe.ai
+- Git repo: [press Enter to use default]
+
+================================================================================
+STEP 3: GENERATE SECRETS
+================================================================================
+
+Run these commands on the server:
+
+echo "SHARED_SECRET_TOKEN=$(openssl rand -hex 32)"
+echo "AEAD_SECRET_KEY=$(openssl rand -hex 32)"
+echo "NEXTAUTH_SECRET=$(openssl rand -hex 32)"
+echo "CLAWOPS_ENGINE_API_KEY=$(openssl rand -hex 32)"
+
+Copy the output for the next step.
+
+================================================================================
+STEP 4: EDIT ENVIRONMENT
+================================================================================
+
+cd /opt/clawops
+nano .env
+
+Required changes:
+
+POSTGRES_PASSWORD=<create-strong-password>
+CLICKHOUSE_PASSWORD=<create-strong-password>
+CLICKHOUSE_RO_PASSWORD=<create-strong-password>
+
+SHARED_SECRET_TOKEN=<paste-from-step-3>
+AEAD_SECRET_KEY=<paste-from-step-3>
+NEXTAUTH_SECRET=<paste-from-step-3>
+CLAWOPS_ENGINE_API_KEY=<paste-from-step-3>
+
+NEXTAUTH_URL=https://clawops.elloe.ai
+
+OPENAI_API_KEY=sk-your-openai-key-here
+# Or use OpenRouter:
+OPENAI_BASE_URL=https://openrouter.ai/api/v1
+
+CLAWOPS_ADMIN_EMAILS=admin@elloe.ai
+
+DOCKER_HUB_ORG=clawops
+IMAGE_TAG=latest
+
+Save: Ctrl+X, Y, Enter
+
+================================================================================
+STEP 5: RECREATE SERVICES (APPLY NEW ENV)
+================================================================================
+
+docker compose -f docker-compose.digitalocean.yml down
+docker compose -f docker-compose.digitalocean.yml up -d
+
+================================================================================
+STEP 6: VERIFY DEPLOYMENT
+================================================================================
+
+# Check all services are running
+docker compose -f docker-compose.digitalocean.yml ps
+
+# View logs
+docker compose -f docker-compose.digitalocean.yml logs -f
+
+# Access ClawOps
+Open browser: https://clawops.elloe.ai
+
+================================================================================
+USEFUL COMMANDS
+================================================================================
+
+# View logs
+docker compose -f docker-compose.digitalocean.yml logs -f
+
+# View specific service
+docker compose -f docker-compose.digitalocean.yml logs -f frontend
+docker compose -f docker-compose.digitalocean.yml logs -f clawops-engine
+
+# Restart all
+docker compose -f docker-compose.digitalocean.yml restart
+
+# Restart specific service
+docker compose -f docker-compose.digitalocean.yml restart frontend
+
+# Stop all
+docker compose -f docker-compose.digitalocean.yml down
+
+# Start all
+docker compose -f docker-compose.digitalocean.yml up -d
+
+# Update ClawOps
+cd /opt/clawops && git pull && \
+docker compose -f docker-compose.digitalocean.yml pull && \
+docker compose -f docker-compose.digitalocean.yml up -d
+
+# Manual backup
+/opt/clawops/scripts/backup.sh
+
+# Check resources
+docker stats
+df -h
+
+# Check service health
+curl https://clawops.elloe.ai
+curl http://localhost:8006/health
+
+================================================================================
+TROUBLESHOOTING
+================================================================================
+
+# Check service status
+docker compose -f docker-compose.digitalocean.yml ps
+
+# View all logs
+docker compose -f docker-compose.digitalocean.yml logs
+
+# Check DNS
+nslookup clawops.elloe.ai
+
+# Check SSL certificate
+certbot certificates
+
+# Check firewall
+ufw status
+
+# Test database
+docker exec -it clawops-production-postgres-1 psql -U postgres
+
+# Restart Docker
+systemctl restart docker
+
+================================================================================
+SECURITY CHECKLIST
+================================================================================
+
+[ ] DNS A record points to 143.198.12.229
+[ ] Strong passwords set for databases
+[ ] Random secrets generated (64-char hex)
+[ ] Firewall enabled (ports 22, 80, 443 only)
+[ ] SSL certificate installed for clawops.elloe.ai
+[ ] .env file secured: chmod 600 /opt/clawops/.env
+[ ] Backups running (check /opt/clawops/backups)
+[ ] Admin emails set to @elloe.ai addresses
+
+================================================================================
+ACCESS POINTS
+================================================================================
+
+Main Application: https://clawops.elloe.ai
+Health Check: https://clawops.elloe.ai/health
+
+Admin Email: admin@elloe.ai
+Support: support@elloe.ai
+
+================================================================================
+BACKUP & MAINTENANCE
+================================================================================
+
+Backups Location: /opt/clawops/backups
+Backup Schedule: Daily at 2:00 AM UTC
+Backup Retention: 7 days
+SSL Renewal: Daily at 3:00 AM UTC
+
+Manual Backup:
+/opt/clawops/scripts/backup.sh
+
+View Backup Logs:
+tail -f /var/log/clawops-backup.log
+
+================================================================================
+SUPPORT
+================================================================================
+
+Server: 143.198.12.229
+Domain: clawops.elloe.ai
+Repository: https://gitlab.com/introd1/ClawOps
+
+Documentation:
+- Quick Start: QUICK_DEPLOY_ELLOE.txt (this file)
+- Detailed: DIGITALOCEAN_DEPLOYMENT.md
+- Full Guide: README_DEPLOY.md
+
+================================================================================

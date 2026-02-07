@@ -1,0 +1,68 @@
+================================================================================
+CLAWOPS DEPLOYMENT - clawops.elloe.ai
+================================================================================
+
+SERVER IP: 143.198.12.229
+DOMAIN: clawops.elloe.ai
+REPOSITORY: https://gitlab.com/introd1/ClawOps
+
+================================================================================
+STEP 1: CONNECT TO SERVER
+================================================================================
+
+ssh root@143.198.12.229
+
+================================================================================
+STEP 2: RUN AUTOMATED DEPLOYMENT
+================================================================================
+
+curl -o deploy.sh https://gitlab.com/introd1/ClawOps/-/raw/main/scripts/deploy-digitalocean.sh
+chmod +x deploy.sh
+sudo ./deploy.sh
+
+When prompted:
+- Domain: clawops.elloe.ai
+- Email: your email
+- Git repo: press Enter (default)
+
+================================================================================
+STEP 3: EDIT ENVIRONMENT
+================================================================================
+
+cd /opt/clawops
+nano .env
+
+Required changes:
+POSTGRES_PASSWORD=<create-strong-password>
+CLICKHOUSE_PASSWORD=<create-strong-password>
+CLICKHOUSE_RO_PASSWORD=<create-strong-password>
+SHARED_SECRET_TOKEN=<openssl rand -hex 32>
+AEAD_SECRET_KEY=<openssl rand -hex 32>
+NEXTAUTH_SECRET=<openssl rand -hex 32>
+CLAWOPS_ENGINE_API_KEY=<openssl rand -hex 32>
+NEXTAUTH_URL=https://clawops.elloe.ai
+OPENAI_API_KEY=sk-your-openai-key-here
+OPENAI_BASE_URL=https://openrouter.ai/api/v1
+CLAWOPS_ADMIN_EMAILS=admin@elloe.ai
+DOCKER_HUB_ORG=clawops
+IMAGE_TAG=latest
+
+Save: Ctrl+X, Y, Enter
+
+================================================================================
+STEP 4: APPLY ENV CHANGES
+================================================================================
+
+docker compose -f docker-compose.digitalocean.yml down
+docker compose -f docker-compose.digitalocean.yml up -d
+
+================================================================================
+STEP 5: VERIFY
+================================================================================
+
+docker compose -f docker-compose.digitalocean.yml ps
+docker compose -f docker-compose.digitalocean.yml logs -f
+
+Open: https://clawops.elloe.ai
+
+================================================================================
