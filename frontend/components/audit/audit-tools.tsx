@@ -10,13 +10,17 @@ import { useProjectContext } from "@/contexts/project-context";
 import { useProductAnalytics } from "@/lib/analytics/use-product-analytics";
 import { useToast } from "@/lib/hooks/use-toast";
 
+type ComplianceMode = "general" | "regulated";
+
 export default function AuditTools() {
   const { projectId } = useParams();
   const router = useRouter();
   const { project, workspace } = useProjectContext();
   const { toast } = useToast();
   const { track } = useProductAnalytics();
-  const [complianceMode, setComplianceMode] = useState(project?.complianceMode ?? "general");
+  const [complianceMode, setComplianceMode] = useState<ComplianceMode>(
+    (project?.complianceMode as ComplianceMode | undefined) ?? "general"
+  );
   const [isSaving, setIsSaving] = useState(false);
 
   const isFreeTier = Boolean(project?.isFreeTier);
@@ -30,6 +34,7 @@ export default function AuditTools() {
 
   const handleComplianceChange = async (value: string) => {
     if (!projectId) return;
+    if (value !== "general" && value !== "regulated") return;
     setComplianceMode(value);
     setIsSaving(true);
     try {

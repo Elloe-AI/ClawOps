@@ -6,6 +6,7 @@ import LightboxImage from "@/components/blog/lightbox-image";
 import MDHeading from "@/components/blog/md-heading";
 import PreHighlighter from "@/components/blog/pre-highlighter";
 import { getBlogPost } from "@/lib/blog/utils";
+import { APP_URL } from "@/lib/brand";
 
 export const generateMetadata = async (
   props: {
@@ -18,16 +19,16 @@ export const generateMetadata = async (
     title: data.title,
     description: data.description,
     authors: data.coAuthors ? [data.author, ...data.coAuthors] : [data.author],
-    icons: ["https://clawops.ai/favicon.ico"],
+    icons: [`${APP_URL}/icon.png`],
     openGraph: {
-      images: data.image ? ["https://clawops.ai" + data.image] : ["https://clawops.ai/favicon.ico"],
+      images: data.image ? [APP_URL + data.image] : [`${APP_URL}/icon.png`],
       type: "article",
       publishedTime: data.date,
     },
     twitter: {
       title: data.title,
       description: data.description,
-      images: data.image ? ["https://clawops.ai" + data.image] : ["https://clawops.ai/favicon.ico"],
+      images: data.image ? [APP_URL + data.image] : [`${APP_URL}/icon.png`],
     },
   };
 };

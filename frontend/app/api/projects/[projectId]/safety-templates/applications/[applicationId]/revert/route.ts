@@ -1,15 +1,17 @@
 import { NextRequest } from "next/server";
 import { getServerSession } from "next-auth";
+import { and, eq } from "drizzle-orm";
 import { prettifyError, ZodError } from "zod/v4";
 
 import { revertSafetyTemplate } from "@/lib/actions/safety-templates";
 import { updateAgentsGuardrailsConfig } from "@/lib/actions/agents";
-import { setThreatProtectionConfig } from "@/lib/actions/project-settings";
+import { DEFAULT_THREAT_PROTECTION_CONFIG, setThreatProtectionConfig } from "@/lib/actions/project-settings";
 import { authOptions } from "@/lib/auth";
 import { requireProjectRoleAtLeast } from "@/lib/authorization/roles";
 import { db } from "@/lib/db/drizzle";
 import { safetyTemplateApplications } from "@/lib/db/migrations/schema";
 import {
+  DEFAULT_GUARDRAILS,
   applyThreatProtectionConfig,
   updateGuardrailsPolicy,
 } from "@/lib/safety-templates/operations";
@@ -29,8 +31,10 @@ export async function POST(
     await requireProjectRoleAtLeast(params.projectId, "operator");
 
     const application = await db.query.safetyTemplateApplications.findFirst({
-      where: (table, { and, eq }) =>
-        and(eq(table.projectId, params.projectId), eq(table.id, params.applicationId)),
+      where: and(
+        eq(safetyTemplateApplications.projectId, params.projectId),
+        eq(safetyTemplateApplications.id, params.applicationId)
+      ),
     });
 
     if (!application) {
@@ -41,14 +45,28 @@ export async function POST(
       return new Response(JSON.stringify({ error: "Template already reverted" }), { status: 409 });
     }
 
-    await updateGuardrailsPolicy(session, application.previousGuardrailsConfig ?? {});
+    const previousGuardrailsConfig =
+      (application.previousGuardrailsConfig as Record<string, unknown> | null) ?? {};
+    const previousThreatProtectionConfig =
+      (application.previousThreatProtectionConfig as Partial<typeof DEFAULT_THREAT_PROTECTION_CONFIG> | null) ?? {};
+
+    const restoredGuardrailsConfig = {
+      ...DEFAULT_GUARDRAILS,
+      ...previousGuardrailsConfig,
+    };
+    const restoredThreatProtectionConfig = {
+      ...DEFAULT_THREAT_PROTECTION_CONFIG,
+      ...previousThreatProtectionConfig,
+    };
+
+    await updateGuardrailsPolicy(session, restoredGuardrailsConfig);
     await updateAgentsGuardrailsConfig({
       projectId: params.projectId,
-      guardrailsConfig: application.previousGuardrailsConfig ?? {},
+      guardrailsConfig: restoredGuardrailsConfig,
     });
 
-    await applyThreatProtectionConfig(session, application.previousThreatProtectionConfig ?? {});
-    await setThreatProtectionConfig(params.projectId, application.previousThreatProtectionConfig ?? {});
+    await applyThreatProtectionConfig(session, restoredThreatProtectionConfig);
+    await setThreatProtectionConfig(params.projectId, restoredThreatProtectionConfig);
 
     const reverted = await revertSafetyTemplate({
       projectId: params.projectId,

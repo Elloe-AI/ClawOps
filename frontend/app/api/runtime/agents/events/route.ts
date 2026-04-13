@@ -21,7 +21,7 @@ const EventSchema = z.object({
   summary: z.string().optional(),
   reason: z.string().optional(),
   action: z.string().optional(),
-  details: z.record(z.any()).optional(),
+  details: z.record(z.string(), z.any()).optional(),
   environment: z.enum(["local", "staging", "prod"]).optional(),
   partnerId: z.string().optional(),
   runtimeType: z.string().optional(),

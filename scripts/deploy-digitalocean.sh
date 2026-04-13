@@ -22,8 +22,8 @@ if [ "$EUID" -ne 0 ]; then
 fi
 
 # Get domain name
-read -p "Enter your domain name (default: clawops.elloe.ai): " DOMAIN_NAME
-DOMAIN_NAME=${DOMAIN_NAME:-clawops.elloe.ai}
+read -p "Enter your domain name (default: partners.elloe.ai): " DOMAIN_NAME
+DOMAIN_NAME=${DOMAIN_NAME:-partners.elloe.ai}
 read -p "Enter your email for SSL certificate: " SSL_EMAIL
 
 echo ""
@@ -118,7 +118,7 @@ echo -e "${GREEN}Step 9: Updating Nginx configuration...${NC}"
 # Update nginx.conf with domain name
 if [ -f nginx.conf ]; then
     sed -i "s/server_name _;/server_name $DOMAIN_NAME;/g" nginx.conf
-    sed -i "s/clawops.elloe.ai/$DOMAIN_NAME/g" nginx.conf
+    sed -i "s/partners.elloe.ai/$DOMAIN_NAME/g" nginx.conf
     sed -i "s/your-domain.com/$DOMAIN_NAME/g" nginx.conf
 fi
 

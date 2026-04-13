@@ -8,15 +8,15 @@ import { getBlogPosts } from "@/lib/blog/utils";
 import { formatUTCDate } from "@/lib/utils";
 
 export const metadata: Metadata = {
-  title: "ClawOps Blog",
-  description: "ClawOps blog posts",
+  title: "TruthChecker Blog",
+  description: "TruthChecker blog posts",
   openGraph: {
-    title: "ClawOps Blog",
-    description: "ClawOps blog posts",
+    title: "TruthChecker Blog",
+    description: "TruthChecker blog posts",
   },
   twitter: {
-    title: "ClawOps Blog",
-    description: "ClawOps blog posts",
+    title: "TruthChecker Blog",
+    description: "TruthChecker blog posts",
   },
 };
 

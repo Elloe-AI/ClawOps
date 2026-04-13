@@ -2,11 +2,11 @@
 
 import * as Sentry from "@sentry/nextjs";
 import { ArrowLeft, RefreshCw } from "lucide-react";
-import Image from "next/image";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { useEffect } from "react";
 
+import { BrandMark } from "@/components/brand/brand-mark";
 import { Button } from "@/components/ui/button.tsx";
 
 export default function Error({ error, reset }: { error: Error & { digest?: string }; reset: () => void }) {
@@ -19,7 +19,7 @@ export default function Error({ error, reset }: { error: Error & { digest?: stri
     <div className="flex flex-col items-center justify-center min-h-screen">
       <div className="flex flex-col max-w-lg items-center justify-center gap-4 text-secondary-foreground">
         <Link href={"/projects"} className="flex h-10 mb-8 items-center justify-center">
-          <Image alt="ClawOps icon" className="rounded-lg" src="/images/logo.webp" width={80} height={80} />
+          <BrandMark size="lg" />
         </Link>
         <h1 className="text-2xl font-medium text-center">Oops, something went wrong</h1>
         <h1 className="font-medium text-center text-destructive">{error?.name}</h1>
@@ -29,7 +29,7 @@ export default function Error({ error, reset }: { error: Error & { digest?: stri
             <ArrowLeft className="mr-2 size-4" />
             Back
           </Button>
-          <Button onClick={router.refresh} className="px-4" size="lg" variant="outlinePrimary">
+          <Button onClick={reset} className="px-4" size="lg" variant="outlinePrimary">
             <RefreshCw className="mr-2 size-4" />
             Try Again
           </Button>

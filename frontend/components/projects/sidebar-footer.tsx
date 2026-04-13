@@ -1,17 +1,14 @@
 "use client";
 
-import { Book, X } from "lucide-react";
+import { X } from "lucide-react";
 import Link from "next/link";
-import React from "react";
 
-import DiscordLogo from "@/assets/logo/discord.tsx";
-import { LaminarIcon, LaminarLogo } from "@/components/ui/icons.tsx";
+import { BrandMark } from "@/components/brand/brand-mark";
 import {
   SidebarFooter,
   SidebarGroup,
   SidebarGroupContent,
   SidebarMenu,
-  SidebarMenuButton,
   SidebarMenuItem,
   useSidebar,
 } from "@/components/ui/sidebar.tsx";
@@ -28,7 +25,7 @@ const SidebarFooterComponent = () => {
         <SidebarGroupContent>
           <div className={cn("flex flex-col rounded-lg border bg-muted relative p-2")}>
             <div className="flex justify-between items-start">
-              <p className="text-xs text-muted-foreground mb-2">ClawOps is open-core</p>
+              <p className="text-xs text-muted-foreground mb-2">Open source edition</p>
               <button onClick={() => setShowStarCard(false)} className="text-muted-foreground hover:text-foreground">
                 <X size={16} />
               </button>
@@ -39,7 +36,7 @@ const SidebarFooterComponent = () => {
               rel="noopener noreferrer"
               className="text-xs text-foreground hover:underline"
             >
-              ⭐ Star it on GitHub
+              View source on GitHub
             </a>
           </div>
         </SidebarGroupContent>
@@ -65,16 +62,11 @@ const SidebarFooterComponent = () => {
             </SidebarMenuItem> */}
             <SidebarMenuItem className="mt-5 mx-0 px-2">
               <Link passHref href="/projects" className="flex items-center">
-                <div className="relative flex">
-                  <img
-                    src="/images/logo.webp"
-                    alt="ClawOps logo"
-                    width={120}
-                    height={40}
-                    style={{ opacity: 0.6 }}
-                    className="mx-auto block"
-                  />
-                </div>
+                <BrandMark
+                  className="w-full justify-center"
+                  imageClassName="opacity-80"
+                  size="sm"
+                />
               </Link>
             </SidebarMenuItem>
           </SidebarMenu>

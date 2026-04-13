@@ -1,6 +1,5 @@
 "use client";
 
-import Image from "next/image";
 import Link from "next/link";
 import { useSearchParams } from "next/navigation";
 import { signIn } from "next-auth/react";
@@ -10,6 +9,7 @@ import { AzureButton } from "@/components/auth/azure-button";
 import { EmailSignInButton } from "@/components/auth/email-sign-in";
 import { GitHubButton } from "@/components/auth/github-button";
 import { GoogleButton } from "@/components/auth/google-button";
+import { BrandMark } from "@/components/brand/brand-mark";
 import { cn } from "@/lib/utils";
 
 interface SignUpProps {
@@ -52,19 +52,13 @@ const SignUp = ({ callbackUrl, enableGoogle, enableGithub, enableAzure, enableCr
           {/* Logo and Welcome Section */}
           <div className="text-center mb-10">
             <Link className="inline-block mb-6" href="/">
-              <Image 
-                alt="ClawOps Logo" 
-                src="/images/logo.webp" 
-                width={180} 
-                height={80}
-                className="mx-auto"
-              />
+              <BrandMark className="justify-center" priority size="lg" />
             </Link>
             <h1 className="text-3xl font-semibold mb-2 text-foreground">
               Create an account
             </h1>
             <p className="text-sm text-muted-foreground">
-              Sign up to get started with ClawOps
+              Sign up to get started with TruthChecker
             </p>
           </div>
 

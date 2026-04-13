@@ -83,7 +83,7 @@ export function AnalysisToolbar({
                 id="toolbar_api_key"
                 type="password"
                 {...register("api_key")}
-                placeholder="Your ClawOps API key"
+                placeholder="Your TruthChecker API key"
                 disabled={isLoading}
                 className={cn("h-8", errors.api_key && "border-destructive")}
               />

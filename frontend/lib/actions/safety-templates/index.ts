@@ -15,8 +15,8 @@ const SafetyTemplateSchema = z.object({
   name: z.string().min(1),
   description: z.string().optional().nullable(),
   version: z.number().int().min(1).optional(),
-  guardrailsConfig: z.record(z.any()),
-  threatProtectionConfig: z.record(z.any()),
+  guardrailsConfig: z.record(z.string(), z.any()),
+  threatProtectionConfig: z.record(z.string(), z.any()),
   visibility: TemplateVisibilitySchema.optional(),
   isPublished: z.boolean().optional(),
   createdBy: z.string().uuid().optional(),
@@ -32,10 +32,10 @@ const ApplyTemplateSchema = z.object({
   projectId: z.string().uuid(),
   templateId: z.string().uuid(),
   appliedBy: z.string().uuid().optional(),
-  previousGuardrailsConfig: z.record(z.any()),
-  previousThreatProtectionConfig: z.record(z.any()),
-  newGuardrailsConfig: z.record(z.any()),
-  newThreatProtectionConfig: z.record(z.any()),
+  previousGuardrailsConfig: z.record(z.string(), z.any()),
+  previousThreatProtectionConfig: z.record(z.string(), z.any()),
+  newGuardrailsConfig: z.record(z.string(), z.any()),
+  newThreatProtectionConfig: z.record(z.string(), z.any()),
 });
 
 const RevertTemplateSchema = z.object({

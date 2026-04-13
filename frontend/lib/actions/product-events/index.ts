@@ -9,7 +9,7 @@ const CreateProductEventSchema = z.object({
   userId: z.string().uuid().optional(),
   projectId: z.string().uuid().optional(),
   agentId: z.string().uuid().optional(),
-  metadata: z.record(z.any()).optional(),
+  metadata: z.record(z.string(), z.any()).optional(),
   createdAt: z.string().optional(),
 });
 

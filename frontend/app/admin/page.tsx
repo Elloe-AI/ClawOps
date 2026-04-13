@@ -208,7 +208,7 @@ export default async function AdminConsolePage() {
     <div className="min-h-screen bg-background px-6 py-10">
       <div className="max-w-6xl mx-auto space-y-8">
         <div className="space-y-2">
-          <h1 className="text-2xl font-semibold">ClawOps Admin Console</h1>
+          <h1 className="text-2xl font-semibold">TruthChecker Admin Console</h1>
           <p className="text-sm text-muted-foreground">
             Internal monitoring for beta operations, growth signals, and product health.
           </p>

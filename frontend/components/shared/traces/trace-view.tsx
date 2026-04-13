@@ -2,12 +2,11 @@
 
 import { TooltipPortal } from "@radix-ui/react-tooltip";
 import { CirclePlay, Minus, Plus } from "lucide-react";
-import Image from "next/image";
 import Link from "next/link";
 import { usePathname, useRouter, useSearchParams } from "next/navigation";
 import React, { useCallback, useEffect, useMemo } from "react";
 
-import fullLogo from "@/assets/logo/logo.svg";
+import { BrandMark } from "@/components/brand/brand-mark";
 import SessionPlayer from "@/components/shared/traces/session-player";
 import { SpanView } from "@/components/shared/traces/span-view";
 import ViewDropdown from "@/components/shared/traces/view-dropdown";
@@ -156,7 +155,7 @@ const PureTraceView = ({ trace, spans }: TraceViewProps) => {
       <div className="flex flex-col h-full w-full overflow-hidden">
         <div className="flex flex-none items-center border-b px-4 py-3.5 gap-2">
           <Link className="mr-2" href="/projects">
-            <Image alt="ClawOps logo" src={fullLogo} width={120} height={20} />
+            <BrandMark size="sm" />
           </Link>
         </div>
         <div className="flex flex-col h-full w-full overflow-hidden">

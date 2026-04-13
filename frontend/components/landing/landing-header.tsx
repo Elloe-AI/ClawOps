@@ -1,12 +1,11 @@
 "use client";
 
 import { Menu, X } from "lucide-react";
-import Image from "next/image";
 import Link from "next/link";
 import { useState } from "react";
 import GitHubButton from "react-github-btn";
 
-import logo from "@/assets/logo/logo.svg";
+import { BrandMark } from "@/components/brand/brand-mark";
 import { cn } from "@/lib/utils";
 
 import { Button } from "../ui/button";
@@ -23,7 +22,7 @@ export default function LandingHeader({ hasSession }: LandingHeaderProps) {
       <div className="w-full px-4 flex flex-col md:flex-row container justify-between">
         <div className="flex items-center h-20 justify-between">
           <Link href="/" className="-mt-1">
-            <Image alt="ClawOps logo" src={logo} width={150} priority />
+            <BrandMark priority size="md" />
           </Link>
           <div className="md:hidden">
             {isMenuOpen ? (
@@ -51,7 +50,7 @@ export default function LandingHeader({ hasSession }: LandingHeaderProps) {
               data-color-scheme="no-preference: dark; light: dark; dark: dark;"
               data-size="large"
               data-show-count="true"
-              aria-label="Star clawops/clawops on GitHub"
+              aria-label="Star TruthChecker on GitHub"
             >
               Star
             </GitHubButton>

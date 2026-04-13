@@ -44,7 +44,7 @@ evaluate(
           </div>
 
           <div className="flex flex-col gap-3">
-            <h2 className="text-lg font-medium">Install ClawOps SDK</h2>
+            <h2 className="text-lg font-medium">Install TruthChecker SDK</h2>
             <CodeHighlighter
               copyable
               className="text-xs bg-background p-4 rounded-md border"

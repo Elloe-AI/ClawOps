@@ -60,21 +60,21 @@ const decisionSummary = (incidentType: string) => {
 const explainImpact = (incidentType: string) => {
   switch (incidentType) {
     case "blocked_response":
-      return "Without ClawOps, this response would have been delivered.";
+      return "Without TruthChecker, this response would have been delivered.";
     case "guardrail_triggered":
-      return "Without ClawOps, this action could have been executed unchecked.";
+      return "Without TruthChecker, this action could have been executed unchecked.";
     case "auto_paused":
-      return "Without ClawOps, risky behavior would have continued.";
+      return "Without TruthChecker, risky behavior would have continued.";
     case "manual_paused":
       return "Manual pause prevented further risky actions.";
     case "approval_requested":
-      return "Without ClawOps, the action would have executed without review.";
+      return "Without TruthChecker, the action would have executed without review.";
     case "approval_completed":
       return "The action proceeded only after human approval.";
     case "runtime_disconnected":
-      return "Without ClawOps, the disconnect might have gone unnoticed.";
+      return "Without TruthChecker, the disconnect might have gone unnoticed.";
     default:
-      return "ClawOps prevented a risky outcome.";
+      return "TruthChecker prevented a risky outcome.";
   }
 };
 
@@ -170,7 +170,7 @@ export default function Incidents() {
             {!isLoading && incidents.length === 0 && (
               <div className="flex flex-col items-center gap-2 py-10 text-sm text-muted-foreground">
                 <AlertTriangle className="h-5 w-5" />
-                No incidents yet. ClawOps will surface risky actions here.
+                No incidents yet. TruthChecker will surface risky actions here.
               </div>
             )}
 

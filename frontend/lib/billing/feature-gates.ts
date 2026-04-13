@@ -67,7 +67,7 @@ export async function assertFeatureAccess(params: {
     await createProductEvent({
       name: "upgrade_clicked",
       projectId,
-      userId: userId ?? null,
+      userId: userId ?? undefined,
       metadata: {
         source: source ?? "feature_gate",
         feature,

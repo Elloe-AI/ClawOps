@@ -11,7 +11,6 @@ import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/com
 import { Badge } from "@/components/ui/badge";
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table";
 import { useToast } from "@/lib/hooks/use-toast";
-import { swrFetcher } from "@/lib/utils";
 import {
   AGENT_CHANNEL_LABELS,
   AGENT_CONNECTION_LABELS,
@@ -19,7 +18,7 @@ import {
   AGENT_STATUS_LABELS,
   Agent,
 } from "@/lib/agents/types";
-import { cn } from "@/lib/utils";
+import { cn, swrFetcher } from "@/lib/utils";
 
 const channelIcons = {
   telegram: Send,

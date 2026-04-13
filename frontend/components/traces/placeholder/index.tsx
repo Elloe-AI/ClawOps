@@ -73,7 +73,7 @@ export default function TracesPagePlaceholder() {
           </div>
 
           <div className="flex flex-col gap-3">
-            <h2 className="text-lg font-medium">Install ClawOps SDK</h2>
+            <h2 className="text-lg font-medium">Install TruthChecker SDK</h2>
             <InstallTabsSection />
           </div>
 
@@ -83,7 +83,7 @@ export default function TracesPagePlaceholder() {
 
           <div className="flex flex-col gap-3">
             <div className="flex flex-col gap-1">
-              <h2 className="text-lg font-medium">Initialize ClawOps</h2>
+              <h2 className="text-lg font-medium">Initialize TruthChecker</h2>
               <p className="text-sm text-muted-foreground">Add 2 lines of code at the top of your project.</p>
             </div>
             <InitializationTabsSection />

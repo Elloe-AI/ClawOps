@@ -62,7 +62,7 @@ export async function authenticateRuntime(headers: Headers): Promise<RuntimeAuth
     projectId: row.projectId,
     name: row.name,
     hash: row.hash,
-    shorthand: row.shorthand,
+    shorthand: row.shorthand ?? "",
     isIngestOnly: row.isIngestOnly,
     id: row.id,
   });
@@ -71,6 +71,6 @@ export async function authenticateRuntime(headers: Headers): Promise<RuntimeAuth
     projectId: row.projectId,
     keyId: row.id,
     isIngestOnly: row.isIngestOnly,
-    shorthand: row.shorthand,
+    shorthand: row.shorthand ?? "",
   };
 }

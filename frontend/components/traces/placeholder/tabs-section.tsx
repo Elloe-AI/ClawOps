@@ -16,8 +16,8 @@ export function InstallTabsSection() {
 }
 
 export function InitializationTabsSection() {
-  const pythonInitialization = `from clawops import ClawOps
-ClawOps.initialize()`;
+  const pythonInitialization = `from clawops import ClawOps as TruthChecker
+TruthChecker.initialize()`;
 
   return (
     <CodeHighlighter

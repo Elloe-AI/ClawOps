@@ -119,7 +119,7 @@ export default function RoleSetup({ onComplete, onSkip }: RoleSetupProps) {
             <div className="mb-6">
                 <h2 className="text-2xl font-semibold mb-2">Configure Security Roles</h2>
                 <p className="text-sm text-muted-foreground">
-                    Define roles and their permissions for your ClawOps guardrails. This will determine what actions different users can perform.
+                    Define roles and their permissions for your TruthChecker guardrails. This will determine what actions different users can perform.
                 </p>
             </div>
 

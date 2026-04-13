@@ -244,7 +244,7 @@ export default function PolicyForm({ open, onOpenChange, policy, onSuccess }: Po
           <DialogDescription>
             {isEditing
               ? "Update the guardrail configuration. Changes will be merged with existing settings."
-              : "Create a new guardrail profile for ClawOps checks."}
+              : "Create a new guardrail profile for TruthChecker checks."}
           </DialogDescription>
         </DialogHeader>
 
@@ -257,7 +257,7 @@ export default function PolicyForm({ open, onOpenChange, policy, onSuccess }: Po
           <TabsContent value="basic" className="space-y-4">
             <div className="space-y-2">
               <p className="text-xs text-muted-foreground">
-                ClawOps generates a system ID for this guardrail automatically.
+                TruthChecker generates a system ID for this guardrail automatically.
               </p>
             </div>
 

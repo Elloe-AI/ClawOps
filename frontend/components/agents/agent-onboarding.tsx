@@ -177,9 +177,9 @@ export default function AgentOnboarding() {
   }, [apiKey, resolvedRuntimeId, environment, runtimeType, partnerId]);
 
   const typescriptSnippet = useMemo(() => {
-    return `import { ClawOps } from "@clawops/runtime";
+    return `import { ClawOps as TruthChecker } from "@clawops/runtime";
 
-const clawops = new ClawOps({
+const truthChecker = new TruthChecker({
   apiKey: process.env.CLAWOPS_API_KEY,
   agentId: "${resolvedRuntimeId}",
   channel: "${channel}",
@@ -188,13 +188,13 @@ const clawops = new ClawOps({
   partnerId: ${partnerId ? `"${partnerId}"` : "undefined"}
 });
 
-const llm = clawops.wrapLLM(openai);`;
+const llm = truthChecker.wrapLLM(openai);`;
   }, [channel, resolvedRuntimeId, environment, runtimeType, partnerId]);
 
   const pythonSnippet = useMemo(() => {
-    return `from clawops import ClawOps
+    return `from clawops import ClawOps as TruthChecker
 
-clawops = ClawOps(
+truth_checker = TruthChecker(
   api_key=os.getenv("CLAWOPS_API_KEY"),
   agent_id="${resolvedRuntimeId}",
   channel="${channel}",
@@ -203,7 +203,7 @@ clawops = ClawOps(
   partner_id=${partnerId ? `"${partnerId}"` : "None"}
 )
 
-llm = clawops.wrap_llm(openai_client)`;
+llm = truth_checker.wrap_llm(openai_client)`;
   }, [channel, resolvedRuntimeId, environment, runtimeType, partnerId]);
 
   const handleGenerateConnection = async () => {
@@ -297,7 +297,7 @@ llm = clawops.wrap_llm(openai_client)`;
         <CardHeader>
           <CardTitle>Connect your agent runtime</CardTitle>
           <CardDescription>
-            Step {step + 1} of 3 · ClawOps connects to your agent runtime. No changes to agent logic required.
+            Step {step + 1} of 3 · TruthChecker connects to your agent runtime. No changes to agent logic required.
           </CardDescription>
         </CardHeader>
         <CardContent className="space-y-6">
@@ -507,7 +507,7 @@ llm = clawops.wrap_llm(openai_client)`;
               <div className="rounded-lg border p-4">
                 <p className="text-sm font-medium">Wrap your LLM client</p>
                 <p className="text-xs text-muted-foreground">
-                  Replace your LLM client with this wrapped version to stream live activity into ClawOps.
+                  Replace your LLM client with this wrapped version to stream live activity into TruthChecker.
                 </p>
                 <Tabs defaultValue="ts" className="mt-4">
                   <TabsList>

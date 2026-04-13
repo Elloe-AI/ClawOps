@@ -1,7 +1,7 @@
 # 🚀 ClawOps Deployment - Ready to Deploy
 
 **Server IP**: `143.198.12.229`  
-**Domain**: `clawops.elloe.ai`  
+**Domain**: `partners.elloe.ai`  
 **Repository**: `https://gitlab.com/introd1/ClawOps`  
 **Status**: Ready for deployment ✅
 
@@ -29,7 +29,7 @@ sudo ./deploy.sh
 ```
 
 **When prompted:**
-- **Domain name**: `clawops.elloe.ai`
+- **Domain name**: `partners.elloe.ai`
 - **Email**: your email for SSL
 - **Git repository**: Press Enter (uses default GitLab repo)
 
@@ -58,7 +58,7 @@ NEXTAUTH_SECRET=<paste-generated-64-char-hex>
 CLAWOPS_ENGINE_API_KEY=<paste-generated-32-char-hex>
 
 # 3. Set your domain
-NEXTAUTH_URL=https://clawops.elloe.ai
+NEXTAUTH_URL=https://partners.elloe.ai
 
 # 4. Add your LLM API key
 OPENAI_API_KEY=sk-your-openai-key-here
@@ -97,11 +97,11 @@ docker compose -f docker-compose.digitalocean.yml logs -f
 
 ## DNS Configuration
 
-DNS for `clawops.elloe.ai` is already pointed to `143.198.12.229`.  
+DNS for `partners.elloe.ai` is already pointed to `143.198.12.229`.  
 If you need to re-check:
 
 ```bash
-nslookup clawops.elloe.ai
+nslookup partners.elloe.ai
 ```
 
 ---
@@ -126,4 +126,3 @@ docker compose -f docker-compose.digitalocean.yml restart
 
 **Repository**: https://gitlab.com/introd1/ClawOps  
 **Support**: support@elloe.ai
-

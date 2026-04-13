@@ -78,7 +78,7 @@ export default function ProjectApiKeys({ apiKeys }: ApiKeysProps) {
     <SettingsSection>
       <SettingsSectionHeader
         title="Project API keys"
-        description="Create a ClawOps API key to send activity from your agents. These keys are tied to the project."
+        description="Create a TruthChecker API key to send activity from your agents. These keys are tied to the project."
       />
       <Dialog
         open={isGenerateKeyDialogOpen}

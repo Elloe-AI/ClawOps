@@ -6,7 +6,7 @@ import Pricing from '@/components/landing/pricing';
 import { authOptions } from '@/lib/auth';
 
 export const metadata: Metadata = {
-  title: 'Pricing – ClawOps'
+  title: 'Pricing – TruthChecker'
 };
 
 export default async function PricingPage() {

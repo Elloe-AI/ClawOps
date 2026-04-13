@@ -87,7 +87,7 @@ export default function ActivityTimeline() {
         <Card>
           <CardHeader>
             <CardTitle>Activity timeline</CardTitle>
-            <CardDescription>Every message, guardrail check, and action taken by ClawOps.</CardDescription>
+            <CardDescription>Every message, guardrail check, and action taken by TruthChecker.</CardDescription>
           </CardHeader>
           <CardContent className="space-y-6">
             {isLoading && <div className="text-sm text-muted-foreground">Loading activity...</div>}

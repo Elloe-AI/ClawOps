@@ -335,8 +335,8 @@ export const incidents = pgTable("incidents", {
     name: "incidents_event_id_fkey",
   }).onUpdate("cascade").onDelete("cascade"),
   foreignKey({
-    columns: [table.traceId],
-    foreignColumns: [traces.id],
+    columns: [table.traceId, table.projectId],
+    foreignColumns: [traces.id, traces.projectId],
     name: "incidents_trace_id_fkey",
   }).onUpdate("cascade").onDelete("set null"),
 ]);

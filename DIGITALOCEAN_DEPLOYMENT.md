@@ -40,7 +40,7 @@ This guide walks you through deploying ClawOps on a single Digital Ocean droplet
 
 ### Step 2: Configure DNS
 
-Point your domain to the droplet (DNS already updated for `clawops.elloe.ai`):
+Point your domain to the droplet (DNS already updated for `partners.elloe.ai`):
 1. Go to your domain registrar
 2. Add an A record:
    - **Name**: @ (or subdomain like `clawops`)
@@ -108,7 +108,7 @@ nano .env
 
 3. **Domain configuration**:
    ```bash
-   NEXTAUTH_URL=https://clawops.elloe.ai
+   NEXTAUTH_URL=https://partners.elloe.ai
    ```
 
 4. **LLM API keys**:
@@ -146,7 +146,7 @@ docker compose -f docker-compose.digitalocean.yml up -d
    ```
 
 3. **Access ClawOps**:
-   - Open browser: `https://clawops.elloe.ai`
+   - Open browser: `https://partners.elloe.ai`
    - You should see the ClawOps login page
 
 ## Manual Deployment (Step-by-Step)
@@ -195,7 +195,7 @@ sudo certbot certonly --standalone \
   --preferred-challenges http \
   --email your-email@example.com \
   --agree-tos \
-  -d clawops.elloe.ai
+  -d partners.elloe.ai
 
 # Copy certs for Docker Nginx
 sudo mkdir -p /opt/clawops/ssl
@@ -226,7 +226,7 @@ sudo nano .env
 # Edit nginx.conf
 sudo nano nginx.conf
 
-# Replace 'clawops.elloe.ai' if you use a different domain
+# Replace 'partners.elloe.ai' if you use a different domain
 # HTTPS is already configured in the repo nginx.conf
 ```
 

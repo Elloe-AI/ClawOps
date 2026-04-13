@@ -11,7 +11,7 @@ const CreateApprovalSchema = z.object({
   agentId: z.string(),
   incidentId: z.string(),
   requestedBy: z.string().uuid().optional(),
-  requestDetails: z.record(z.any()).optional(),
+  requestDetails: z.record(z.string(), z.any()).optional(),
 });
 
 const UpdateApprovalSchema = z.object({
@@ -19,7 +19,7 @@ const UpdateApprovalSchema = z.object({
   approvalId: z.string(),
   status: ApprovalStatusSchema,
   approvedBy: z.string().uuid().optional(),
-  responseDetails: z.record(z.any()).optional(),
+  responseDetails: z.record(z.string(), z.any()).optional(),
 });
 
 const ListApprovalsSchema = z.object({

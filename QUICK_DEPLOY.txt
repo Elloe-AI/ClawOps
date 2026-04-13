@@ -1,9 +1,9 @@
 ================================================================================
-CLAWOPS DEPLOYMENT - clawops.elloe.ai
+CLAWOPS DEPLOYMENT - partners.elloe.ai
 ================================================================================
 
 SERVER IP: 143.198.12.229
-DOMAIN: clawops.elloe.ai
+DOMAIN: partners.elloe.ai
 REPOSITORY: https://gitlab.com/introd1/ClawOps
 
 ================================================================================
@@ -21,7 +21,7 @@ chmod +x deploy.sh
 sudo ./deploy.sh
 
 When prompted:
-- Domain: clawops.elloe.ai
+- Domain: partners.elloe.ai
 - Email: your email
 - Git repo: press Enter (default)
 
@@ -40,7 +40,7 @@ SHARED_SECRET_TOKEN=<openssl rand -hex 32>
 AEAD_SECRET_KEY=<openssl rand -hex 32>
 NEXTAUTH_SECRET=<openssl rand -hex 32>
 CLAWOPS_ENGINE_API_KEY=<openssl rand -hex 32>
-NEXTAUTH_URL=https://clawops.elloe.ai
+NEXTAUTH_URL=https://partners.elloe.ai
 OPENAI_API_KEY=sk-your-openai-key-here
 OPENAI_BASE_URL=https://openrouter.ai/api/v1
 CLAWOPS_ADMIN_EMAILS=admin@elloe.ai
@@ -63,6 +63,6 @@ STEP 5: VERIFY
 docker compose -f docker-compose.digitalocean.yml ps
 docker compose -f docker-compose.digitalocean.yml logs -f
 
-Open: https://clawops.elloe.ai
+Open: https://partners.elloe.ai
 
 ================================================================================

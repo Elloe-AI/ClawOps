@@ -154,7 +154,7 @@ services:
       # Runtime flag
       RUNNING_IN_DOCKER: "1"
     healthcheck:
-      test: ["CMD", "curl", "-f", "http://localhost:8006/health"]
+      test: ["CMD", "curl", "-f", "http://localhost:8006/api/v1/health"]
       interval: 30s
       timeout: 10s
       start_period: 40s
@@ -199,6 +199,7 @@ services:
       # ClawOps engine configuration
       CLAWOPS_ENGINE_URL: http://clawops-engine:8006
       CLAWOPS_ENGINE_API_KEY: ${CLAWOPS_ENGINE_API_KEY}
+      CLAWOPS_ADMIN_EMAILS: ${CLAWOPS_ADMIN_EMAILS}
       # Optional: Disable telemetry
       NEXT_OTEL_FETCH_DISABLED: ${NEXT_OTEL_FETCH_DISABLED:-1}
     depends_on:

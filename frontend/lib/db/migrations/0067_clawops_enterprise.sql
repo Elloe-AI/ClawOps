@@ -124,7 +124,7 @@ ALTER TABLE "incidents" ADD CONSTRAINT "incidents_agent_id_fkey" FOREIGN KEY ("a
 --> statement-breakpoint
 ALTER TABLE "incidents" ADD CONSTRAINT "incidents_event_id_fkey" FOREIGN KEY ("event_id") REFERENCES "public"."agent_activity_events"("id") ON DELETE cascade ON UPDATE cascade;
 --> statement-breakpoint
-ALTER TABLE "incidents" ADD CONSTRAINT "incidents_trace_id_fkey" FOREIGN KEY ("trace_id") REFERENCES "public"."traces"("id") ON DELETE set null ON UPDATE cascade;
+ALTER TABLE "incidents" ADD CONSTRAINT "incidents_trace_id_fkey" FOREIGN KEY ("trace_id","project_id") REFERENCES "public"."traces"("id","project_id") ON DELETE set null ON UPDATE cascade;
 --> statement-breakpoint
 ALTER TABLE "agent_approvals" ADD CONSTRAINT "agent_approvals_project_id_fkey" FOREIGN KEY ("project_id") REFERENCES "public"."projects"("id") ON DELETE cascade ON UPDATE cascade;
 --> statement-breakpoint

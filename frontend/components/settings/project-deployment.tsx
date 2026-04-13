@@ -15,8 +15,8 @@ import { SettingsSection, SettingsSectionHeader } from "./settings-section";
 const DEPLOYMENT_MODES = [
   {
     id: "hosted",
-    label: "Hosted ClawOps (SaaS)",
-    description: "Fastest launch. ClawOps control plane is fully managed.",
+    label: "Hosted TruthChecker (SaaS)",
+    description: "Fastest launch. TruthChecker control plane is fully managed.",
     detail: "Default metadata-only telemetry with opt-in full fidelity.",
     icon: Cloud,
   },
@@ -108,7 +108,7 @@ export default function ProjectDeploymentSettings() {
     <>
       <SettingsSectionHeader
         title="Deployment & data handling"
-        description="Choose how ClawOps is deployed and what telemetry leaves your environment."
+        description="Choose how TruthChecker is deployed and what telemetry leaves your environment."
       />
       <SettingsSection>
         <Card>

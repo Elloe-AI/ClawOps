@@ -16,6 +16,7 @@ scripts/*-debug.png
 scripts/*-debug.gif
 scripts/signin-debug.png
 scripts/generate_landing_assets.py
+output/
 
 # Python cache files
 __pycache__/

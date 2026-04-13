@@ -381,7 +381,7 @@ export default function Guardrails() {
             <CardTitle>Guardrails</CardTitle>
           </div>
           <CardDescription>
-            Toggle the safety behaviors ClawOps enforces for every agent. These settings map to ClawOps safety rules under the hood.
+            Toggle the safety behaviors TruthChecker enforces for every agent. These settings map to TruthChecker safety rules under the hood.
           </CardDescription>
         </CardHeader>
         <CardContent className="space-y-4">

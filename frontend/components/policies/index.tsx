@@ -33,7 +33,7 @@ export default function Policies() {
         <div>
           <h1 className="text-2xl font-semibold">Guardrails</h1>
           <p className="text-sm text-muted-foreground mt-1">
-            Manage guardrails for ClawOps safety checks
+            Manage guardrails for TruthChecker safety checks
           </p>
         </div>
         <PolicyForm open={isFormOpen} onOpenChange={setIsFormOpen} onSuccess={handleFormSuccess} />

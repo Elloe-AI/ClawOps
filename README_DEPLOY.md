@@ -21,7 +21,7 @@ bash <(curl -s https://gitlab.com/introd1/ClawOps/-/raw/main/scripts/deploy-digi
 ```
 
 **When prompted, enter:**
-- Your domain name (`clawops.elloe.ai`)
+- Your domain name (`partners.elloe.ai`)
 - Your email for SSL certificate
 - Press Enter for repository (uses default: `https://gitlab.com/introd1/ClawOps`)
 
@@ -45,7 +45,7 @@ SHARED_SECRET_TOKEN=<paste-secret-1>
 AEAD_SECRET_KEY=<paste-secret-2>
 NEXTAUTH_SECRET=<paste-secret-3>
 CLAWOPS_ENGINE_API_KEY=<paste-secret-4>
-NEXTAUTH_URL=https://clawops.elloe.ai
+NEXTAUTH_URL=https://partners.elloe.ai
 OPENAI_API_KEY=sk-your-openai-key
 CLAWOPS_ADMIN_EMAILS=admin@elloe.ai
 ```
@@ -63,7 +63,7 @@ docker compose -f docker-compose.digitalocean.yml up -d
 docker compose -f docker-compose.digitalocean.yml ps
 ```
 
-**Access ClawOps**: `https://clawops.elloe.ai`
+**Access ClawOps**: `https://partners.elloe.ai`
 
 ---
 
@@ -80,7 +80,7 @@ Before deploying, point your domain to the server:
    TTL: 300
    ```
 3. Wait 5-10 minutes for DNS propagation
-4. Verify: `nslookup clawops.elloe.ai` should return `143.198.12.229`
+4. Verify: `nslookup partners.elloe.ai` should return `143.198.12.229`
 
 ---
 
@@ -168,7 +168,7 @@ docker system df
 
 # Service health
 curl http://localhost:3000
-curl http://localhost:8006/health
+curl http://localhost:8006/api/v1/health
 ```
 
 ### Updates
@@ -214,7 +214,7 @@ systemctl restart docker
 docker compose -f docker-compose.digitalocean.yml logs nginx
 
 # Verify DNS
-nslookup clawops.elloe.ai
+nslookup partners.elloe.ai
 
 # Check firewall
 ufw status
@@ -294,7 +294,7 @@ After deployment:
 
 After successful deployment:
 
-1. **Access ClawOps**: `https://clawops.elloe.ai`
+1. **Access ClawOps**: `https://partners.elloe.ai`
 2. **Create admin account**: Follow on-screen instructions
 3. **Configure OAuth** (optional): Add GitHub/Google credentials to `.env`
 4. **Create first project**: Use ClawOps UI

@@ -33,8 +33,8 @@ const CreateAgentSchema = z.object({
   userId: z.string().optional(),
   partnerId: z.string().optional(),
   runtimeType: z.string().optional(),
-  guardrailsConfig: z.record(z.any()).optional(),
-  channelConfig: z.record(z.any()).optional(),
+  guardrailsConfig: z.record(z.string(), z.any()).optional(),
+  channelConfig: z.record(z.string(), z.any()).optional(),
 });
 
 const UpdateAgentSchema = z.object({
@@ -49,8 +49,8 @@ const UpdateAgentSchema = z.object({
   lastHeartbeatAt: z.string().optional(),
   partnerId: z.string().nullable().optional(),
   runtimeType: z.string().nullable().optional(),
-  guardrailsConfig: z.record(z.any()).optional(),
-  channelConfig: z.record(z.any()).optional(),
+  guardrailsConfig: z.record(z.string(), z.any()).optional(),
+  channelConfig: z.record(z.string(), z.any()).optional(),
 });
 
 const GetAgentSchema = z.object({
@@ -72,7 +72,7 @@ const CreateAgentEventSchema = z.object({
   summary: z.string().optional(),
   reason: z.string().optional(),
   action: z.string().optional(),
-  details: z.record(z.any()).optional(),
+  details: z.record(z.string(), z.any()).optional(),
   environment: AgentEnvironmentSchema.optional(),
   partnerId: z.string().optional(),
   runtimeType: z.string().optional(),
@@ -95,7 +95,7 @@ const GetProjectAgentEventsSchema = z.object({
 
 const UpdateAgentsGuardrailsSchema = z.object({
   projectId: z.string(),
-  guardrailsConfig: z.record(z.any()),
+  guardrailsConfig: z.record(z.string(), z.any()),
 });
 
 const AUTO_PAUSE_RULES = {
@@ -346,7 +346,7 @@ export async function updateAgent(input: z.infer<typeof UpdateAgentSchema>) {
       projectId,
       agentId,
       eventType: "agent_paused_manual",
-      reason: pauseReason,
+      reason: pauseReason ?? undefined,
       userId,
     });
   }
@@ -577,7 +577,7 @@ export async function createAgentEvent(input: z.infer<typeof CreateAgentEventSch
     try {
       await createProductEvent({
         name,
-        userId: userId ?? null,
+        userId: userId ?? undefined,
         projectId,
         agentId,
         metadata,
@@ -707,7 +707,7 @@ export async function refreshAgentSafety(
   const riskWindowStart = hoursAgo(24);
   const isFreeTier = options?.isFreeTier ?? (await getProjectDetails(agent.projectId)).isFreeTier;
 
-  const events = await db
+  const rawEvents = await db
     .select({
       eventType: agentActivityEvents.eventType,
       createdAt: agentActivityEvents.createdAt,
@@ -722,6 +722,11 @@ export async function refreshAgentSafety(
       )
     )
     .orderBy(desc(agentActivityEvents.createdAt));
+
+  const events = rawEvents.map((event) => ({
+    ...event,
+    details: (event.details as Record<string, any> | null | undefined) ?? undefined,
+  }));
 
   const riskScore = calculateRiskScore(events);
   const latestEvent = events[0];

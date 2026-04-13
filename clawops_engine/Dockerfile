@@ -34,7 +34,7 @@ EXPOSE 8006
 
 # Health check using curl (more reliable than Python requests)
 HEALTHCHECK --interval=30s --timeout=10s --start-period=40s --retries=3 \
-    CMD curl -f http://localhost:8006/health || exit 1
+    CMD curl -f http://localhost:8006/api/v1/health || exit 1
 
 # Run the server using uvicorn
 CMD ["uvicorn", "clawops_engine.api.server:create_app", "--host", "0.0.0.0", "--port", "8006", "--factory"]

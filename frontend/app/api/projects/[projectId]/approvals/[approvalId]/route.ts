@@ -1,5 +1,6 @@
 import { NextRequest } from "next/server";
 import { getServerSession } from "next-auth";
+import { and, eq } from "drizzle-orm";
 import { prettifyError, ZodError } from "zod/v4";
 
 import { createAgentEvent } from "@/lib/actions/agents";
@@ -10,6 +11,7 @@ import { authOptions } from "@/lib/auth";
 import { requireProjectRoleAtLeast } from "@/lib/authorization/roles";
 import { assertFeatureAccess, FeatureGateError } from "@/lib/billing/feature-gates";
 import { db } from "@/lib/db/drizzle";
+import { incidents } from "@/lib/db/migrations/schema";
 
 export async function PATCH(
   req: NextRequest,
@@ -56,7 +58,7 @@ export async function PATCH(
     });
 
     const incident = await db.query.incidents.findFirst({
-      where: (table, { eq, and }) => and(eq(table.projectId, params.projectId), eq(table.id, approval.incidentId)),
+      where: and(eq(incidents.projectId, params.projectId), eq(incidents.id, approval.incidentId)),
     });
 
     const traceId = incident?.traceId ?? null;

@@ -24,7 +24,8 @@ const rateLimit = (req: NextRequestWithAuth) => {
   if (!Number.isFinite(rateLimitWindowMs) || !Number.isFinite(rateLimitMax)) return null;
 
   const forwardedFor = req.headers.get("x-forwarded-for");
-  const ip = req.ip ?? forwardedFor?.split(",")[0]?.trim() ?? "unknown";
+  const realIp = req.headers.get("x-real-ip");
+  const ip = forwardedFor?.split(",")[0]?.trim() ?? realIp?.trim() ?? "unknown";
   const key = `${ip}:${req.nextUrl.pathname}`;
   const now = Date.now();
   const store = getRateLimitStore();

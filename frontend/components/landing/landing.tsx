@@ -46,7 +46,7 @@ const sections: Section[] = [
     id: "activity",
     title: "Activity",
     description: `See every message, reply, and block across your public channels in one calm timeline.
-    ClawOps turns noisy bot traffic into a clear operational view.`,
+    TruthChecker turns noisy bot traffic into a clear operational view.`,
     docsLink: "https://clawops.ai/docs/tracing/introduction",
     callToAction: "View live activity",
   },
@@ -175,10 +175,10 @@ export default function Landing() {
                   The control plane for AI agents in public channels.
                 </p>
                 <p className="px-4 md:px-0 text-lg md:text-2xl text-white/85 font-semibold tracking-normal font-title text-left md:text-center">
-                  ClawOps gives you calm, clear visibility and guardrails for Telegram, Discord, WhatsApp, and SMS bots.
+                  TruthChecker gives you calm, clear visibility and guardrails for Telegram, Discord, WhatsApp, and SMS bots.
                 </p>
                 <p className="px-4 md:px-0 text-sm md:text-base text-white/70 font-semibold tracking-normal font-title text-left md:text-center max-w-3xl">
-                  Not an agent framework. Not a chatbot builder. ClawOps is the operations, safety, and governance layer for agents you already run.
+                  Not an agent framework. Not a chatbot builder. TruthChecker is the operations, safety, and governance layer for agents you already run.
                 </p>
                 <p className="px-4 md:px-0 text-sm md:text-base text-white/80 font-semibold tracking-normal font-title text-left md:text-center">
                   You don't rebuild agents to make them safe. You operate them safely after they're deployed.
@@ -267,11 +267,11 @@ export default function Landing() {
               </div>
               <div className="px-4 md:px-0">
                 <h1 className="text-2xl md:text-[2.4rem] font-bold tracking-normal font-title text-white py-16 md:py-32 leading-tight">
-                  With ClawOps, teams run public-channel agents with confidence, <br />
+                  With TruthChecker, teams run public-channel agents with confidence, <br />
                   understand why something happened, and pause risk before it spreads.
                 </h1>
                 <span className="text-white/80 text-base font-semibold font-title">
-                  Why teams choose ClawOps
+                  Why teams choose TruthChecker
                 </span>
                 <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-8 md:gap-16 my-8 md:mb-24 mb-16">
                   <FeatureCard
@@ -284,7 +284,7 @@ export default function Landing() {
                   />
                   <FeatureCard
                     title="Clear activity timelines"
-                    subtitle="Understand what happened, why, and what ClawOps did about it."
+                    subtitle="Understand what happened, why, and what TruthChecker did about it."
                     className="hidden md:block"
                   />
                   <FeatureCard
@@ -310,7 +310,7 @@ export default function Landing() {
         <div className="flex flex-col w-full max-w-full xl:max-w-[1200px] md:pt-8 2xl:pt-32">
           <div className="flex items-center justify-center flex-col">
             <div className="p-6 flex flex-col h-full gap-8 max-w-[900px]">
-              <p className="text-3xl md:text-[2.4rem] leading-normal text-white text-center font-title font-bold">"ClawOps gives us the confidence to run public-channel agents without worrying about surprise behavior."</p>
+              <p className="text-3xl md:text-[2.4rem] leading-normal text-white text-center font-title font-bold">"TruthChecker gives us the confidence to run public-channel agents without worrying about surprise behavior."</p>
             </div>
             <div>
               <p className="text-white font-medium">Hashim Rehman</p>
@@ -528,7 +528,7 @@ function CoreSections() {
                 />
                 <InfoCard
                   title="Spot risky patterns early"
-                  description="ClawOps highlights unusual spikes or repeated triggers before they escalate."
+                  description="TruthChecker highlights unusual spikes or repeated triggers before they escalate."
                   animationOrder={1}
                 />
                 <InfoCard
@@ -587,7 +587,7 @@ function CoreSections() {
                 title=""
                 description={
                   <div className="flex flex-col gap-4">
-                    <p>ClawOps keeps context synced to every activity event so you can see what the agent saw before it replied or got blocked.</p>
+                    <p>TruthChecker keeps context synced to every activity event so you can see what the agent saw before it replied or got blocked.</p>
                     <div className="flex items-center gap-4 pb-4">
                       <IconBrowserUse className="w-9 h-9 text-white" />
                       <div className="flex items-center justify-center w-10 h-10 rounded-full text-4xl">🤘</div>

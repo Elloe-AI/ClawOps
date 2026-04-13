@@ -10,7 +10,7 @@ import { db } from "@/lib/db/drizzle";
 import { membersOfWorkspaces } from "@/lib/db/migrations/schema";
 
 export const metadata: Metadata = {
-  title: "Get Started - ClawOps",
+  title: "Get Started - TruthChecker",
 };
 
 export default async function OnboardingPage() {

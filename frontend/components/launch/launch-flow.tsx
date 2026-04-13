@@ -209,9 +209,9 @@ export default function LaunchFlow() {
         <Badge variant="outline" className="text-xs uppercase tracking-wide">
           5-minute agent protection
         </Badge>
-        <h1 className="text-2xl font-semibold text-foreground">Launch ClawOps in minutes</h1>
+        <h1 className="text-2xl font-semibold text-foreground">Launch TruthChecker in minutes</h1>
         <p className="text-sm text-muted-foreground max-w-2xl">
-          ClawOps connects to your runtime and applies guardrails without changing agent logic. Complete the steps below
+          TruthChecker connects to your runtime and applies guardrails without changing agent logic. Complete the steps below
           to move into a verified ready state.
         </p>
         <p className="text-xs text-muted-foreground max-w-2xl">
@@ -226,7 +226,7 @@ export default function LaunchFlow() {
         </CardHeader>
         <CardContent className="text-sm text-muted-foreground flex items-center gap-3">
           <CheckCircle2 className="h-4 w-4 text-emerald-500" />
-          Project <span className="text-foreground font-medium">{project?.name ?? "ClawOps Project"}</span> is live.
+          Project <span className="text-foreground font-medium">{project?.name ?? "TruthChecker Project"}</span> is live.
         </CardContent>
       </Card>
 
@@ -298,7 +298,7 @@ export default function LaunchFlow() {
       <Card>
         <CardHeader>
           <CardTitle>4. Run the mandatory demo</CardTitle>
-          <CardDescription>Demo mode proves ClawOps blocks and incidents without touching production.</CardDescription>
+          <CardDescription>Demo mode proves TruthChecker blocks and incidents without touching production.</CardDescription>
         </CardHeader>
         <CardContent className="flex flex-wrap items-center gap-3">
           <Button onClick={handleRunDemo} disabled={demoLoading}>
@@ -359,7 +359,7 @@ export default function LaunchFlow() {
           )}
 
           <div className="rounded-lg border bg-muted/40 p-3 text-xs text-muted-foreground">
-            ClawOps readiness is emitted only after demo validation, runtime connection, and upgrade visibility checks.
+            TruthChecker readiness is emitted only after demo validation, runtime connection, and upgrade visibility checks.
           </div>
         </CardContent>
       </Card>

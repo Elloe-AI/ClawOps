@@ -5,6 +5,7 @@ import { Metadata } from "next";
 import { Suspense } from "react";
 
 import { Toaster } from "@/components/ui/toaster";
+import { APP_DESCRIPTION, APP_NAME, APP_URL } from "@/lib/brand";
 import { manrope, sans } from "@/lib/fonts";
 import { cn } from "@/lib/utils";
 
@@ -12,9 +13,15 @@ import PostHogPageView from "./posthog-pageview";
 import { PHProvider } from "./providers";
 
 export const metadata: Metadata = {
-  metadataBase: new URL("https://clawops.ai"),
-  title: "ClawOps",
+  metadataBase: new URL(APP_URL),
+  title: APP_NAME,
+  icons: {
+    icon: "/icon.png",
+    shortcut: "/icon.png",
+    apple: "/icon.png",
+  },
   keywords: [
+    "truthchecker",
     "clawops",
     "agent operations",
     "bot operations",
@@ -30,21 +37,21 @@ export const metadata: Metadata = {
   ],
   openGraph: {
     type: "website",
-    title: "ClawOps",
-    description: "The control plane for AI agents running in public channels.",
-    siteName: "ClawOps",
+    title: APP_NAME,
+    description: APP_DESCRIPTION,
+    siteName: APP_NAME,
     images: {
       url: "/opengraph-image.png",
-      alt: "ClawOps",
+      alt: APP_NAME,
     },
   },
   twitter: {
     card: "summary",
-    description: "The control plane for AI agents running in public channels.",
-    title: "ClawOps",
+    description: APP_DESCRIPTION,
+    title: APP_NAME,
     images: {
       url: "/twitter-image.png",
-      alt: "ClawOps",
+      alt: APP_NAME,
     },
   },
 };

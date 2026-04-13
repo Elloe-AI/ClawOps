@@ -39,9 +39,9 @@ export default function Pricing() {
   const faqItems = [
     {
       id: "metering",
-      question: "What is ClawOps metered on?",
+      question: "What is TruthChecker metered on?",
       answer:
-        "ClawOps is metered on active agents, sessions, incidents, and audit exports. We never charge per token.",
+        "TruthChecker is metered on active agents, sessions, incidents, and audit exports. We never charge per token.",
     },
     {
       id: "active-agent",

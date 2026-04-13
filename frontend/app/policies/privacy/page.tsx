@@ -13,7 +13,7 @@ export default function PrivacyPage() {
         </ul>
         <div>
           <ul>
-            <li><span>Use ClawOps. The control plane for AI agents running in public channels.</span>
+            <li><span>Use TruthChecker. The control plane for AI agents running in public channels.</span>
             </li>
           </ul>
           <ul>

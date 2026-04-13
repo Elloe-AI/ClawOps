@@ -1,11 +1,11 @@
 "use client";
 
 import { Loader2 } from "lucide-react";
-import Image from "next/image";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
 import React, { FormEvent, useState } from "react";
 
+import { BrandMark } from "@/components/brand/brand-mark";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
@@ -126,13 +126,7 @@ export default function CreateFirstWorkspaceAndProject({ name }: CreateFirstWork
           <div className="flex flex-col items-center mb-8">
             <div className="mb-6">
               <Link className="inline-block" href="/">
-                <Image
-                  alt="ClawOps Logo"
-                  src="/images/logo.webp"
-                  width={180}
-                  height={80}
-                  className="mx-auto"
-                />
+                <BrandMark className="justify-center" priority size="lg" />
               </Link>
             </div>
             <p className="text-sm text-muted-foreground text-center">

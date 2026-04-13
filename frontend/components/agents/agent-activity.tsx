@@ -147,12 +147,12 @@ export default function AgentActivity({ agentId }: { agentId: string }) {
     }
   };
 
-  const scorecardText = `ClawOps-Protected\nAgent: ${agentData?.name ?? "Agent"}\nChannel: ${
+  const scorecardText = `TruthChecker-Protected\nAgent: ${agentData?.name ?? "Agent"}\nChannel: ${
     agentData?.channel ? AGENT_CHANNEL_LABELS[agentData.channel] : "Channel"
   }\nRisk: ${riskLabel}\nGuardrails: ${guardrailLabel}\nBlocks: ${blockedCount}\nGuardrails triggered: ${guardrailCount}\nLast incident: ${
     lastIncident?.createdAt ? new Date(lastIncident.createdAt).toISOString() : "None"
   }`;
-  const badgeSnippet = `<span class="clawops-protected">ClawOps-Protected</span>`;
+  const badgeSnippet = `<span class="truthchecker-protected">TruthChecker-Protected</span>`;
 
   const handleCopyScorecard = async () => {
     try {
@@ -170,7 +170,7 @@ export default function AgentActivity({ agentId }: { agentId: string }) {
   const handleCopyBadge = async () => {
     try {
       await navigator.clipboard.writeText(badgeSnippet);
-      toast({ title: "Badge snippet copied", description: "Embed the ClawOps-Protected badge anywhere." });
+      toast({ title: "Badge snippet copied", description: "Embed the TruthChecker-Protected badge anywhere." });
     } catch (error) {
       toast({
         title: "Copy failed",
@@ -254,7 +254,7 @@ export default function AgentActivity({ agentId }: { agentId: string }) {
       <Card>
         <CardHeader>
           <CardTitle>Safety scorecard</CardTitle>
-          <CardDescription>Shareable proof that this agent is running under ClawOps guardrails.</CardDescription>
+          <CardDescription>Shareable proof that this agent is running under TruthChecker guardrails.</CardDescription>
         </CardHeader>
         <CardContent className="space-y-4 text-sm">
           <div className="grid gap-3 md:grid-cols-4">
@@ -277,7 +277,7 @@ export default function AgentActivity({ agentId }: { agentId: string }) {
           </div>
           <div className="rounded-lg border bg-muted/40 p-3 text-xs">
             <div className="flex items-center justify-between gap-2">
-              <span className="font-medium text-foreground">ClawOps-Protected</span>
+              <span className="font-medium text-foreground">TruthChecker-Protected</span>
               <div className="flex items-center gap-2">
                 <Button size="sm" variant="outline" onClick={handleCopyScorecard}>
                   Copy scorecard
@@ -300,7 +300,7 @@ export default function AgentActivity({ agentId }: { agentId: string }) {
       <Card>
         <CardHeader>
           <CardTitle>Activity timeline</CardTitle>
-          <CardDescription>Every user message, guardrail check, and action taken by ClawOps.</CardDescription>
+          <CardDescription>Every user message, guardrail check, and action taken by TruthChecker.</CardDescription>
         </CardHeader>
         <CardContent>
           {isLoading && <div className="text-sm text-muted-foreground">Loading activity...</div>}

@@ -1,9 +1,9 @@
 ================================================================================
-CLAWOPS DEPLOYMENT - clawops.elloe.ai
+CLAWOPS DEPLOYMENT - partners.elloe.ai
 ================================================================================
 
 SERVER IP: 143.198.12.229
-DOMAIN: clawops.elloe.ai
+DOMAIN: partners.elloe.ai
 REPOSITORY: https://gitlab.com/introd1/ClawOps
 
 ================================================================================
@@ -18,7 +18,7 @@ Value: 143.198.12.229
 TTL: 300
 
 Wait 5-10 minutes, then verify:
-nslookup clawops.elloe.ai
+nslookup partners.elloe.ai
 (Should return: 143.198.12.229)
 
 ================================================================================
@@ -34,7 +34,7 @@ STEP 2: RUN AUTOMATED DEPLOYMENT
 bash <(curl -s https://gitlab.com/introd1/ClawOps/-/raw/main/scripts/deploy-digitalocean.sh)
 
 When prompted:
-- Domain: clawops.elloe.ai
+- Domain: partners.elloe.ai
 - Email: your-owen@elloe.ai
 - Git repo: [press Enter to use default]
 
@@ -69,7 +69,7 @@ AEAD_SECRET_KEY=<paste-from-step-3>
 NEXTAUTH_SECRET=<paste-from-step-3>
 CLAWOPS_ENGINE_API_KEY=<paste-from-step-3>
 
-NEXTAUTH_URL=https://clawops.elloe.ai
+NEXTAUTH_URL=https://partners.elloe.ai
 
 OPENAI_API_KEY=sk-your-openai-key-here
 # Or use OpenRouter:
@@ -100,7 +100,7 @@ docker compose -f docker-compose.digitalocean.yml ps
 docker compose -f docker-compose.digitalocean.yml logs -f
 
 # Access ClawOps
-Open browser: https://clawops.elloe.ai
+Open browser: https://partners.elloe.ai
 
 ================================================================================
 USEFUL COMMANDS
@@ -138,8 +138,8 @@ docker stats
 df -h
 
 # Check service health
-curl https://clawops.elloe.ai
-curl http://localhost:8006/health
+curl https://partners.elloe.ai
+curl http://localhost:8006/api/v1/health
 
 ================================================================================
 TROUBLESHOOTING
@@ -152,7 +152,7 @@ docker compose -f docker-compose.digitalocean.yml ps
 docker compose -f docker-compose.digitalocean.yml logs
 
 # Check DNS
-nslookup clawops.elloe.ai
+nslookup partners.elloe.ai
 
 # Check SSL certificate
 certbot certificates
@@ -174,7 +174,7 @@ SECURITY CHECKLIST
 [ ] Strong passwords set for databases
 [ ] Random secrets generated (64-char hex)
 [ ] Firewall enabled (ports 22, 80, 443 only)
-[ ] SSL certificate installed for clawops.elloe.ai
+[ ] SSL certificate installed for partners.elloe.ai
 [ ] .env file secured: chmod 600 /opt/clawops/.env
 [ ] Backups running (check /opt/clawops/backups)
 [ ] Admin emails set to @elloe.ai addresses
@@ -183,8 +183,8 @@ SECURITY CHECKLIST
 ACCESS POINTS
 ================================================================================
 
-Main Application: https://clawops.elloe.ai
-Health Check: https://clawops.elloe.ai/health
+Main Application: https://partners.elloe.ai
+Health Check: https://partners.elloe.ai/health
 
 Admin Email: admin@elloe.ai
 Support: support@elloe.ai
@@ -209,7 +209,7 @@ SUPPORT
 ================================================================================
 
 Server: 143.198.12.229
-Domain: clawops.elloe.ai
+Domain: partners.elloe.ai
 Repository: https://gitlab.com/introd1/ClawOps
 
 Documentation:

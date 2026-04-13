@@ -1,5 +1,6 @@
 import { NextRequest } from "next/server";
 import { getServerSession } from "next-auth";
+import { and, eq, inArray } from "drizzle-orm";
 
 import { createAgent, createAgentEvent, recordAgentHeartbeat } from "@/lib/actions/agents";
 import { authOptions } from "@/lib/auth";
@@ -32,9 +33,7 @@ export async function POST(
   const existing = await db
     .select({ id: agents.id, externalBotId: agents.externalBotId })
     .from(agents)
-    .where((table, { and, eq, inArray }) =>
-      and(eq(table.projectId, projectId), inArray(table.externalBotId, demoExternalIds))
-    );
+    .where(and(eq(agents.projectId, projectId), inArray(agents.externalBotId, demoExternalIds)));
 
   if (existing.length === demoExternalIds.length) {
     return new Response(JSON.stringify({ status: "ok", seeded: false }), { status: 200 });

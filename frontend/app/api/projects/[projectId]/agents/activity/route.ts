@@ -6,6 +6,21 @@ import { authOptions } from "@/lib/auth";
 import { getProjectAgentEvents } from "@/lib/actions/agents";
 import { requireProjectRoleAtLeast } from "@/lib/authorization/roles";
 
+const AGENT_ACTIVITY_TYPES = [
+  "user_message_received",
+  "agent_response_sent",
+  "agent_response_blocked",
+  "guardrail_triggered",
+  "agent_paused_auto",
+  "agent_paused_manual",
+  "agent_resumed",
+  "agent_connected",
+  "runtime_disconnected",
+] as const;
+
+type AgentActivityType = (typeof AGENT_ACTIVITY_TYPES)[number];
+const AGENT_ACTIVITY_TYPE_SET = new Set<string>(AGENT_ACTIVITY_TYPES);
+
 export async function GET(
   req: NextRequest,
   props: { params: Promise<{ projectId: string }> }
@@ -25,7 +40,12 @@ export async function GET(
     const environment = req.nextUrl.searchParams.get("environment") ?? undefined;
 
     const limit = limitParam ? Number(limitParam) : undefined;
-    const eventTypes = typesParam ? typesParam.split(",").map((value) => value.trim()).filter(Boolean) : undefined;
+    const eventTypes = typesParam
+      ? typesParam
+          .split(",")
+          .map((value) => value.trim())
+          .filter((value): value is AgentActivityType => AGENT_ACTIVITY_TYPE_SET.has(value))
+      : undefined;
 
     const events = await getProjectAgentEvents({
       projectId: params.projectId,

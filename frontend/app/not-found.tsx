@@ -5,7 +5,7 @@ import Image from "next/image";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
 
-import icon from "@/assets/logo/icon.png";
+import icon from "@/assets/ms-icon-310x310-removebg-preview.png";
 import { Button } from "@/components/ui/button.tsx";
 
 export default function NotFound() {
@@ -14,7 +14,7 @@ export default function NotFound() {
     <div className="flex flex-col items-center justify-center min-h-screen">
       <div className="flex flex-col max-w-lg items-center justify-center gap-4 text-secondary-foreground">
         <Link href={"/projects"} className="flex h-10 mb-8 items-center justify-center">
-          <Image alt="ClawOps icon" className="rounded-lg" src={icon} width={80} />
+          <Image alt="TruthChecker icon" className="rounded-lg" src={icon} width={80} />
         </Link>
         <div className="space-y-2">
           <h1 className="text-6xl font-bold text-center text-foreground">404</h1>

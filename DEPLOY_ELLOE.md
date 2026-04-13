@@ -1,8 +1,8 @@
-# ClawOps Deployment - clawops.elloe.ai
+# ClawOps Deployment - partners.elloe.ai
 
 ## 🎯 Deployment Details
 
-- **Domain**: `clawops.elloe.ai`
+- **Domain**: `partners.elloe.ai`
 - **Server IP**: `143.198.12.229`
 - **Repository**: `https://gitlab.com/introd1/ClawOps`
 - **Status**: ✅ Ready to deploy
@@ -24,7 +24,7 @@ TTL: 300 (or automatic)
 
 **Verify DNS propagation:**
 ```bash
-nslookup clawops.elloe.ai
+nslookup partners.elloe.ai
 # Should return: 143.198.12.229
 ```
 
@@ -43,14 +43,14 @@ bash <(curl -s https://gitlab.com/introd1/ClawOps/-/raw/main/scripts/deploy-digi
 ```
 
 **When prompted, enter:**
-- **Domain name**: `clawops.elloe.ai`
+- **Domain name**: `partners.elloe.ai`
 - **Email**: `owen@elloe.ai` (or your email)
 - **Git repository**: Press `Enter` (uses default)
 
 The script will automatically:
 - Install Docker
 - Configure firewall
-- Get SSL certificate for clawops.elloe.ai
+- Get SSL certificate for partners.elloe.ai
 - Clone repository
 - Start all services
 
@@ -91,7 +91,7 @@ NEXTAUTH_SECRET=<paste-generated-value>
 CLAWOPS_ENGINE_API_KEY=<paste-generated-value>
 
 # Domain configuration
-NEXTAUTH_URL=https://clawops.elloe.ai
+NEXTAUTH_URL=https://partners.elloe.ai
 
 # LLM API Key
 OPENAI_API_KEY=sk-your-openai-key-here
@@ -128,7 +128,7 @@ docker compose -f docker-compose.digitalocean.yml logs -f
 ```
 
 **Access ClawOps:**
-Open browser: **https://clawops.elloe.ai**
+Open browser: **https://partners.elloe.ai**
 
 ---
 
@@ -152,7 +152,7 @@ After deployment, these services will be available:
 
 | Service | Internal Port | External Access |
 |---------|---------------|-----------------|
-| Frontend | 3000 | https://clawops.elloe.ai |
+| Frontend | 3000 | https://partners.elloe.ai |
 | App Server | 8000, 8001, 8002 | Internal only |
 | ClawOps Engine | 8006 | Internal only |
 | Query Engine | 8903 | Internal only |
@@ -200,8 +200,8 @@ df -h
 docker system df
 
 # Service health
-curl https://clawops.elloe.ai
-curl http://localhost:8006/health
+curl https://partners.elloe.ai
+curl http://localhost:8006/api/v1/health
 curl http://localhost:8000/health
 ```
 
@@ -233,11 +233,11 @@ gunzip < /opt/clawops/backups/postgres_YYYYMMDD_HHMMSS.sql.gz | \
 
 ## 🔍 Troubleshooting
 
-### Can't access clawops.elloe.ai
+### Can't access partners.elloe.ai
 
 ```bash
 # 1. Check DNS
-nslookup clawops.elloe.ai
+nslookup partners.elloe.ai
 # Should return: 143.198.12.229
 
 # 2. Check Nginx
@@ -296,11 +296,11 @@ docker compose -f docker-compose.digitalocean.yml restart nginx
 
 After deployment, verify:
 
-- [ ] DNS A record for clawops.elloe.ai points to 143.198.12.229
+- [ ] DNS A record for partners.elloe.ai points to 143.198.12.229
 - [ ] Strong passwords set for PostgreSQL and ClickHouse
 - [ ] Random 64-char hex secrets generated for all tokens
 - [ ] Firewall enabled (only ports 22, 80, 443 open)
-- [ ] SSL certificate installed for clawops.elloe.ai
+- [ ] SSL certificate installed for partners.elloe.ai
 - [ ] Database ports not exposed externally (127.0.0.1 only)
 - [ ] `.env` file permissions: `chmod 600 /opt/clawops/.env`
 - [ ] Backups configured (daily at 2 AM)
@@ -315,7 +315,7 @@ The deployment script automatically installs:
 
 ✅ **Docker & Docker Compose**  
 ✅ **Nginx** (reverse proxy with SSL)  
-✅ **Let's Encrypt SSL** (for clawops.elloe.ai)  
+✅ **Let's Encrypt SSL** (for partners.elloe.ai)  
 ✅ **UFW Firewall** (ports 22, 80, 443)  
 ✅ **PostgreSQL 16** (database)  
 ✅ **ClickHouse** (analytics database)  
@@ -332,7 +332,7 @@ The deployment script automatically installs:
 
 ## 📞 Support & Access
 
-**Production URL**: https://clawops.elloe.ai  
+**Production URL**: https://partners.elloe.ai  
 **Server IP**: 143.198.12.229  
 **Repository**: https://gitlab.com/introd1/ClawOps  
 
@@ -350,7 +350,7 @@ The deployment script automatically installs:
 
 After successful deployment:
 
-1. **Access ClawOps**: https://clawops.elloe.ai
+1. **Access ClawOps**: https://partners.elloe.ai
 2. **Create admin account**: Use admin@elloe.ai email
 3. **Configure OAuth** (optional):
    - Add GitHub/Google OAuth credentials to `.env`
@@ -373,6 +373,6 @@ After successful deployment:
 
 ---
 
-**Ready to deploy to clawops.elloe.ai!** 🚀
+**Ready to deploy to partners.elloe.ai!** 🚀
 
 Start with DNS configuration, then run the deployment script.

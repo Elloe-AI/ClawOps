@@ -10,9 +10,9 @@ const AuditLogEntrySchema = z.object({
   action: z.string().min(1),
   entityType: z.string().min(1),
   entityId: z.string().optional().nullable(),
-  before: z.record(z.any()).optional().nullable(),
-  after: z.record(z.any()).optional().nullable(),
-  metadata: z.record(z.any()).optional(),
+  before: z.record(z.string(), z.any()).optional().nullable(),
+  after: z.record(z.string(), z.any()).optional().nullable(),
+  metadata: z.record(z.string(), z.any()).optional(),
 });
 
 export type AuditLogEntryInput = z.infer<typeof AuditLogEntrySchema>;

@@ -299,7 +299,7 @@ export default function MissionControl() {
             <CardHeader>
               <CardTitle>Connect your first agent</CardTitle>
               <CardDescription>
-                ClawOps watches live agents in public channels. Connect one to start monitoring safety and activity.
+                TruthChecker watches live agents in public channels. Connect one to start monitoring safety and activity.
               </CardDescription>
             </CardHeader>
             <CardContent className="flex flex-wrap gap-3">
@@ -503,7 +503,7 @@ export default function MissionControl() {
             <Card>
               <CardHeader>
                 <CardTitle>Onboarding checklist</CardTitle>
-                <CardDescription>Track your first milestones in ClawOps.</CardDescription>
+                <CardDescription>Track your first milestones in TruthChecker.</CardDescription>
               </CardHeader>
               <CardContent className="space-y-3">
                 {checklist.map((item) => (

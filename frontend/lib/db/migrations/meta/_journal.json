@@ -456,6 +456,34 @@
       "when": 1765817940399,
       "tag": "0064_open_prima",
       "breakpoints": true
+    },
+    {
+      "idx": 65,
+      "version": "7",
+      "when": 1774564127252,
+      "tag": "0065_clawops_agents",
+      "breakpoints": true
+    },
+    {
+      "idx": 66,
+      "version": "7",
+      "when": 1774564127253,
+      "tag": "0066_product_events",
+      "breakpoints": true
+    },
+    {
+      "idx": 67,
+      "version": "7",
+      "when": 1774564127254,
+      "tag": "0067_clawops_enterprise",
+      "breakpoints": true
+    },
+    {
+      "idx": 68,
+      "version": "7",
+      "when": 1774564127255,
+      "tag": "0068_runtime_disconnected",
+      "breakpoints": true
     }
   ]
 }

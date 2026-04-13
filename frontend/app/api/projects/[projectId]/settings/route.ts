@@ -12,7 +12,7 @@ import { projectSettings } from "@/lib/db/migrations/schema";
 const DEPLOYMENT_MODES = ["hosted", "hybrid", "self_hosted"] as const;
 const DATA_HANDLING_MODES = ["metadata_only", "redacted", "full_fidelity"] as const;
 
-const SETTINGS_KEYS = ["deployment_mode", "data_handling_mode"] as const;
+const SETTINGS_KEYS = ["deployment_mode", "data_handling_mode"];
 
 const DEFAULTS = {
   deployment_mode: "hybrid",

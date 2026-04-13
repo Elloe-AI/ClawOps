@@ -316,6 +316,7 @@ export default function Timeline() {
           const style = eventStyles[event.type];
           const Icon = style.icon;
           const showConnector = index < events.length - 1;
+          const linkedSpan = event.spanId ? spanLookup.get(event.spanId) : undefined;
 
           return (
             <div key={event.id} className="flex gap-4">
@@ -339,12 +340,12 @@ export default function Timeline() {
                     {event.details.decision}
                   </Badge>
                 )}
-                {event.spanId && spanLookup.has(event.spanId) && (
+                {linkedSpan && (
                   <Button
                     size="sm"
                     variant="link"
                     className="px-0 text-sm"
-                    onClick={() => setSelectedSpan(spanLookup.get(event.spanId))}
+                    onClick={() => setSelectedSpan(linkedSpan)}
                   >
                     Open technical details
                   </Button>
