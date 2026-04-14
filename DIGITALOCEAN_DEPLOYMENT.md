@@ -447,7 +447,7 @@ For issues:
 ---
 
 **Next Steps:**
-1. Configure OAuth providers (GitHub, Google)
+1. Configure OAuth providers (Google, Microsoft)
 2. Set up monitoring (optional)
 3. Configure custom branding
 4. Invite team members

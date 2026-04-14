@@ -1,7 +1,6 @@
 import type { NextAuthOptions, User } from "next-auth";
 import AzureADProvider from "next-auth/providers/azure-ad";
 import CredentialsProvider from "next-auth/providers/credentials";
-import GithubProvider from "next-auth/providers/github";
 import GoogleProvider from "next-auth/providers/google";
 
 import { createUser, getUserByEmail, updateUserAvatar } from "@/lib/db/auth";
@@ -12,14 +11,6 @@ import { Feature, isFeatureEnabled } from "./features/features";
 
 const getProviders = () => {
   const providerConfigs = [
-    {
-      feature: Feature.GITHUB_AUTH,
-      provider: () =>
-        GithubProvider({
-          clientId: process.env.AUTH_GITHUB_ID!,
-          clientSecret: process.env.AUTH_GITHUB_SECRET!,
-        }),
-    },
     {
       feature: Feature.GOOGLE_AUTH,
       provider: () =>
@@ -76,7 +67,7 @@ export const authOptions: NextAuthOptions = {
   callbacks: {
     async signIn({ user, account }) {
       const list = await getEmailsConfig();
-      if (account?.provider === "github" && user?.email && !!list) {
+      if (account?.provider && account.provider !== "email" && user?.email && !!list) {
         return list.includes(user.email);
       }
       return true;

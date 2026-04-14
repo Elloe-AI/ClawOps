@@ -110,7 +110,7 @@ ClawOps onboarding is designed for non-technical teams:
 ### Step 1: Clone and setup
 
 ```bash
-git clone https://github.com/clawops/clawops
+git clone <your-repository-url>
 cd clawops
 ```
 
@@ -395,8 +395,8 @@ We welcome contributions! Please see our [Contributing Guidelines](CONTRIBUTING.
 
 For support and inquiries:
 - Email: support@elloe.ai
-- GitHub Issues: https://github.com/Elloe-AI/clawops/issues
-- Documentation: https://doc.github.io/clawops/
+- Deployment Guide: [DEPLOYMENT.md](DEPLOYMENT.md)
+- Operations Guide: [README_DEPLOY.md](README_DEPLOY.md)
 
 ---
 

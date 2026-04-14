@@ -22,7 +22,7 @@ export const metadata: Metadata = {
   },
   keywords: [
     "truthchecker",
-    "clawops",
+    "elloe ai",
     "agent operations",
     "bot operations",
     "ai agents",

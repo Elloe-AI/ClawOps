@@ -22,7 +22,7 @@ export const defaultThemeSettings: CreateThemeOptions["settings"] = {
   caret: "2px solid hsl(var(--primary) / 0.1)",
 };
 
-export const githubDarkSyntaxHighlighter = {
+export const codeDarkSyntaxHighlighter = {
   'code[class*="language-"]': {
     color: "#c9d1d9",
     background: "transparent",
@@ -62,7 +62,7 @@ export const githubDarkSyntaxHighlighter = {
   important: { color: "#49db7e", fontWeight: "bold" },
 };
 
-export const githubDarkStyle: CreateThemeOptions["styles"] = [
+export const codeDarkThemeStyles: CreateThemeOptions["styles"] = [
   { tag: [t.standard(t.tagName), t.tagName], color: "#7ee787" },
   { tag: [t.comment, t.bracket], color: "#8b949e" },
   { tag: [t.className, t.propertyName], color: "#d2a8ff" },
@@ -82,7 +82,7 @@ export const githubDarkStyle: CreateThemeOptions["styles"] = [
 export const theme = createTheme({
   theme: "dark",
   settings: defaultThemeSettings,
-  styles: githubDarkStyle,
+  styles: codeDarkThemeStyles,
 });
 
 export const baseExtensions = [

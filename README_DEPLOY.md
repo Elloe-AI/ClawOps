@@ -296,7 +296,7 @@ After successful deployment:
 
 1. **Access ClawOps**: `https://partners.elloe.ai`
 2. **Create admin account**: Follow on-screen instructions
-3. **Configure OAuth** (optional): Add GitHub/Google credentials to `.env`
+3. **Configure OAuth** (optional): Add Google/Microsoft credentials to `.env`
 4. **Create first project**: Use ClawOps UI
 5. **Connect first agent**: Follow the agent setup wizard
 

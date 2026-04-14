@@ -205,8 +205,7 @@ those changes to the database, and then update the migration files by running
 `npx drizzle-kit generate`.
 
 Migrations are applied on frontend startup. This is done in the `instrumentation.ts` file,
-which is a [recommended](https://github.com/vercel/next.js/discussions/15341#discussioncomment-7091594)
-place to run one-time startup scripts in Next.js. This means that if you 
+which is an appropriate place to run one-time startup scripts in Next.js. This means that if you
 need to re-apply migrations, restarting the frontend service will trigger them automatically.
 
 ## Troubleshooting
@@ -233,6 +232,6 @@ need to re-apply migrations, restarting the frontend service will trigger them a
 
 ## Getting Help
 
-- Check existing issues on GitHub
+- Check the current issue tracker used by your deployment team
 - Review the `DEPLOYMENT.md` guide for production setup
 - Open a new issue if you encounter problems

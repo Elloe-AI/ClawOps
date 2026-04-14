@@ -2,7 +2,7 @@ import { TooltipPortal } from "@radix-ui/react-tooltip";
 import React, { memo, useMemo } from "react";
 import { Prism as SyntaxHighlighter } from "react-syntax-highlighter";
 
-import { githubDarkSyntaxHighlighter } from "@/components/ui/content-renderer/utils";
+import { codeDarkSyntaxHighlighter } from "@/components/ui/content-renderer/utils";
 import { CopyButton } from "@/components/ui/copy-button.tsx";
 import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from "@/components/ui/tooltip";
 import { isValidJsonObject } from "@/lib/utils";
@@ -71,7 +71,7 @@ const JsonTooltip = ({ data, columnSize }: JsonTooltipProps) => {
                 wrapLines
                 lineProps={{ style: { wordBreak: "break-all", whiteSpace: "pre-wrap" } }}
                 language="json"
-                style={githubDarkSyntaxHighlighter}
+                style={codeDarkSyntaxHighlighter}
                 customStyle={{
                   backgroundColor: "transparent",
                   padding: "0",

@@ -353,7 +353,7 @@ After successful deployment:
 1. **Access ClawOps**: https://partners.elloe.ai
 2. **Create admin account**: Use admin@elloe.ai email
 3. **Configure OAuth** (optional):
-   - Add GitHub/Google OAuth credentials to `.env`
+   - Add Google/Microsoft OAuth credentials to `.env`
    - Restart frontend: `docker compose -f docker-compose.digitalocean.yml restart frontend`
 4. **Create first project**: Use ClawOps UI
 5. **Register first agent**: Follow agent setup wizard

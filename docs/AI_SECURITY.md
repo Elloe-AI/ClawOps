@@ -117,4 +117,4 @@ Technical indicators include:
 - ClawOps: https://clawops.ai
 - Deployment Guide: [DEPLOYMENT.md](../DEPLOYMENT.md)
 - Contributing Guide: [CONTRIBUTING.md](../CONTRIBUTING.md)
-- Issues: https://github.com/clawops/clawops/issues
+- Support: support@elloe.ai

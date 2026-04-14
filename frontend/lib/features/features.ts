@@ -1,6 +1,5 @@
 export const enum Feature {
   SEND_EMAIL = "SEND_EMAIL",
-  GITHUB_AUTH = "GITHUB_AUTH",
   GOOGLE_AUTH = "GOOGLE_AUTH",
   AZURE_AUTH = "AZURE_AUTH",
   EMAIL_AUTH = "EMAIL_AUTH",
@@ -31,10 +30,6 @@ export const isFeatureEnabled = (feature: Feature) => {
 
   if (feature === Feature.LOCAL_DB) {
     return process.env.ENVIRONMENT !== "PRODUCTION" || process.env.FORCE_RUN_MIGRATIONS === "true";
-  }
-
-  if (feature === Feature.GITHUB_AUTH) {
-    return !!process.env.AUTH_GITHUB_ID && !!process.env.AUTH_GITHUB_SECRET;
   }
 
   if (feature === Feature.AZURE_AUTH) {

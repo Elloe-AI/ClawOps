@@ -238,17 +238,17 @@ Copy-Item .env.production .env
 ./scripts/sync-env.sh remote://user@server:/path/to/.env
 ```
 
-## CI/CD with GitHub Actions
+## CI/CD Workflow
 
-The repository includes a GitHub Actions workflow (`.github/workflows/docker-build-push.yml`) that automatically builds and pushes images on:
+The repository includes a Docker image build workflow that automatically builds and pushes images on:
 
 - Push to `main`/`master` branch → tags as `latest`
 - Tagged releases (e.g., `v1.0.0`) → tags with version
 - Manual workflow dispatch → custom tag
 
-### Setting up GitHub Actions
+### Setting up CI Secrets
 
-1. Add Docker Hub credentials to GitHub Secrets:
+1. Add Docker Hub credentials to your CI secrets store:
    - `DOCKER_HUB_USERNAME`: Your Docker Hub username
    - `DOCKER_HUB_TOKEN`: Your Docker Hub access token
 
@@ -412,4 +412,4 @@ docker system prune -a
 
 ## Support
 
-For issues or questions, please open an issue on GitHub or contact the ClawOps team.
+For issues or questions, contact the Elloe AI team at support@elloe.ai.
