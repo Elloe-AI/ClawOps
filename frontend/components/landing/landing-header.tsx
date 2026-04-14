@@ -3,7 +3,6 @@
 import { Menu, X } from "lucide-react";
 import Link from "next/link";
 import { useState } from "react";
-import GitHubButton from "react-github-btn";
 
 import { BrandMark } from "@/components/brand/brand-mark";
 import { cn } from "@/lib/utils";
@@ -45,15 +44,6 @@ export default function LandingHeader({ hasSession }: LandingHeaderProps) {
             <Link target="_blank" href="https://discord.gg/nNFUUDAKub">
               Discord
             </Link>
-            <GitHubButton
-              href="https://github.com/clawops/clawops"
-              data-color-scheme="no-preference: dark; light: dark; dark: dark;"
-              data-size="large"
-              data-show-count="true"
-              aria-label="Star TruthChecker on GitHub"
-            >
-              Star
-            </GitHubButton>
           </div>
           {hasSession ? (
             <Link className="hidden lg:block" href="/projects">

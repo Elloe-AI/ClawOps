@@ -55,7 +55,7 @@ export default async function ProjectIdLayout(props: { children: ReactNode; para
           <div className="fixed inset-0 flex overflow-hidden md:pt-2 bg-sidebar">
             <SidebarProvider cookieName={projectSidebarCookieName} className="bg-sidebar" defaultOpen={defaultOpen}>
               <ProjectSidebar details={projectDetails} />
-              <SidebarInset className="flex flex-col h-[calc(100%-8px)]! border-l border-t flex-1 md:rounded-tl-lg overflow-hidden">
+              <SidebarInset className="flex min-h-0 flex-1 flex-col h-[calc(100%-8px)]! border-l border-t md:rounded-tl-lg overflow-hidden">
                 {showBanner && <ProjectUsageBanner details={projectDetails} />}
                 {children}
               </SidebarInset>

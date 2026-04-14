@@ -292,9 +292,9 @@ export default function MissionControl() {
 
   if (!isAgentsLoading && agents.length === 0 && !isDemo) {
     return (
-      <div className="flex flex-col h-full">
+      <div className="flex h-full min-h-0 flex-col">
         <Header path={[{ name: "Mission Control" }]} />
-        <div className="flex-1 px-6 pb-10">
+        <div className="min-h-0 flex-1 overflow-y-auto px-6 pb-10">
           <Card className="border-dashed">
             <CardHeader>
               <CardTitle>Connect your first agent</CardTitle>
@@ -320,9 +320,9 @@ export default function MissionControl() {
   }
 
   return (
-    <div className="flex flex-col h-full">
+    <div className="flex h-full min-h-0 flex-col">
       <Header path={[{ name: "Mission Control" }]} />
-      <div className="flex-1 px-6 pb-10">
+      <div className="min-h-0 flex-1 overflow-y-auto px-6 pb-10">
         {isDemo && (
           <div className="mb-4 rounded-lg border border-amber-200 bg-amber-50 px-4 py-3 text-sm text-amber-900">
             Demo mode is active. No runtime connection required.

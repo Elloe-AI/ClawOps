@@ -126,7 +126,7 @@ export default function CreateFirstWorkspaceAndProject({ name }: CreateFirstWork
           <div className="flex flex-col items-center mb-8">
             <div className="mb-6">
               <Link className="inline-block" href="/">
-                <BrandMark className="justify-center" priority size="lg" />
+                <BrandMark className="justify-center" priority size="lg" variant="full" />
               </Link>
             </div>
             <p className="text-sm text-muted-foreground text-center">

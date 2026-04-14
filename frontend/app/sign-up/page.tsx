@@ -31,7 +31,6 @@ export default async function SignUpPage(props: {
   return (
     <SignUp
       enableCredentials={isFeatureEnabled(Feature.EMAIL_AUTH)}
-      enableGithub={isFeatureEnabled(Feature.GITHUB_AUTH)}
       enableGoogle={isFeatureEnabled(Feature.GOOGLE_AUTH)}
       enableAzure={isFeatureEnabled(Feature.AZURE_AUTH)}
       callbackUrl={callbackUrl}

@@ -7,9 +7,6 @@ export default function Footer() {
             <a className="" href="mailto:support@clawops.ai">
               Contact us
             </a>
-            <a target="_blank" href="https://github.com/clawops/clawops">
-              GitHub
-            </a>
             <a
               className="flex"
               target="_blank"

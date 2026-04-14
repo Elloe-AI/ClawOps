@@ -7,7 +7,6 @@ import React, { useState } from "react";
 
 import { AzureButton } from "@/components/auth/azure-button";
 import { EmailSignInButton } from "@/components/auth/email-sign-in";
-import { GitHubButton } from "@/components/auth/github-button";
 import { GoogleButton } from "@/components/auth/google-button";
 import { BrandMark } from "@/components/brand/brand-mark";
 import { cn } from "@/lib/utils";
@@ -15,16 +14,15 @@ import { cn } from "@/lib/utils";
 interface SignUpProps {
   callbackUrl: string;
   enableGoogle?: boolean;
-  enableGithub?: boolean;
   enableAzure?: boolean;
   enableCredentials?: boolean;
 }
 
-type Provider = "github" | "google" | "azure-ad";
+type Provider = "google" | "azure-ad";
 
 const defaultErrorMessage = `Failed to sign in. Please try again.`;
 
-const SignUp = ({ callbackUrl, enableGoogle, enableGithub, enableAzure, enableCredentials }: SignUpProps) => {
+const SignUp = ({ callbackUrl, enableGoogle, enableAzure, enableCredentials }: SignUpProps) => {
   const searchParams = useSearchParams();
   const [error, setError] = useState(searchParams.get("error"));
   const [isLoading, setIsLoading] = useState<Provider | string>("");
@@ -52,7 +50,7 @@ const SignUp = ({ callbackUrl, enableGoogle, enableGithub, enableAzure, enableCr
           {/* Logo and Welcome Section */}
           <div className="text-center mb-10">
             <Link className="inline-block mb-6" href="/">
-              <BrandMark className="justify-center" priority size="lg" />
+              <BrandMark className="justify-center" priority size="lg" variant="full" />
             </Link>
             <h1 className="text-3xl font-semibold mb-2 text-foreground">
               Create an account
@@ -73,7 +71,7 @@ const SignUp = ({ callbackUrl, enableGoogle, enableGithub, enableAzure, enableCr
             <div className="space-y-4">
               {enableCredentials && <EmailSignInButton callbackUrl={callbackUrl} buttonText="Sign up" />}
               
-              {(enableGoogle || enableGithub || enableAzure) && enableCredentials && (
+              {(enableGoogle || enableAzure) && enableCredentials && (
                 <div className="relative my-6">
                   <div className="absolute inset-0 flex items-center">
                     <div className="w-full border-t border-border"></div>
@@ -88,16 +86,6 @@ const SignUp = ({ callbackUrl, enableGoogle, enableGithub, enableAzure, enableCr
                 <GoogleButton
                   onClick={() => handleSignUp("google")}
                   isLoading={isLoading === "google"}
-                  isDisabled={!!isLoading}
-                  className={cn({
-                    "w-full": enableCredentials,
-                  })}
-                />
-              )}
-              {enableGithub && (
-                <GitHubButton
-                  onClick={() => handleSignUp("github")}
-                  isLoading={isLoading === "github"}
                   isDisabled={!!isLoading}
                   className={cn({
                     "w-full": enableCredentials,

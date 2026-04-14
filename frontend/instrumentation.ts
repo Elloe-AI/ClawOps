@@ -1,6 +1,4 @@
-// Yes, this file is called instrumentation.ts, but it's not actually used to instrument the app.
-// Apparently, this is the suggested way to run startup hooks in Next.js:
-// https://github.com/vercel/next.js/discussions/15341#discussioncomment-7091594
+// Next.js loads this file for startup hooks even though it is not the main app instrumentation entrypoint.
 import * as Sentry from "@sentry/nextjs";
 
 export async function register() {
