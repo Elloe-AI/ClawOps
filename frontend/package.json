@@ -46,7 +46,7 @@
     "@dnd-kit/utilities": "^3.2.2",
     "@hookform/resolvers": "^5.2.1",
     "@lezer/highlight": "^1.2.1",
-    "@lmnr-ai/lmnr": "^0.7.8",
+    "@lmnr-ai/lmnr": "^0.8.51",
     "@monaco-editor/loader": "^1.7.0",
     "@monaco-editor/react": "^4.7.0",
     "@mux/mux-player-react": "^3.5.3",
