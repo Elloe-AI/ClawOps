@@ -133,7 +133,7 @@
     "use-stick-to-bottom": "^1.1.1",
     "uuid": "^13.0.0",
     "yaml": "^2.8.1",
-    "zod": "^4.1.5",
+    "zod": "^4.6.7",
     "zustand": "^4.5.7"
   },
   "devDependencies": {
